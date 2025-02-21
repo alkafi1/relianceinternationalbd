@@ -12,12 +12,31 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            // Custom UID as primary key
+            $table->uuid('uid')->primary(); // Use UUID for unique identifier
+
+            // User's first name
+            $table->string('first_name');
+
+            // User's last name
+            $table->string('last_name');
+
+            // User's email (unique)
             $table->string('email')->unique();
+
+            // Timestamp for email verification (nullable)
             $table->timestamp('email_verified_at')->nullable();
+
+            // User status with predefined values: 'active', 'delete', 'approved', 'unapproved', 'suspended', 'lock'
+            $table->enum('status', ['active', 'delete', 'approved', 'unapproved', 'suspended', 'lock'])->default('active');
+
+            // User's password (hashed)
             $table->string('password');
+
+            // Remember token for "remember me" functionality
             $table->rememberToken();
+
+            // Timestamps for created_at and updated_at
             $table->timestamps();
         });
 

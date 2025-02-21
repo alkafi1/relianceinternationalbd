@@ -2,6 +2,11 @@
 
 return [
     'roles' => [
+        'super_admin' => [
+            'permissions' => [
+                '*' => ['*'], // Wildcard to grant all permissions
+            ],
+        ],
         'admin' => [
             'permissions' => [
                 'posts' => ['create', 'edit', 'delete', 'view'],

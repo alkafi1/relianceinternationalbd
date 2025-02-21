@@ -6,27 +6,41 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use Spatie\Permission\Traits\HasRoles; // Ensure this line is present
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+
+    use HasFactory, Notifiable, HasRoles;
+
+    // Set the primary key
+    protected $primaryKey = 'uid';
+
+    // Set the key type to string (for UUID)
+    protected $keyType = 'string';
+
+    // Disable auto-incrementing (since UUIDs are used)
+    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array
      */
     protected $fillable = [
-        'name',
+        'uid', // Add uid to fillable if you plan to set it manually
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'status',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * The attributes that should be hidden for arrays.
      *
-     * @var list<string>
+     * @var array
      */
     protected $hidden = [
         'password',
@@ -34,15 +48,24 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast to native types.
      *
-     * @return array<string, string>
+     * @var array
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        parent::boot();
+
+        // Automatically generate a UUID when creating a new user
+        static::creating(function ($model) {
+            $model->uid = Str::uuid()->toString();
+        });
     }
 }

@@ -16,10 +16,17 @@ class RolePermissionSeeder extends Seeder
     {
         // Get roles and permissions from config
         $rolesPermissions = config('roles_permissions.roles');
-
+        
         foreach ($rolesPermissions as $roleName => $roleData) {
             // Create the role
             $role = Role::firstOrCreate(['name' => $roleName]);
+            
+            // Handle wildcard permissions for super_admin
+            if ($roleName === 'super_admin') {
+                // Grant all permissions to super_admin
+                $role->givePermissionTo(Permission::all());
+                continue;
+            }
 
             // Loop through permissions for the role
             foreach ($roleData['permissions'] as $resource => $actions) {
