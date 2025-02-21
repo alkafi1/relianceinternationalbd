@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AdminStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -28,7 +29,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
 
             // User status with predefined values: 'active', 'delete', 'approved', 'unapproved', 'suspended', 'lock'
-            $table->enum('status', ['active', 'delete', 'approved', 'unapproved', 'suspended', 'lock'])->default('active');
+            $table->enum('status', AdminStatus::getValues())->default(AdminStatus::APPROVED()->value);
 
             // User's password (hashed)
             $table->string('password');

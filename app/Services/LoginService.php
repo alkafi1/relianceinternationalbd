@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Enums\AdminStatus;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class LoginService
 {

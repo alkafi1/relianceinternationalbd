@@ -1,4 +1,0 @@
-
-.table>:not(:last-child)>:last-child>* {
-    border-bottom-color: inherit;
-}

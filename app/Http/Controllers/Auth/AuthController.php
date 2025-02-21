@@ -45,24 +45,12 @@ class AuthController extends Controller
      */
     public function loginPost(LoginRequest $request)
     {
-        // Get the email and password from the request
-        $credentials = $request->only('email', 'password');
+        // Simplifying the login process by directly returning the response
+        $result = $this->loginService->login($request->only('email', 'password'));
 
-        // Call the login service to handle the login request
-        $result = $this->loginService->login($credentials);
-
-        // If the login is successful, return the user data
-        if ($result) {
-            return response()->json([
-                // The redirect URL after the login
-                'redirect' => $result['redirect'],
-                // The user data
-                'user' => $result['user'],
-            ]);
-        }
-
-        // If the login is not successful, return a 401 error with a message
-        return response()->json([
+        return $result ? response()->json([
+            'redirect' => $result['redirect'],
+        ]) : response()->json([
             'message' => 'Invalid credentials',
         ], 401);
     }
