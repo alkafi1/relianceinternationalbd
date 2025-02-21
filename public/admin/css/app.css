@@ -1,0 +1,280 @@
+.cke_notifications_area {
+  display: none !important;
+}
+
+/* Custom CSS for datatable */
+.dt-buttons {
+  text-align: center;
+}
+
+.swal2-container {
+  z-index: 9999 !important;
+}
+
+div.dataTables_wrapper div.dataTables_processing {
+  color: #827175 !important;
+  border: 1px solid;
+  animation: wave 1s infinite;
+}
+
+/* Add a red star after labels with the required class */
+.required:after {
+  content: " *";
+  color: red;
+}
+
+/* Define the keyframes for the wave animation */
+@keyframes wave {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@media screen and (max-width: 768px) {
+  div.dataTables_wrapper div.dataTables_processing {
+    left: 40%;
+  }
+}
+@media screen and (max-width: 512px) {
+  div.dataTables_wrapper div.dataTables_processing {
+    left: 38%;
+  }
+}
+@media screen and (max-width: 414px) {
+  div.dataTables_wrapper div.dataTables_processing {
+    left: 35%;
+  }
+}
+/* CSS to make DataTable columns full-width on mobile */
+.dataTable .dtr-details {
+  width: 100% !important;
+}
+
+.dataTable td.dt-body-center {
+  text-align: center;
+}
+
+.blink-red-border {
+  border: 1px solid red !important;
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+.election-datatable thead tr {
+  background-color: rgba(222, 226, 230, 0.2) !important;
+}
+.election-datatable thead tr th {
+  border-left-width: 1px !important;
+  padding: 12px !important;
+}
+.election-datatable tr td {
+  padding: 12px !important;
+  border-left-width: 1px !important;
+  border-bottom-width: 1px !important;
+}
+.election-datatable tbody tr:last-child td,
+.election-datatable tbody tr:last-child th,
+.election-datatable tfoot tr:last-child td,
+.election-datatable tfoot tr:last-child th {
+  border-bottom: 1px solid rgba(222, 226, 230, 0.2) !important;
+  border-bottom-width: 1px !important;
+}
+
+.paginate_button {
+  padding: 0.5rem 0.75rem;
+  margin: 0 0.25rem;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #1E1E2D;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.paginate_button:hover {
+  background-color: #1E1E2D;
+  color: #fff;
+}
+
+.paginate_button.current {
+  background-color: #1E1E2D;
+  color: #fff;
+}
+
+.dataTables_filter input {
+  border: 1px solid #e4e6ef;
+}
+
+.dataTables_filter .input-group {
+  flex-wrap: nowrap !important;
+}
+
+.dataTables_filter input[type=search] {
+  width: 100% !important;
+}
+
+/* Custom CSS for pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.pagination svg {
+  width: 20px;
+}
+.pagination nav div.flex-1.sm\:hidden {
+  display: none;
+}
+.pagination ul.pagination {
+  background-color: transparent;
+}
+.pagination li.page-item {
+  margin: 0 5px;
+  list-style: none;
+  display: inline;
+}
+.pagination a.page-link {
+  background-color: #4CAF50;
+  color: white;
+  border: 1px solid #4CAF50;
+  padding: 5px 10px;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: background-color 0.3s;
+}
+.pagination a.page-link:hover {
+  background-color: #45a049;
+}
+
+table tbody tr:last-child td {
+  border-bottom: 1px solid rgba(222, 226, 230, 0.2) !important;
+  border-bottom-width: 1px !important;
+}
+
+/* Modal Design start Here  */
+.modal-body iframe {
+  width: 100%;
+  height: 430px;
+}
+
+@media screen and (max-width: 992px) {
+  .modal-body iframe {
+    width: 100%;
+    height: 260px;
+  }
+}
+/* Modal Design end Here  */
+.das_board .card .card-header {
+  padding-bottom: 5px;
+}
+
+.user-activity i {
+  font-size: 30px;
+}
+
+.expand i, .compress i {
+  font-size: 17px;
+  padding: 4px;
+  color: #A1A5B7;
+  border-radius: 2px;
+  border: 1px solid;
+  cursor: pointer;
+  transition: 0.6s;
+}
+
+.select2 {
+  width: 100% !important;
+}
+
+.select2-selection__rendered li {
+  margin: 0px 7px 0px 0px !important;
+  margin-right: 7px !important;
+}
+
+.select2-search, .select2-search--inline {
+  display: flex !important;
+}
+
+.select2-search__field {
+  margin: 0 !important;
+}
+
+.select2-selection {
+  padding: 12px !important;
+  border-color: #e4e6ef !important;
+}
+.select2-selection:focus-visible, .select2-selection:focus {
+  border-color: #b5b5c3 !important;
+}
+
+.select2-selection__clear {
+  margin-right: 1px !important;
+  font-size: 20px !important;
+  margin-top: -18px !important;
+}
+
+.footer-management .nav-link {
+  cursor: pointer;
+}
+.footer-management .active {
+  background-color: #f5f8fa;
+  border-color: #3f444b;
+}
+.footer-management .active .icon i, .footer-management .active .title {
+  color: black;
+}
+
+.builder-panel-category-items {
+  padding-block-end: 20px;
+}
+
+.builder-responsive-panel {
+  padding: 0 15px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(min(135px, 50% - 5px), 1fr));
+}
+
+.builder-element {
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  color: #d5d8dc;
+  line-height: 1;
+  text-align: center;
+  border: 1px solid #e4e6ef;
+  border-radius: 3px;
+  cursor: move;
+  position: relative;
+  transition: 0.8s;
+  width: 100%;
+  background-color: transparent;
+}
+.builder-element:hover, .builder-element:active, .builder-element:focus {
+  background-color: #f5f8fa;
+  border-color: #3f444b;
+}
+.builder-element:hover .icon i, .builder-element:hover .title, .builder-element:active .icon i, .builder-element:active .title, .builder-element:focus .icon i, .builder-element:focus .title {
+  color: black;
+}
+.builder-element .icon {
+  font-size: 28px;
+  padding-block-start: 15px;
+}
+.builder-element .title-wrapper {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+}
+.builder-element .title-wrapper .title {
+  font-size: 12px;
+}

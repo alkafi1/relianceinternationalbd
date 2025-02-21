@@ -33,6 +33,9 @@ return new class extends Migration
             // User's password (hashed)
             $table->string('password');
 
+            // Base64-encoded image
+            $table->longText('image')->nullable(); // Store Base64-encoded image
+
             // Remember token for "remember me" functionality
             $table->rememberToken();
 
