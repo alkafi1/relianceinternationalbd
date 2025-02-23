@@ -50,6 +50,7 @@ class AuthController extends Controller
 
         return $result ? response()->json([
             'redirect' => $result['redirect'],
+            'user' => $result['user'],
         ]) : response()->json([
             'message' => 'Invalid credentials',
         ], 401);

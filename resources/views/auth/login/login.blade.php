@@ -4,15 +4,14 @@
 <!--begin::Head-->
 
 <head>
-    <title>INGO Forum</title>
-    <meta name="description" content="Ingo Forum login" />
+    <title>Reliance International BD</title>
+    <meta name="description" content="Reliance International BD" />
     <meta name="keywords"
-        content="Metronic, bootstrap, bootstrap 5, Angular, VueJs, React, Laravel, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+        content="Reliance International BD" />
     <meta charset="utf-8" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Ingo Forum" />
+    <meta property="og:title" content="Reliance International BD" />
     <meta property="og:url" content="{{ url()->current() }}" />
     {{-- <meta property="og:site_name" content="{{ $global['website_name'] }}" /> --}}
     {{-- <link rel="shortcut icon" href="{{ asset('public/frontend/images/' . $global['favicon']) }}" /> --}}
@@ -95,7 +94,7 @@
         <!--end::Authentication - Sign-in-->
     </div>
     <!--end::Main-->
-    
+
     <!--begin::Javascript-->
     <!--begin::Global Javascript Bundle(used by all pages)-->
     <script src="{{ asset('public/admin/plugins/global/plugins.bundle.js') }}"></script>
@@ -147,7 +146,51 @@
             });
         });
     </script>
+    @if (session('success'))
+        <script>
+            toastr.success('{{ session('success') }}');
+        </script>
+    @endif
 
+    @if (session('info'))
+        <script>
+            toastr.info('{{ session('info') }}');
+        </script>
+    @endif
+
+    @if (session('warning'))
+        <script>
+            toastr.warning('{{ session('warning') }}');
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            toastr.error('{{ session('error') }}');
+        </script>
+    @endif
+
+    @if (session('failed'))
+        <script>
+            toastr.error('{{ session('failed') }}');
+        </script>
+    @endif
+
+    @if (session('errors'))
+        @foreach (session('errors') as $error)
+            <script>
+                toastr.error('{{ $error }}');
+            </script>
+        @endforeach
+    @endif
+
+    @if ($errors->any())
+        <script>
+            @foreach ($errors->all() as $error)
+                toastr.error('{{ $error }}');
+            @endforeach
+        </script>
+    @endif
 
     <!--end::Javascript-->
 </body>

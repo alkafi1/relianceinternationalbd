@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\AdminStatus;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
@@ -28,9 +28,9 @@ class SuperAdminSeeder extends Seeder
             'uid' => Str::uuid()->toString(), // Generate UUID
             'first_name' => 'Super',
             'last_name' => 'Admin',
-            'email' => 'superadmin@example.com',
+            'email' => 'superadmin@gmail.com',
             'email_verified_at' => now(),
-            'status' => 'active',
+            'status' => AdminStatus::APPROVED(),
             'password' => Hash::make('password'), // Hash the password
             'remember_token' => Str::random(10),
             'created_at' => Carbon::now(),

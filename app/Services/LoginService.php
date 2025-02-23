@@ -20,7 +20,7 @@ class LoginService
         if (Auth::attempt($credentials)) {
             // Get the user that was logged in
             $user = Auth::user();
-
+            
             // If the user is not approved, return null
             if ($user->status !== AdminStatus::APPROVED()->value) {
                 return null;

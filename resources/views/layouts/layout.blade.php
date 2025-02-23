@@ -4,18 +4,15 @@
 <!--begin::Head-->
 
 <head>
-    <base href="">
-    <title>Ingo-Forum </title>
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reliance International BD</title>
+    <meta name="description" content="Reliance International BD" />
+    <meta name="keywords"
+        content="Reliance International BD" />
     <meta charset="utf-8" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="INGO Forum" />
-    <meta property="og:url" content="" />
-    <meta property="og:site_name" content="INGO Forum" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta property="og:title" content="Reliance International BD" />
+    <meta property="og:url" content="{{ url()->current() }}" />
     {{-- <link rel="shortcut icon" href="{{ asset('public/frontend/images/' . $global['favicon']) }}" /> --}}
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
@@ -27,7 +24,7 @@
     <!-- Select2 CSS -->
     {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <!-- Toastr CSS -->
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <!--end::Page Vendor Stylesheets-->
     <!--begin::Global Stylesheets Bundle(used by all pages)-->
@@ -131,11 +128,11 @@
     <script src="{{ asset('public/admin/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('public/admin/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <script src="{{ asset('public/admin/js/scripts.bundle.js') }}"></script>
-    {{-- <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
+    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- jQuery -->
 
     <!-- Toastr JS -->
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="{{ asset('public/ckeditor-advanced/ckeditor.js') }}"></script>
     <script src="{{ asset('public/ckeditor-advanced/config.js') }}"></script>
     <script src="{{ asset('public/ckeditor-advanced/styles.js') }}"></script>

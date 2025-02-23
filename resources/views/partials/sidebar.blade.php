@@ -138,6 +138,61 @@
                 {{-- @endif --}}
                 {{-- member sidebar end --}}
 
+                {{-- member sidebar start --}}
+                {{-- @if (Auth::guard('admin')->user()->hasAnyPermission(['member-list-view', 'member-request-view'])) --}}
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Agent</span>
+                    </div>
+                </div>
+                <div data-kt-menu-trigger="click"
+                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'agent.create' || Route::currentRouteName() == 'dashboard' ? 'hover show' : '' }}">
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <i class="fas fa-users"></i>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title position-relative">Agent
+                        </span>
+                        <span class="menu-arrow"></span>
+                    </span>
+
+                    <div
+                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'agent.create' || Route::currentRouteName() == 'dashboard' ? 'hover show' : '' }}">
+                        {{-- @can('member-list-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('dashboard') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Agent List</span>
+
+                                </span>
+                            </a>
+                        {{-- @endcan --}}
+                        {{-- @can('member-request-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('agent.create') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'agent.create' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title position-relative">Agent Create
+                                    </span>
+                                </span>
+                            </a>
+                        {{-- @endcan --}}
+                    </div>
+                </div>
+
+            {{-- @endif --}}
+            {{-- member sidebar end --}}
+
                 
                 
             </div>
