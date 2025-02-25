@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             // Custom UID as primary key
-            $table->uuid('uid')->primary(); // Use UUID for unique identifier
+            $table->id('uid')->primary(); // Use UUID for unique identifier
 
             // User's first name
             $table->string('first_name');

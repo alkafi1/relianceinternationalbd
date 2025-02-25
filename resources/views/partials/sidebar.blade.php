@@ -162,11 +162,11 @@
                     </span>
 
                     <div
-                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'agent.create' || Route::currentRouteName() == 'dashboard' ? 'hover show' : '' }}">
+                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'agent.index' || Route::currentRouteName() == 'agent.create' ? 'hover show' : '' }}">
                         {{-- @can('member-list-view') --}}
-                            <a class="menu-item menu-accordion" href="{{ route('dashboard') }}">
+                            <a class="menu-item menu-accordion" href="{{ route('agent.index') }}">
                                 <span
-                                    class="menu-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}">
+                                    class="menu-link {{ Route::currentRouteName() == 'agent.index' ? 'active' : '' }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>

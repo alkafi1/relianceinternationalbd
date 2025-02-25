@@ -6,6 +6,8 @@
 <head>
     <title>Reliance International BD</title>
     <meta name="description" content="Reliance International BD" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <meta name="keywords"
         content="Reliance International BD" />
     <meta charset="utf-8" />
@@ -137,22 +139,22 @@
     <script src="{{ asset('public/ckeditor-advanced/config.js') }}"></script>
     <script src="{{ asset('public/ckeditor-advanced/styles.js') }}"></script>
     <script src="{{ asset('public/admin/js/ekko-lightbox.js') }}"></script>
-    {{-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdn.rawgit.com/mjsarfatti/nestedSortable/master/jquery.mjs.nestedSortable.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.5/jscolor.min.js"></script> --}}
     <script src="{{ asset('public/admin/js/custom/widgets.js') }}"></script>
+    <script src="{{ asset('public/admin/js/reliance-datatable.js') }}"></script>
 
-    {{-- dattabase
+    {{-- dattabase --}}
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
     <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     
 
     <!-- Select2 JS -->
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
+
+    
 
 
     @stack('custom-js')

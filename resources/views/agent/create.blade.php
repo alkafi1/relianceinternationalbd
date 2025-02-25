@@ -87,7 +87,15 @@
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="division_id" class="required">Division ID</label>
-                                    <input type="number" id="division_id" name="division_id" class="form-control mt-3">
+                                    <select id="division_id" name="division_id" class="form-control mt-3"
+                                        onchange="getDistricts(this.value)">
+                                        <option value="">--Select Division--</option>
+                                        @foreach ($divisions as $division)
+                                            <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                        @endforeach
+                                    </select>
+
+
                                 </div>
                             </div>
 
@@ -95,7 +103,8 @@
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="district_id" class="required">District ID</label>
-                                    <input type="number" id="district_id" name="district_id" class="form-control mt-3">
+                                    <select id="district_id" name="district_id" class="form-control mt-3">
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -199,5 +208,21 @@
                 });
             });
         });
+    </script>
+
+    <script>
+        function getDistricts(division_id) {
+            $.ajax({
+                url: '{{ route('get.districts') }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    division_id: division_id
+                },
+                success: function(response) {
+                    $('#district_id').html(response.option);
+                }
+            });
+        }
     </script>
 @endpush
