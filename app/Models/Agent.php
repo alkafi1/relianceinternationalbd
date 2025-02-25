@@ -39,4 +39,18 @@ class Agent extends BaseModel
     ];
 
     
+    /**
+     * The accessors to append to the model's array form.
+     */
+    protected $appends = ['display_name'];
+
+    /**
+     * Get the display name.
+     */
+    public function getDisplayNameAttribute(): string
+    {
+        return isset($this->first_name, $this->last_name) ? "{$this->first_name} {$this->last_name}" : '';
+    }
+
+    
 }
