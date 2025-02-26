@@ -33,8 +33,6 @@ Clone the Repository
 
 Clone the repository using the following command:
 
-bash
-Copy
 git clone <repository-url>
 cd <project-directory>
 
@@ -82,18 +80,37 @@ DB_PASSWORD=your_database_password
 
 Replace the placeholders with your actual database credentials.
 
+## Running Migrations and Seeders
+
+Run Database Migrations
+-------------------------------
+
+Run the database migrations using the following command:
+
+php artisan migrate
+
+Run Database Seeders
+------------------------------
+
+Run the database seeders using the following command:
+
+php artisan db:seed
+
+## Serving the Application  
+
+Run the Laravel Application
+--------------------------      
+
+Run the Laravel application using the following command:
+
+php artisan serve
+
+Access the Application
+------------------------------
+
+You can now access the application at [http://localhost:8000](http://localhost:8000) in your web browser.   
+
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Contributing to Reliance International BD Laravel Project
+----------------------------------------------------------------------------------------------------------------------
