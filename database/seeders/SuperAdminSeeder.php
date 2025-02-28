@@ -29,7 +29,7 @@ class SuperAdminSeeder extends Seeder
             'first_name' => 'Super',
             'last_name' => 'Admin',
             'email' => 'superadmin@gmail.com',
-            'email_verified_at' => now(),
+            'email_verified_at' => now(),    
             'status' => AdminStatus::APPROVED(),
             'password' => Hash::make('password'), // Hash the password
             'remember_token' => Str::random(10),

@@ -128,9 +128,7 @@
     <!--begin::Javascript-->
     <!--begin::Global Javascript Bundle(used by all pages)-->
     <script src="{{ asset('public/admin/plugins/global/plugins.bundle.js') }}"></script>
-    <script src="{{ asset('public/admin/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <script src="{{ asset('public/admin/js/scripts.bundle.js') }}"></script>
-    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- jQuery -->
 
     <!-- Toastr JS -->
@@ -143,12 +141,8 @@
     <script src="{{ asset('public/admin/js/reliance-datatable.js') }}"></script>
 
     {{-- dattabase --}}
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
-    <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.colVis.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="{{ asset('public/admin/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+
     
 
     <!-- Select2 JS -->

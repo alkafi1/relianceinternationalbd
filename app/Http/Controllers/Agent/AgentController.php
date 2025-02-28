@@ -101,16 +101,31 @@ class AgentController extends Controller
         $query = Agent::latest();
 
         if ($request->ajax()) {
+            $query = Agent::query();
+    
             return DataTables::of($query)
+                // Agent ID (Sortable & Searchable)
                 ->addColumn('agent_id', function ($data) {
                     return $data->agent_id ?? '';
                 })
+    
+                // Full Name (Concatenated, needs custom sorting & filtering)
                 ->addColumn('agent_name', function ($data) {
                     return $data->first_name . ' ' . $data->last_name;
                 })
-                ->addColumn('todays_job', function ($data) {
+                ->filterColumn('agent_name', function ($query, $keyword) {
+                    $query->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$keyword}%"]);
+                })
+                ->orderColumn('agent_name', function ($query, $order) {
+                    $query->orderByRaw("CONCAT(first_name, ' ', last_name) {$order}");
+                })
+    
+                // Static Column (Not Sortable)
+                ->addColumn('todays_job', function () {
                     return 1;
                 })
+    
+                // Phone, Email, Age, Address (Sortable & Searchable)
                 ->addColumn('phone', function ($data) {
                     return $data->phone ?? '';
                 })
@@ -121,33 +136,64 @@ class AgentController extends Controller
                     return $data->age ?? '';
                 })
                 ->addColumn('full_address', function ($data) {
-                    return $data->age ?? '';
+                    return $data->address ?? '';
                 })
+    
+                // Status Badge (Sortable & Searchable)
                 ->addColumn('status', function ($data) {
-                    $status = $data->status ?? '';
-                    return $status ? '<span class="status badge badge-light-' . ($status === 1 ? 'success' : 'danger') . '" data-toggle="tooltip" title="Status: ' . ($status === 1 ? 'Active' : 'Inactive') . '">' . ($status === 1 ? 'Active' : 'Inactive') . '</span>' : '';
+                    return '<span class="status badge badge-light-' . ($data->status == 1 ? 'success' : 'danger') . '" 
+                            title="Status: ' . ($data->status == 1 ? 'Active' : 'Inactive') . '">' . 
+                            ($data->status == 1 ? 'Active' : 'Inactive') . '</span>';
                 })
+                ->filterColumn('status', function ($query, $keyword) {
+                    if (stripos('Active', $keyword) !== false) {
+                        $query->where('status', 1);
+                    } elseif (stripos('Inactive', $keyword) !== false) {
+                        $query->where('status', 0);
+                    }
+                })
+                ->orderColumn('status', function ($query, $order) {
+                    $query->orderBy('status', $order);
+                })
+    
+                // Action Buttons (Not Sortable or Searchable)
                 ->addColumn('action', function ($data) {
                     return '
-                <a href="javascript:void(0)" class="view text-info mr-2 me-2" data-id="' . $data->uid . '">
-                    <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
-                </a>
-                <a href="javascript:void(0)" class="edit text-primary mr-2 me-2 " data-id="' . $data->uid . '">
-                    <i class="fas fa-edit text-primary" style="font-size: 16px;"></i> <!-- Adjust font-size here -->
-                </a>
-                <a href="javascript:void(0)" class="text-danger delete" data-id="' . $data->uid . '">
-                    <i class="fas fa-trash text-danger" style="font-size: 16px;"></i> <!-- Adjust font-size here -->
-                </a>
-                ';
+                        <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '">
+                            <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="edit text-primary me-2" data-id="' . $data->uid . '">
+                            <i class="fas fa-edit text-primary" style="font-size: 16px;"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="delete text-danger" data-id="' . $data->uid . '">
+                            <i class="fas fa-trash text-danger" style="font-size: 16px;"></i>
+                        </a>';
                 })
-                ->addColumn('last_updated', function ($data) {
-                    return $data->updated_at ?? '';
+    
+                // Last Updated & Created At (Formatted, Sortable & Searchable)
+                ->editColumn('last_updated', function ($data) {
+                    return $data->updated_at ? $data->updated_at->format('Y-m-d H:i:s') : '';
                 })
-                ->addColumn('created_at', function ($data) {
-                    return $data->created_at ?? '';
+                ->filterColumn('last_updated', function ($query, $keyword) {
+                    $query->whereRaw("DATE_FORMAT(updated_at, '%Y-%m-%d %H:%i:%s') LIKE ?", ["%{$keyword}%"]);
                 })
+                ->orderColumn('last_updated', function ($query, $order) {
+                    $query->orderBy('updated_at', $order);
+                })
+    
+                ->editColumn('created_at', function ($data) {
+                    return $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '';
+                })
+                ->filterColumn('created_at', function ($query, $keyword) {
+                    $query->whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') LIKE ?", ["%{$keyword}%"]);
+                })
+                ->orderColumn('created_at', function ($query, $order) {
+                    $query->orderBy('created_at', $order);
+                })
+    
+                // Allow raw HTML in action and status columns
                 ->rawColumns(['action', 'status'])
-                ->toJSON();
+                ->toJson();
         }
     }
 
