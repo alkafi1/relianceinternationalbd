@@ -102,13 +102,13 @@ class AgentController extends Controller
 
         if ($request->ajax()) {
             $query = Agent::query();
-    
+
             return DataTables::of($query)
                 // Agent ID (Sortable & Searchable)
                 ->addColumn('agent_id', function ($data) {
                     return $data->agent_id ?? '';
                 })
-    
+
                 // Full Name (Concatenated, needs custom sorting & filtering)
                 ->addColumn('agent_name', function ($data) {
                     return $data->first_name . ' ' . $data->last_name;
@@ -119,12 +119,12 @@ class AgentController extends Controller
                 ->orderColumn('agent_name', function ($query, $order) {
                     $query->orderByRaw("CONCAT(first_name, ' ', last_name) {$order}");
                 })
-    
+
                 // Static Column (Not Sortable)
                 ->addColumn('todays_job', function () {
                     return 1;
                 })
-    
+
                 // Phone, Email, Age, Address (Sortable & Searchable)
                 ->addColumn('phone', function ($data) {
                     return $data->phone ?? '';
@@ -138,12 +138,12 @@ class AgentController extends Controller
                 ->addColumn('full_address', function ($data) {
                     return $data->address ?? '';
                 })
-    
+
                 // Status Badge (Sortable & Searchable)
                 ->addColumn('status', function ($data) {
-                    return '<span class="status badge badge-light-' . ($data->status == 1 ? 'success' : 'danger') . '" 
-                            title="Status: ' . ($data->status == 1 ? 'Active' : 'Inactive') . '">' . 
-                            ($data->status == 1 ? 'Active' : 'Inactive') . '</span>';
+                    return '<span class="status badge badge-light-' . ($data->status == 1 ? 'success' : 'danger') . '"
+                            title="Status: ' . ($data->status == 1 ? 'Active' : 'Inactive') . '">' .
+                        ($data->status == 1 ? 'Active' : 'Inactive') . '</span>';
                 })
                 ->filterColumn('status', function ($query, $keyword) {
                     if (stripos('Active', $keyword) !== false) {
@@ -155,7 +155,7 @@ class AgentController extends Controller
                 ->orderColumn('status', function ($query, $order) {
                     $query->orderBy('status', $order);
                 })
-    
+
                 // Action Buttons (Not Sortable or Searchable)
                 ->addColumn('action', function ($data) {
                     return '
@@ -169,7 +169,7 @@ class AgentController extends Controller
                             <i class="fas fa-trash text-danger" style="font-size: 16px;"></i>
                         </a>';
                 })
-    
+
                 // Last Updated & Created At (Formatted, Sortable & Searchable)
                 ->editColumn('last_updated', function ($data) {
                     return $data->updated_at ? $data->updated_at->format('Y-m-d H:i:s') : '';
@@ -180,7 +180,7 @@ class AgentController extends Controller
                 ->orderColumn('last_updated', function ($query, $order) {
                     $query->orderBy('updated_at', $order);
                 })
-    
+
                 ->editColumn('created_at', function ($data) {
                     return $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '';
                 })
@@ -190,7 +190,7 @@ class AgentController extends Controller
                 ->orderColumn('created_at', function ($query, $order) {
                     $query->orderBy('created_at', $order);
                 })
-    
+
                 // Allow raw HTML in action and status columns
                 ->rawColumns(['action', 'status'])
                 ->toJson();

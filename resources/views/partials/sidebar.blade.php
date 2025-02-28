@@ -190,11 +190,63 @@
                     </div>
                 </div>
 
+                {{-- Terminal Start --}}
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Terminal</span>
+                    </div>
+                </div>
+                <div data-kt-menu-trigger="click"
+                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'terminal.create' || Route::currentRouteName() == 'dashboard' ? 'hover show' : '' }}">
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <i class="fas fa-users"></i>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title position-relative">Terminal
+                        </span>
+                        <span class="menu-arrow"></span>
+                    </span>
+
+                    <div
+                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'terminal.index' || Route::currentRouteName() == 'agent.create' ? 'hover show' : '' }}">
+                        {{-- @can('member-list-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('terminal.index') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'terminal.index' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Terminal List</span>
+
+                                </span>
+                            </a>
+                        {{-- @endcan --}}
+                        {{-- @can('member-request-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('agent.create') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'agent.create' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title position-relative">Terminal Create
+                                    </span>
+                                </span>
+                            </a>
+                        {{-- @endcan --}}
+                    </div>
+                </div>
+                {{-- Terminal End --}}
+
             {{-- @endif --}}
             {{-- member sidebar end --}}
 
-                
-                
+
+
             </div>
             <!--end::Menu-->
         </div>

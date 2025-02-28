@@ -3,9 +3,10 @@
 use App\Http\Controllers\Agent\AgentController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\TerminalController;
 use Illuminate\Support\Facades\Route;
 
-// 
+//
 Route::prefix('admin')->group(function () {
     Route::get('/', [AuthController::class, 'login'])->name('login');
     Route::post('/', [AuthController::class, 'loginPost']);
@@ -30,6 +31,10 @@ Route::prefix('admin')->group(function () {
 
             // datatable
             Route::get('/datatable', [AgentController::class, 'datatable'])->name('agent.datatable');
+        });
+        Route::prefix('terminal')->group(function () {
+            Route::get('/index', [TerminalController::class, 'index'])->name('terminal.index');
+            Route::get('/datatable', [TerminalController::class, 'datatable'])->name('terminal.datatable');
         });
     });
 });
