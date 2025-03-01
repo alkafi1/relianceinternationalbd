@@ -3,12 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Terminal;
+use App\Services\AgentService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 
 class TerminalController extends Controller
 {
+
+    // protected $agentService;
+
+    // public function __construct(AgentService $agentService)
+    // {
+    //     $this->agentService = $agentService;
+    // }
+
     function index()
     {
         $terminal_infos = Terminal::all();
@@ -25,7 +35,8 @@ class TerminalController extends Controller
     function store(Request $request)
     {
         Terminal::insert([
-            'uid' => $request->uid,
+            // 'uid' => $request->uid,
+            'uid' => Str::uuid()->toString(),
             'terminal_id' => $request->terminal_id,
             'terminal_name' => $request->terminal_name,
             'terminal_short_form' => $request->terminal_short_form,

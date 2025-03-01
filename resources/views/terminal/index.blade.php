@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('breadcame', 'Agent List')
+@section('breadcame', 'Terminal List')
 @section('content')
     <div class="row">
         <div class="col-md-12 event-list-col">

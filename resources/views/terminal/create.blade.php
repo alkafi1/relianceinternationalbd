@@ -10,12 +10,12 @@
 
                         <div class="row">
                             <!-- Agent -->
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="uid" class="required">UID</label>
                                     <input type="number" id="uid" name="uid" class="form-control mt-3" required>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="terminal_id" class="required">Terminal ID</label>
