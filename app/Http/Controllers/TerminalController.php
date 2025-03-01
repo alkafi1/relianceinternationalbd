@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Terminal;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -14,6 +15,26 @@ class TerminalController extends Controller
         return view('terminal.index', [
             'terminal_infos' => $terminal_infos,
         ]);
+    }
+
+    function create()
+    {
+        return view('terminal.create');
+    }
+
+    function store(Request $request)
+    {
+        Terminal::insert([
+            'uid' => $request->uid,
+            'terminal_id' => $request->terminal_id,
+            'terminal_name' => $request->terminal_name,
+            'terminal_short_form' => $request->terminal_short_form,
+            'description' => $request->description,
+            'terminal_type' => $request->terminal_type,
+            'address' => $request->address,
+            'created_at' => Carbon::now(),
+        ]);
+        return back();
     }
 
     public function datatable(Request $request)

@@ -5,7 +5,39 @@ namespace App\Models {
     /**
      * App\Models\Agent
      *
+     * @property \Illuminate\Support\Carbon|null $updated_at
+     * @property \Illuminate\Support\Carbon|null $created_at
+     * @property mixed $status
+     * @property mixed $thana_id
+     * @property mixed $district_id
+     * @property mixed $division_id
+     * @property string|null $address
+     * @property string|null $image
+     * @property string $password
+     * @property string|null $phone
+     * @property string $email
+     * @property mixed $age
+     * @property string $last_name
+     * @property string $first_name
+     * @property string $agent_id
+     * @property string $uid
      * @property-read mixed $display_name
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereUid($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereAgentId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereFirstName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereLastName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereAge($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereEmail($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent wherePhone($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent wherePassword($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereImage($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereAddress($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereDivisionId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereDistrictId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereThanaId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereStatus($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereCreatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Agent whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder|Agent newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder|Agent newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder|Agent query()
@@ -514,6 +546,20 @@ namespace App\Models {
     /**
      * App\Models\District
      *
+     * @property string $url
+     * @property string|null $lon
+     * @property string|null $lat
+     * @property string $bn_name
+     * @property string $name
+     * @property mixed $division_id
+     * @property int $id
+     * @method static \Illuminate\Database\Eloquent\Builder|District whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|District whereDivisionId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|District whereName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|District whereBnName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|District whereLat($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|District whereLon($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|District whereUrl($value)
      * @method static \Illuminate\Database\Eloquent\Builder|District newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder|District newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder|District query()
@@ -768,6 +814,14 @@ namespace App\Models {
     /**
      * App\Models\Division
      *
+     * @property string $url
+     * @property string $bn_name
+     * @property string $name
+     * @property int $id
+     * @method static \Illuminate\Database\Eloquent\Builder|Division whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Division whereName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Division whereBnName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Division whereUrl($value)
      * @method static \Illuminate\Database\Eloquent\Builder|Division newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder|Division newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder|Division query()
@@ -1022,6 +1076,26 @@ namespace App\Models {
     /**
      * App\Models\Terminal
      *
+     * @property \Illuminate\Support\Carbon|null $updated_at
+     * @property \Illuminate\Support\Carbon|null $created_at
+     * @property mixed $status
+     * @property string $address
+     * @property mixed $terminal_type
+     * @property string $description
+     * @property string|null $terminal_short_form
+     * @property string $terminal_name
+     * @property string $terminal_id
+     * @property string $uid
+     * @method static \Illuminate\Database\Eloquent\Builder|Terminal whereUid($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Terminal whereTerminalId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Terminal whereTerminalName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Terminal whereTerminalShortForm($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Terminal whereDescription($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Terminal whereTerminalType($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Terminal whereAddress($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Terminal whereStatus($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Terminal whereCreatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Terminal whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder|Terminal newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder|Terminal newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder|Terminal query()
@@ -1276,6 +1350,16 @@ namespace App\Models {
     /**
      * App\Models\Thana
      *
+     * @property string $url
+     * @property string $bn_name
+     * @property string $name
+     * @property mixed $district_id
+     * @property int $id
+     * @method static \Illuminate\Database\Eloquent\Builder|Thana whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Thana whereDistrictId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Thana whereName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Thana whereBnName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|Thana whereUrl($value)
      * @method static \Illuminate\Database\Eloquent\Builder|Thana newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder|Thana newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder|Thana query()
@@ -1535,7 +1619,7 @@ namespace App\Models {
      * @property string|null $remember_token
      * @property string|null $image
      * @property string $password
-     * @property string $status
+     * @property mixed $status
      * @property \Illuminate\Support\Carbon|null $email_verified_at
      * @property string $email
      * @property string $last_name

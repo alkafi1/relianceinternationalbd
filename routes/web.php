@@ -34,6 +34,8 @@ Route::prefix('admin')->group(function () {
         });
         Route::prefix('terminal')->group(function () {
             Route::get('/index', [TerminalController::class, 'index'])->name('terminal.index');
+            Route::get('/create', [TerminalController::class, 'create'])->name('terminal.create');
+            Route::post('/create', [TerminalController::class, 'store'])->name('terminal.store');
             Route::get('/datatable', [TerminalController::class, 'datatable'])->name('terminal.datatable');
         });
     });

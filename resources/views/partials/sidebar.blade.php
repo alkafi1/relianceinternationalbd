@@ -227,9 +227,9 @@
                             </a>
                         {{-- @endcan --}}
                         {{-- @can('member-request-view') --}}
-                            <a class="menu-item menu-accordion" href="{{ route('agent.create') }}">
+                            <a class="menu-item menu-accordion" href="{{ route('terminal.create') }}">
                                 <span
-                                    class="menu-link {{ Route::currentRouteName() == 'agent.create' ? 'active' : '' }}">
+                                    class="menu-link {{ Route::currentRouteName() == 'terminal.create' ? 'active' : '' }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
