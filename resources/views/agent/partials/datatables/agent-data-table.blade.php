@@ -6,32 +6,38 @@
         <thead>
             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0" style="background: #690f0f;">
                 <th class="fw-bold text-dark" style="font-weight: 900">
-                    {{ __('agent_id') }}
+                    {{ __('english.agent_id') }}
                 </th>
                 <th class="min-w-50px fw-bold text-dark firstTheadColumn" style="font-weight: 900">
-                    {{ __('agent_name') }}
+                    {{ __('english.agent_name') }}
                 </th>
                 <th class="min-w-30px fw-bold text-dark" style="font-weight: 900">
-                    {{ __("today's_job") }}
+                    {{ __("english.today_job") }}
                 </th>
                 <th class="min-w-150px fw-bold text-dark" style="font-weight: 900">
-                    {{ __('phone') }}
+                    {{ __('english.phone') }}
                 </th>
                 <th class="min-w-50px fw-bold text-dark" style="font-weight: 900">
-                    {{ __('email') }}
+                    {{ __('english.email') }}
                 </th>
                 <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
-                    {{ __('age') }}</th>
+                    {{ __('english.age') }}
+                </th>
                 <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
-                    {{ __('full_address') }}</th>
+                    {{ __('english.full_address') }}
+                </th>
                 <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
-                    {{ __('status') }}</th>
+                    {{ __('english.status') }}
+                </th>
                 <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
-                    {{ __('action') }}</th>
+                    {{ __('english.action') }}
+                </th>
                 <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
-                    {{ __('last_updated') }}</th>
+                    {{ __('english.last_updated') }}
+                </th>
                 <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
-                    {{ __('created_at') }}</th>
+                    {{ __('english.created_at') }}
+                </th>
             </tr>
         </thead>
         <tbody>

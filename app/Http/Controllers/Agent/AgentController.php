@@ -105,8 +105,7 @@ class AgentController extends Controller
         $agent->update($validatedData);
 
         return redirect()->route('agent.index')->with([
-            'success' => true,
-            'message' => 'Agent updated successfully.',
+            'success' => 'Agent updated successfully.',
         ]);
     }
 

@@ -131,7 +131,6 @@
 
                 var uid = $(this).attr('data-id');
                 var url = `{{ route('agent.edit', ':agent') }}`.replace(':agent', uid);
-                alert(url);
                 $.ajax({
                     url: url,
                     type: 'GET', // or 'GET' depending on your server endpoint

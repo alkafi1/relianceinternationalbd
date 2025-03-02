@@ -25,6 +25,7 @@ Route::prefix('admin')->group(function () {
             Route::PUT('/{agent}/update', [AgentController::class, 'update'])->name('agent.update');
             Route::put('/{agent}', [AgentController::class, 'update'])->name('agent.update');
             Route::delete('/{agent}', [AgentController::class, 'destroy'])->name('agent.destroy');
+            Route::put('/status/{agent}/update', [AgentController::class, 'statusUpdate'])->name('agent.status.update');
             Route::put('/status/{agent}', [AgentController::class, 'getStatusByUid'])->name('agent.status');
             Route::post('/get/districts', [AgentController::class, 'getdistricts'])->name('get.districts');
             Route::post('/get/thanas', [AgentController::class, 'getThanas'])->name('get.thanas');
