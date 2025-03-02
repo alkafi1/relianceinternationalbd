@@ -10,7 +10,7 @@ trait BaseModel
      *
      * @var string
      */
-    protected $primaryKey = 'uuid';
+    protected $primaryKey = 'uid';
 
     /**
      * The "type" of the auto-incrementing ID.
@@ -37,5 +37,23 @@ trait BaseModel
         static::creating(function ($model) {
             $model->uid = Str::uuid()->toString();
         });
+    }
+
+    public static function findByColumn($column, $value)
+    {
+        $record = self::where($column, $value)->first();
+
+        if (!$record) {
+            return response()->json([
+                'success' => false,
+                'message' => ucfirst(self::class) . ' not found.',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => ucfirst(self::class) . ' retrieved successfully.',
+            'data' => $record
+        ], 200);
     }
 }

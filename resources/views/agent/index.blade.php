@@ -10,6 +10,30 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Agent Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <select id="statusSelect" class="form-control">
+                        <option value="approved">APPROVED</option>
+                        <option value="unapproved">UNAPPROVED</option>
+                        <option value="deleted">DELETED</option>
+                        <option value="lock">LOCK</option>
+                        <option value="suspended">SUSPENDED</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @push('custom-js')
         <script>
             // Define columns
@@ -105,19 +129,17 @@
             $(document).on('click', '.edit', function(e) {
                 e.preventDefault(); // Prevent default link behavior
 
-                var id = $(this).attr('data-id');
-                var url = "{{ route('dashboard') }}";
+                var uid = $(this).attr('data-id');
+                var url = `{{ route('agent.edit', ':agent') }}`.replace(':agent', uid);
+                alert(url);
                 $.ajax({
                     url: url,
-                    type: 'POST', // or 'GET' depending on your server endpoint
+                    type: 'GET', // or 'GET' depending on your server endpoint
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: {
-                        id: id
                     }, // You can send additional data if needed
                     success: function(response) {
-                        console.log(response.event);
+                        console.log(response);
 
                     },
                     error: function(xhr, status, error) {
@@ -152,26 +174,11 @@
             $(document).on('click', '.status', function(e) {
                 e.preventDefault(); // Prevent default link behavior
 
-                var id = $(this).attr('data-id'); // Get the URL from the href attribute
+                var uid = $(this).attr('data-id'); // Get the URL from the href attribute
                 var status = $(this).attr('data-status');
-                var url = "";
-                // Show SweetAlert confirmation dialog
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'This action will change status of this agent!',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, Change it!',
-                    cancelButtonText: 'No, cancel!',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Send AJAX request
-                        // sendAjaxRequest(url, row);
-
-                        sendAjaxReq(id, status, url);
-                    }
-                });
+                $('#exampleModal').modal('show');
+                var url = `{{ route('agent.status', ':agent') }}`.replace(':agent', uid);
+                sendAjaxReq(uid, status, url, 'PUT');
             });
 
             function sendAjaxReq(id, status, url, type) {
@@ -179,23 +186,24 @@
                     id: id,
                     // Optionally include status if it's provided
                 };
-
-                // Check if status is defined and not null
-                if (typeof status !== 'undefined' && status !== null) {
-                    requestData.status = status;
-                }
                 $.ajax({
                     url: url,
                     type: type, // or 'GET' depending on your server endpoint
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: requestData, // You can send additional data if needed
+                    }, // You can send additional data if needed
                     success: function(response) {
                         $('#agent-data').DataTable().ajax.reload(null, false);
-                        // Swal.fire('Success!', response.success,
-                        //     'success');
-                        toastr.success(response.message);
+                        if (response.success) {
+                            console.log(response);
+                            if (response.data && response.data.status) {
+                                $('#statusSelect').val(response.data.status);
+                            } else {
+                                toastr.success(response.message);
+                            }
+                        } else {
+                            toastr.error(response.message);
+                        }
                     },
                     error: function(xhr, status, error) {
                         // Handle AJAX error

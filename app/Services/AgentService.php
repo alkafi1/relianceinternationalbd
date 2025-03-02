@@ -29,8 +29,6 @@ class AgentService
 
         // Create the agent
         $agent = Agent::create([
-            'uid' => Str::uuid()->toString(), // Generate UUID
-            'agent_id' => $validatedData['agent_id'],
             'first_name' => $validatedData['first_name'],
             'last_name' => $validatedData['last_name'],
             'age' => $validatedData['age'],

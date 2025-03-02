@@ -18,13 +18,9 @@
     {{-- <link rel="shortcut icon" href="{{ asset('public/frontend/images/' . $global['favicon']) }}" /> --}}
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
-    <!-- jQuery UI -->
-    {{-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> --}}
     <!--end::Fonts-->
     <!--begin::Page Vendor Stylesheets(used by this page)-->
     <link rel="stylesheet" href="{{ asset('public/admin/css/app.css') }}" type="text/css">
-    <!-- Select2 CSS -->
-    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
@@ -33,7 +29,6 @@
     <link href="{{ asset('public/admin/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('public/admin/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
         type="text/css" />
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/4.0.1/ekko-lightbox.min.css" rel="stylesheet" /> --}}
     <link href="{{ asset('public/admin/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
 
     <!--end::Global Stylesheets Bundle-->
@@ -142,15 +137,6 @@
 
     {{-- dattabase --}}
     <script src="{{ asset('public/admin/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-
-    
-
-    <!-- Select2 JS -->
-    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
-
-    
-
-
     @stack('custom-js')
     <!-- Initialize Toastr -->
     {{-- {!! Toastr::message() !!} --}}

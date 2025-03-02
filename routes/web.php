@@ -22,9 +22,10 @@ Route::prefix('admin')->group(function () {
             Route::post('/store', [AgentController::class, 'store'])->name('agent.store');
             // Route::get('/{agent}', [AgentController::class, 'show'])->name('agent.show');
             Route::get('/{agent}/edit', [AgentController::class, 'edit'])->name('agent.edit');
+            Route::PUT('/{agent}/update', [AgentController::class, 'update'])->name('agent.update');
             Route::put('/{agent}', [AgentController::class, 'update'])->name('agent.update');
             Route::delete('/{agent}', [AgentController::class, 'destroy'])->name('agent.destroy');
-            Route::post('/status/{agent}', [AgentController::class, 'status'])->name('agent.status');
+            Route::put('/status/{agent}', [AgentController::class, 'getStatusByUid'])->name('agent.status');
             Route::post('/get/districts', [AgentController::class, 'getdistricts'])->name('get.districts');
             Route::post('/get/thanas', [AgentController::class, 'getThanas'])->name('get.thanas');
 

@@ -24,7 +24,6 @@ class AgentStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'agent_id' => ['required', 'string', 'max:255',],
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'age' => ['nullable', 'integer', 'min:1', 'max:120'],
