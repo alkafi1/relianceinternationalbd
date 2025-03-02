@@ -56,6 +56,8 @@ class BaseModel extends Model
         // Retrieve the 'status' value for the given UID
         $status = self::where('uid', $uid)->value('status');
 
+
+
         // Check if the status is null, meaning the agent was not found
         if (is_null($status)) {
             return response()->json([
@@ -69,9 +71,44 @@ class BaseModel extends Model
             'success' => true,
             'message' => ucfirst(self::class) . ' retrieved successfully.',
             'data' => [
-                'status' => $status
+                'status' => $status,
+                'uid' => $uid
             ]
         ], 200);
+    }
+
+    /**
+     * Update a record by a given column and value.
+     *
+     * @param string $column
+     * @param mixed $value
+     * @param array $data
+     * @return array
+     */
+    public static function updateByColumn(string $column, $value, array $data): array
+    {
+        try {
+            // Perform the update
+            $result = static::where($column, $value)->update($data);
+
+            // Check if the update was successful
+            if ($result) {
+                return [
+                    'success' => true,
+                    'message' => '<b>Record updated successfully.</b>',
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => '<b>No records found or no changes made.</b>',
+                ];
+            }
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => '<b>An error occurred while updating the record.</b>',
+            ];
+        }
     }
 
 

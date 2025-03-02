@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Agent;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Agent\AgentStatusUpdateRequest;
 use App\Http\Requests\Agent\AgentStoreRequest;
 use App\Http\Requests\Agent\AgentUpdateRequest;
 use App\Http\Resources\Agent\AgentEditResource;
@@ -109,6 +110,14 @@ class AgentController extends Controller
         ]);
     }
 
+    public function statusUpdate(AgentStatusUpdateRequest $request)
+    {
+        // Agent::where('uid', $request['uid'])->update(['status' => $request['status']]);
+        return $result = Agent::updateByColumn('uid', $request['uid'], [
+            'status' => $request['status'],
+        ]);
+    }
+
 
 
     /**
@@ -133,11 +142,13 @@ class AgentController extends Controller
         if ($request->ajax()) {
             $query = Agent::query();
 
+
             return DataTables::of($query)
                 // Agent ID (Sortable & Searchable)
                 ->addColumn('agent_id', function ($data) {
                     return $data->agent_id ?? '';
                 })
+
 
                 // Full Name (Concatenated, needs custom sorting & filtering)
                 ->addColumn('agent_name', function ($data) {
@@ -150,10 +161,12 @@ class AgentController extends Controller
                     $query->orderByRaw("CONCAT(first_name, ' ', last_name) {$order}");
                 })
 
+
                 // Static Column (Not Sortable)
                 ->addColumn('todays_job', function () {
                     return 1;
                 })
+
 
                 // Phone, Email, Age, Address (Sortable & Searchable)
                 ->addColumn('phone', function ($data) {
@@ -169,22 +182,48 @@ class AgentController extends Controller
                     return $data->address ?? '';
                 })
 
-                // Status Badge (Sortable & Searchable)
+
                 ->addColumn('status', function ($data) {
-                    return '<span class="status badge badge-light-' . ($data->status == 1 ? 'success' : 'danger') . '" 
-                            title="Status: ' . ($data->status == 1 ? 'Active' : 'Inactive') . '" data-id="' . $data->uid . '">' .
-                        ($data->status == 1 ? 'Active' : 'Inactive') . '</span>';
+                    // Define status colors and labels
+                    $statusColors = [
+                        'APPROVED' => 'success',
+                        'UNAPPROVED' => 'warning',
+                        'DELETED' => 'danger',
+                        'LOCK' => 'secondary',
+                        'SUSPENDED' => 'info',
+                    ];
+
+                    // Get the status label and color
+                    $statusLabel = strtolower($data->status); // Ensure lowercase for consistency
+                    $statusColor = $statusColors[strtoupper($data->status)] ?? 'secondary'; // Default to 'secondary' if status is not found
+
+                    // Return the formatted status badge
+                    return '<span class="status badge badge-light-' . $statusColor . '" 
+                            title="Status: ' . ucfirst($statusLabel) . '" data-id="' . $data->uid . '">' .
+                        ucfirst($statusLabel) . '</span>';
                 })
                 ->filterColumn('status', function ($query, $keyword) {
-                    if (stripos('Active', $keyword) !== false) {
-                        $query->where('status', 1);
-                    } elseif (stripos('Inactive', $keyword) !== false) {
-                        $query->where('status', 0);
+                    // Map keyword to status values
+                    $statusMap = [
+                        'approved' => 'APPROVED',
+                        'unapproved' => 'UNAPPROVED',
+                        'deleted' => 'DELETED',
+                        'lock' => 'LOCK',
+                        'suspended' => 'SUSPENDED',
+                    ];
+
+                    // Convert keyword to lowercase for case-insensitive comparison
+                    $keyword = strtolower($keyword);
+
+                    // Check if the keyword matches any status
+                    if (array_key_exists($keyword, $statusMap)) {
+                        $query->where('status', $statusMap[$keyword]);
                     }
                 })
                 ->orderColumn('status', function ($query, $order) {
                     $query->orderBy('status', $order);
                 })
+
 
                 // Action Buttons (Not Sortable or Searchable)
                 ->addColumn('action', function ($data) {
@@ -201,6 +240,7 @@ class AgentController extends Controller
                         </a>';
                 })
 
+
                 // Last Updated & Created At (Formatted, Sortable & Searchable)
                 ->editColumn('last_updated', function ($data) {
                     return $data->updated_at ? $data->updated_at->format('Y-m-d H:i:s') : '';
@@ -212,6 +252,7 @@ class AgentController extends Controller
                     $query->orderBy('updated_at', $order);
                 })
 
+
                 ->editColumn('created_at', function ($data) {
                     return $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '';
                 })
@@ -221,6 +262,7 @@ class AgentController extends Controller
                 ->orderColumn('created_at', function ($query, $order) {
                     $query->orderBy('created_at', $order);
                 })
+
 
                 // Allow raw HTML in action and status columns
                 ->rawColumns(['action', 'status'])

@@ -27,7 +27,7 @@ class AgentUpdateRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'age' => ['nullable', 'integer', 'min:1', 'max:120'],
-            // 'email' => ['required', 'email', Rule::unique('agents', 'email')->ignore($this->agent->uid)],
+            'email' => ['required', 'email', Rule::unique('agents', 'email')->ignore($this->agent->uid)],
             'phone' => ['required', 'string', 'max:20'],
             // 'password' => ['nullable', 'string', 'min:8'],
             'address' => ['nullable', 'string', 'max:500'],

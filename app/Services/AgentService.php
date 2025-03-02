@@ -60,4 +60,3 @@ class AgentService
         Auth::logout();
     }
 }
-

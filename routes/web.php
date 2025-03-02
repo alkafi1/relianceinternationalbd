@@ -3,9 +3,10 @@
 use App\Http\Controllers\Agent\AgentController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\TerminalController;
 use Illuminate\Support\Facades\Route;
 
-// 
+//
 Route::prefix('admin')->group(function () {
     Route::get('/', [AuthController::class, 'login'])->name('login');
     Route::post('/', [AuthController::class, 'loginPost']);
@@ -25,13 +26,19 @@ Route::prefix('admin')->group(function () {
             Route::PUT('/{agent}/update', [AgentController::class, 'update'])->name('agent.update');
             Route::put('/{agent}', [AgentController::class, 'update'])->name('agent.update');
             Route::delete('/{agent}', [AgentController::class, 'destroy'])->name('agent.destroy');
-            Route::put('/status/{agent}/update', [AgentController::class, 'statusUpdate'])->name('agent.status.update');
+            Route::post('/status/update', [AgentController::class, 'statusUpdate'])->name('agent.status.update');
             Route::put('/status/{agent}', [AgentController::class, 'getStatusByUid'])->name('agent.status');
             Route::post('/get/districts', [AgentController::class, 'getdistricts'])->name('get.districts');
             Route::post('/get/thanas', [AgentController::class, 'getThanas'])->name('get.thanas');
 
             // datatable
             Route::get('/datatable', [AgentController::class, 'datatable'])->name('agent.datatable');
+        });
+        Route::prefix('terminal')->group(function () {
+            Route::get('/index', [TerminalController::class, 'index'])->name('terminal.index');
+            Route::get('/create', [TerminalController::class, 'create'])->name('terminal.create');
+            Route::post('/create', [TerminalController::class, 'store'])->name('terminal.store');
+            Route::get('/datatable', [TerminalController::class, 'datatable'])->name('terminal.datatable');
         });
     });
 });

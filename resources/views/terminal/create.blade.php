@@ -5,24 +5,28 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="route('agent.store')" id="agentForm" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('terminal.store') }}" id="terminalForm" method="POST">
                         @csrf <!-- Add CSRF token for security -->
 
                         <div class="row">
+                            <!-- Agent -->
+                            {{-- <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="uid" class="required">UID</label>
+                                    <input type="number" id="uid" name="uid" class="form-control mt-3" required>
+                                </div>
+                            </div> --}}
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="terminal_id" class="required">Terminal ID</label>
+                                    <input type="text" id="terminal_id" name="terminal_id" class="form-control mt-3" required>
+                                </div>
+                            </div>
                             <!-- First Name -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="first_name" class="required">First Name</label>
-                                    <input type="text" id="first_name" name="first_name" class="form-control mt-3"
-                                        required>
-                                </div>
-                            </div>
-
-                            <!-- Last Name -->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="last_name" class="required">Last Name</label>
-                                    <input type="text" id="last_name" name="last_name" class="form-control mt-3"
+                                    <label for="terminal_name" class="required">Terminal Name</label>
+                                    <input type="text" id="terminal_name" name="terminal_name" class="form-control mt-3"
                                         required>
                                 </div>
                             </div>
@@ -32,16 +36,16 @@
                             <!-- Age -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="age">Age</label>
-                                    <input type="number" id="age" name="age" class="form-control mt-3">
+                                    <label for="age">Terminal Short Form</label>
+                                    <input type="text" id="terminal_short_form" name="terminal_short_form" class="form-control mt-3">
                                 </div>
                             </div>
 
                             <!-- Email -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="email" class="required">Email</label>
-                                    <input type="email" id="email" name="email" class="form-control mt-3" required>
+                                    <label for="description" class="required">Description</label>
+                                    <input type="text" id="description" name="description" class="form-control mt-3" required>
                                 </div>
                             </div>
                         </div>
@@ -50,17 +54,8 @@
                             <!-- Phone -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="phone" class="required">Phone</label>
-                                    <input type="text" id="phone" name="phone" class="form-control mt-3">
-                                </div>
-                            </div>
-
-                            <!-- Password -->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="password" class="required">Password</label>
-                                    <input type="password" id="password" name="password" class="form-control mt-3"
-                                        required>
+                                    <label for="terminal_type" class="required">Terminal Type</label>
+                                    <input type="text" id="terminal_type" name="terminal_type" class="form-control mt-3">
                                 </div>
                             </div>
                         </div>
@@ -75,44 +70,18 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <!-- Town ID -->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="division_id" class="required">Division ID</label>
-                                    <select id="division_id" name="division_id" class="form-control mt-3"
-                                        onchange="getDistricts(this.value)">
-                                        <option value="">--Select Division--</option>
-                                        @foreach ($divisions as $division)
-                                            <option value="{{ $division->id }}">{{ $division->name }}</option>
-                                        @endforeach
-                                    </select>
 
-
-                                </div>
-                            </div>
-
-                            <!-- City ID -->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="district_id" class="required">District ID</label>
-                                    <select id="district_id" name="district_id" class="form-control mt-3">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
+                        {{-- <div class="row">
                             <!-- State ID -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="thana_id">Thana ID</label>
-                                    <input type="number" id="thana_id" name="thana_id" class="form-control mt-3">
+                                    <label for="status">Status</label>
+                                    <input type="number" id="status" name="status" value="active" class="form-control mt-3">
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
-                        <div class="row">
+                        {{-- <div class="row">
                             <!-- Status -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
@@ -127,18 +96,8 @@
                                 </div>
                             </div>
 
-                            <!-- Image -->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="image">Profile Image</label>
-                                    <input type="file" id="image" name="image" class="form-control mt-3"
-                                        oninput="previewImage.src=window.URL.createObjectURL(this.files[0])">
-                                    <p class="text-danger">Image must be in JPEG, PNG, or GIF format</p>
-                                    <img id="previewImage" width="200" class="float-start mt-3" src=""
-                                        alt="Image Preview">
-                                </div>
-                            </div>
-                        </div>
+
+                        </div> --}}
 
                         <!-- Submit Button -->
                         <div class="row">
@@ -183,10 +142,13 @@
                     success: function(response) {
                         // Hide loading spinner
                         $('#spinner').addClass('d-none');
+
                         if (response.success) {
-                            toastr.success(response.message);
+                            alert('Form submitted successfully!');
+                            // Optionally, reset the form
+                            $('#agentForm')[0].reset();
                         } else {
-                            toastr.error(response.message);
+                            alert('Error: ' + response.message);
                         }
                     },
                     error: function(xhr) {

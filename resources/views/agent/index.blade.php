@@ -18,18 +18,20 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <select id="statusSelect" class="form-control">
-                        <option value="approved">APPROVED</option>
-                        <option value="unapproved">UNAPPROVED</option>
-                        <option value="deleted">DELETED</option>
-                        <option value="lock">LOCK</option>
-                        <option value="suspended">SUSPENDED</option>
-                    </select>
+                    <form id="agentStatusUpdateForm">
+                        @csrf
+                        <select id="status" name="status" class="form-control">
+                            <option value="approved">APPROVED</option>
+                            <option value="unapproved">UNAPPROVED</option>
+                            <option value="deleted">DELETED</option>
+                            <option value="lock">LOCK</option>
+                            <option value="suspended">SUSPENDED</option>
+                        </select>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <input type="hidden" id="uid" name="uid">
+                <button type="submit" id="submit" class="btn btn-primary">Save changes</button>
+                </form>
             </div>
         </div>
     </div>
@@ -94,13 +96,6 @@
                     searchable: true,
                 },
                 {
-                    data: 'action', // Corresponds to the 'status' field in your data
-                    name: 'action',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
-                    orderable: true,
-                    searchable: true,
-                },
-                {
                     data: 'last_updated', // Corresponds to the 'last_updated' field in your data
                     name: 'last_updated',
                     className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
@@ -121,37 +116,24 @@
                         // Format the date if needed
                         return new Date(data).toLocaleDateString();
                     }
-                }
+                },
+
+                {
+                    data: 'action', // Corresponds to the 'status' field in your data
+                    name: 'action',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true,
+                },
             ];
             // Initialize DataTable
             initializeDataTable('agent-data', "{{ route('agent.datatable') }}", columns);
 
-            $(document).on('click', '.edit', function(e) {
-                e.preventDefault(); // Prevent default link behavior
-
-                var uid = $(this).attr('data-id');
-                var url = `{{ route('agent.edit', ':agent') }}`.replace(':agent', uid);
-                $.ajax({
-                    url: url,
-                    type: 'GET', // or 'GET' depending on your server endpoint
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }, // You can send additional data if needed
-                    success: function(response) {
-                        console.log(response);
-
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle AJAX error
-                        Swal.fire('Error!', 'An error occurred.', 'error');
-                    }
-                });
-            });
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior
 
-                var id = $(this).attr('data-id');
-                var url = `{{ route('agent.destroy', ':agent') }}`.replace(':agent', id);
+                var uid = $(this).attr('data-id');
+                var url = `{{ route('agent.destroy', ':agent') }}`.replace(':agent', uid);
                 // Show SweetAlert confirmation dialog
                 Swal.fire({
                     title: 'Are you sure?',
@@ -166,7 +148,7 @@
                         // Send AJAX request
                         // sendAjaxRequest(url, row);
 
-                        sendAjaxReq(id, status = null, url, type = 'DELETE');
+                        sendAjaxReq(uid, status = null, url, type = 'DELETE');
                     }
                 });
             });
@@ -180,11 +162,7 @@
                 sendAjaxReq(uid, status, url, 'PUT');
             });
 
-            function sendAjaxReq(id, status, url, type) {
-                var requestData = {
-                    id: id,
-                    // Optionally include status if it's provided
-                };
+            function sendAjaxReq(uid, status, url, type) {
                 $.ajax({
                     url: url,
                     type: type, // or 'GET' depending on your server endpoint
@@ -196,7 +174,8 @@
                         if (response.success) {
                             console.log(response);
                             if (response.data && response.data.status) {
-                                $('#statusSelect').val(response.data.status);
+                                $('#status').val(response.data.status);
+                                $('#uid').val(response.data.uid);
                             } else {
                                 toastr.success(response.message);
                             }
@@ -210,6 +189,40 @@
                     }
                 });
             }
+            $(document).ready(function() {
+                // Handle form submission
+                $('#agentStatusUpdateForm').on('submit', function(e) {
+                    e.preventDefault(); // Prevent the default form submission
+                    // Show loading spinner
+                    $('#spinner').removeClass('d-none');
+                    // Create a FormData object to handle file uploads
+                    const formData = new FormData(this);
+                    // Send the AJAX request
+                    $.ajax({
+                        url: '{{ route('agent.status.update') }}', // URL to submit the form data
+                        type: 'POST',
+                        data: formData,
+                        processData: false, // Prevent jQuery from processing the data
+                        contentType: false, // Prevent jQuery from setting the content type
+                        success: function(response) {
+                            // Hide loading spinner
+                            $('#spinner').addClass('d-none');
+                            if (response.success) {
+                                toastr.success(response.message);
+                                $('#exampleModal').modal('hide');
+                                $('#agentStatusUpdateForm')[0].reset();
+                                $('#agent-data').DataTable().ajax.reload(null, false);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            $('#spinner').addClass('d-none');
+                            alert('An error occurred while submitting the form.');
+                        }
+                    });
+                });
+            });
         </script>
     @endpush
 @endsection
