@@ -112,7 +112,7 @@
                             </div>
                         </div>
                         <button id="system-submit" type="submit" class="btn btn-primary mt-3">
-                            <span id="spinner-system-submit" class="spinner-border spinner-border-sm me-2 d-none"
+                            <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none"
                                 role="status" aria-hidden="true"></span>
                             <i class="fas fa-upload"></i> Submit
                         </button>
@@ -127,7 +127,8 @@
             $(document).ready(function() {
                 $('#system-submit').on('click', function(e) {
                     e.preventDefault();
-
+                    // Show loading spinner
+                    $('#spinner').removeClass('d-none');
                     let form = $('#myForm')[0]; // Get the raw DOM element
                     let formData = new FormData(form); // Create FormData object
 
@@ -145,9 +146,17 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function(response) {
-                            console.log(response);
+                            $('#spinner').addClass('d-none');
+                            if (response.success) {
+                                toastr.success(response.message);
+                            } else {
+                                toastr.error(response.message);
+                            }
                         },
                         error: function(xhr) {
+                            
+                        // Hide loading spinner
+                        $('#spinner').addClass('d-none');
                             var errors = xhr.responseJSON.errors;
                             $.each(errors, function(key, value) {
                                 console.log(key, value);
