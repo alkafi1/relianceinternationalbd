@@ -36,15 +36,16 @@ Route::prefix('admin')->group(function () {
             Route::get('/datatable', [AgentController::class, 'datatable'])->name('agent.datatable');
         });
 
-        // 
+        // terminal route start
         Route::prefix('terminal')->group(function () {
             Route::get('/index', [TerminalController::class, 'index'])->name('terminal.index');
             Route::get('/create', [TerminalController::class, 'create'])->name('terminal.create');
             Route::post('/create', [TerminalController::class, 'store'])->name('terminal.store');
             Route::get('/datatable', [TerminalController::class, 'datatable'])->name('terminal.datatable');
         });
+        // terminal route end
 
-        //
+        // party route start
         Route::prefix('party')->group(function () {
             Route::get('/index', [PartyController::class, 'index'])->name('party.index');
             Route::get('/create', [PartyController::class, 'create'])->name('party.create');
@@ -59,6 +60,7 @@ Route::prefix('admin')->group(function () {
             // datatable
             Route::get('/datatable', [PartyController::class, 'datatable'])->name('party.datatable');
         });
+        // party route end
         
     });
 });
