@@ -134,4 +134,6 @@ class BaseModel extends Model
             'message' => ucfirst(class_basename(get_class($model))) . ' deletion failed.',
         ], 400);
     }
+
+    
 }

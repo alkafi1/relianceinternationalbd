@@ -1,20 +1,20 @@
 @extends('layouts.layout')
-@section('breadcame', 'Agent')
+@section('breadcame', $agent->display_name . ' Agent Edit')
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="route('agent.store')" id="agentForm" method="POST" enctype="multipart/form-data">
+                    <form action="{{route('agent.update',['agent' => $agent->uid])}}" id="agentForm" method="POST" enctype="multipart/form-data">
                         @csrf <!-- Add CSRF token for security -->
-
+                        @method('PUT')
                         <div class="row">
                             <!-- First Name -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="first_name" class="required">First Name</label>
                                     <input type="text" id="first_name" name="first_name" class="form-control mt-3"
-                                        required>
+                                        required value="{{ $agent->first_name }}">
                                 </div>
                             </div>
 
@@ -23,7 +23,7 @@
                                 <div class="form-group mt-3">
                                     <label for="last_name" class="required">Last Name</label>
                                     <input type="text" id="last_name" name="last_name" class="form-control mt-3"
-                                        required>
+                                        required value="{{ $agent->last_name }}">
                                 </div>
                             </div>
                         </div>
@@ -33,7 +33,7 @@
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="age">Age</label>
-                                    <input type="number" id="age" name="age" class="form-control mt-3">
+                                    <input type="number" id="age" name="age" class="form-control mt-3" value="{{ $agent->age }}">
                                 </div>
                             </div>
 
@@ -41,7 +41,7 @@
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="email" class="required">Email</label>
-                                    <input type="email" id="email" name="email" class="form-control mt-3" required>
+                                    <input type="email" id="email" name="email" class="form-control mt-3" required value="{{ $agent->email }}">
                                 </div>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="phone" class="required">Phone</label>
-                                    <input type="text" id="phone" name="phone" class="form-control mt-3">
+                                    <input type="text" id="phone" name="phone" class="form-control mt-3" value="{{ $agent->phone }}">
                                 </div>
                             </div>
 
@@ -60,7 +60,7 @@
                                 <div class="form-group mt-3">
                                     <label for="password" class="required">Password</label>
                                     <input type="password" id="password" name="password" class="form-control mt-3"
-                                        required>
+                                        >
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                             <div class="col-md-12">
                                 <div class="form-group mt-3">
                                     <label for="address" class="required">Address</label>
-                                    <textarea id="address" name="address" class="form-control mt-3" rows="3"></textarea>
+                                    <textarea id="address" name="address" class="form-control mt-3" rows="3">{{$agent->address}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                                         onchange="getDistricts(this.value)">
                                         <option value="">--Select Division--</option>
                                         @foreach ($divisions as $division)
-                                            <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                            <option value="{{ $division->id }}" {{ $division->id == $agent->division_id ? 'selected' : '' }} >{{ $division->name }}</option>
                                         @endforeach
                                     </select>
 
@@ -110,6 +110,11 @@
                                     <input type="number" id="thana_id" name="thana_id" class="form-control mt-3">
                                 </div>
                             </div>
+                            <!-- State ID -->
+                            <div class="col-md-6">
+                                <img id="previewImage" width="200" class="float-start mt-3" src=""
+                                alt="Image Preview">
+                            </div>
                         </div>
 
                         <div class="row">
@@ -118,11 +123,11 @@
                                 <div class="form-group mt-3">
                                     <label for="status" class="required">Agent Status</label>
                                     <select id="status" name="status" class="form-control mt-3" required>
-                                        <option value="approved">Approved</option>
-                                        <option value="unapproved">Unapproved</option>
-                                        <option value="deleted">Deleted</option>
-                                        <option value="lock">Lock</option>
-                                        <option value="suspended">Suspended</option>
+                                        <option value="approved" {{ $agent->status == 'approved' ? 'selected' : '' }}>Approved</option>
+                                        <option value="unapproved" {{ $agent->status == 'unapproved' ? 'selected' : '' }}>Unapproved</option>
+                                        <option value="deleted" {{ $agent->status == 'deleted' ? 'selected' : '' }}>Deleted</option>
+                                        <option value="lock" {{ $agent->status == 'lock' ? 'selected' : '' }}>Lock</option>
+                                        <option value="suspended" {{ $agent->status == 'suspended' ? 'selected' : '' }}>Suspended</option>
                                     </select>
                                 </div>
                             </div>
@@ -134,8 +139,7 @@
                                     <input type="file" id="image" name="image" class="form-control mt-3"
                                         oninput="previewImage.src=window.URL.createObjectURL(this.files[0])">
                                     <p class="text-danger">Image must be in JPEG, PNG, or GIF format</p>
-                                    <img id="previewImage" width="200" class="float-start mt-3" src=""
-                                        alt="Image Preview">
+                                    
                                 </div>
                             </div>
                         </div>
@@ -147,7 +151,7 @@
                                     <button type="submit" id="submit" class="btn btn-primary mt-4">
                                         <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none"
                                             role="status" aria-hidden="true"></span>
-                                        <i class="fas fa-upload"></i> Submit
+                                        <i class="fas fa-upload"></i> Update
                                     </button>
                                 </div>
                             </div>
@@ -164,43 +168,42 @@
     <script>
         $(document).ready(function() {
             // Handle form submission
-            $('#agentForm').on('submit', function(e) {
-                e.preventDefault(); // Prevent the default form submission
+            // $('#agentForm').on('submit', function(e) {
+            //     e.preventDefault(); // Prevent the default form submission
 
-                // Show loading spinner
-                $('#spinner').removeClass('d-none');
+            //     // Show loading spinner
+            //     $('#spinner').removeClass('d-none');
 
-                // Create a FormData object to handle file uploads
-                const formData = new FormData(this);
+            //     // Create a FormData object to handle file uploads
+            //     const formData = new FormData(this);
 
-                // Send the AJAX request
-                $.ajax({
-                    url: '{{ route('agent.store') }}', // URL to submit the form data
-                    type: 'POST',
-                    data: formData,
-                    processData: false, // Prevent jQuery from processing the data
-                    contentType: false, // Prevent jQuery from setting the content type
-                    success: function(response) {
-                        // Hide loading spinner
-                        $('#spinner').addClass('d-none');
-                        if (response.success) {
-                            toastr.success(response.message);
-                        } else {
-                            toastr.error(response.message);
-                        }
-                    },
-                    error: function(xhr) {
-                        // Hide loading spinner
-                        $('#spinner').addClass('d-none');
-                        if (xhr.responseJSON && xhr.responseJSON.errors) {
-                            var errors = xhr.responseJSON.errors;
-                            for (var field in errors) {
-                                toastr.error(errors[field]); // Display field-specific error messages
-                            }
-                        }
-                    }
-                });
-            });
+            //     // Send the AJAX request
+            //     $.ajax({
+            //         url: '{{ route('agent.store') }}', // URL to submit the form data
+            //         type: 'POST',
+            //         data: formData,
+            //         processData: false, // Prevent jQuery from processing the data
+            //         contentType: false, // Prevent jQuery from setting the content type
+            //         success: function(response) {
+            //             // Hide loading spinner
+            //             $('#spinner').addClass('d-none');
+
+            //             if (response.success) {
+            //                 alert('Form submitted successfully!');
+            //                 // Optionally, reset the form
+            //                 $('#agentForm')[0].reset();
+            //             } else {
+            //                 alert('Error: ' + response.message);
+            //             }
+            //         },
+            //         error: function(xhr) {
+            //             // Hide loading spinner
+            //             $('#spinner').addClass('d-none');
+
+            //             alert('An error occurred while submitting the form.');
+            //         }
+            //     });
+            // });
         });
     </script>
 

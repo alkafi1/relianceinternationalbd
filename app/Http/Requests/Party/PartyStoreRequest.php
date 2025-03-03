@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Requests\Agent;
+namespace App\Http\Requests\Party;
 
-use App\Enums\AgentStatus;
+use App\Enums\PartyStatusEnum;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class AgentStatusUpdateRequest extends FormRequest
+class PartyStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +26,11 @@ class AgentStatusUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'uid' => ['required', 'string', 'exists:agents,uid'],
-            'status' => ['required', 'string', 'max:255', Rule::in(AgentStatus::getValues())],
+            'party_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:parties,email'],
+            'phone' => ['required', 'string', 'max:20'],
+            'address' => ['nullable', 'string', 'max:500'],
+            'status' => ['required', 'string', 'max:255', Rule::in(PartyStatusEnum::getValues())],
         ];
     }
 

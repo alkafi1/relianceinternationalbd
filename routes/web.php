@@ -3,6 +3,7 @@
 use App\Http\Controllers\Agent\AgentController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Party\PartyController;
 use App\Http\Controllers\TerminalController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,11 +35,30 @@ Route::prefix('admin')->group(function () {
             // datatable
             Route::get('/datatable', [AgentController::class, 'datatable'])->name('agent.datatable');
         });
+
+        // 
         Route::prefix('terminal')->group(function () {
             Route::get('/index', [TerminalController::class, 'index'])->name('terminal.index');
             Route::get('/create', [TerminalController::class, 'create'])->name('terminal.create');
             Route::post('/create', [TerminalController::class, 'store'])->name('terminal.store');
             Route::get('/datatable', [TerminalController::class, 'datatable'])->name('terminal.datatable');
         });
+
+        //
+        Route::prefix('party')->group(function () {
+            Route::get('/index', [PartyController::class, 'index'])->name('party.index');
+            Route::get('/create', [PartyController::class, 'create'])->name('party.create');
+            Route::post('/store', [PartyController::class, 'store'])->name('party.store');
+            // Route::get('/{party}', [PartyController::class, 'show'])->name('party.show');
+            Route::get('/{party}/edit', [PartyController::class, 'edit'])->name('party.edit');
+            Route::put('/{party}/update', [PartyController::class, 'update'])->name('party.update');
+            Route::delete('/{party}', [PartyController::class, 'destroy'])->name('party.destroy');
+            Route::post('/status/update', [PartyController::class, 'statusUpdate'])->name('party.status.update');
+            Route::put('/status/{party}', [PartyController::class, 'getStatusByUid'])->name('party.status');
+        
+            // datatable
+            Route::get('/datatable', [PartyController::class, 'datatable'])->name('party.datatable');
+        });
+        
     });
 });

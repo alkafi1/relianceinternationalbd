@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Agent;
 
 use App\Enums\AgentStatus;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
 class AgentStoreRequest extends FormRequest
@@ -84,5 +86,19 @@ class AgentStoreRequest extends FormRequest
             'image.mimes' => 'The image must be a file of type: jpeg, png, gif.',
             'image.max' => 'The image must not exceed 2MB in size.',
         ];
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => $validator->errors()->first(), // Get first error message
+            'errors' => $validator->errors(), // Full validation errors
+        ], 422));
     }
 }
