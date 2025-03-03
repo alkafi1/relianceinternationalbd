@@ -105,6 +105,7 @@
                         // Hide loading spinner
                         $('#spinner').addClass('d-none');
                         if (response.success) {
+                            $('#partyForm')[0].reset();
                             toastr.success(response.message);
                         } else {
                             toastr.error(response.message);
@@ -116,7 +117,8 @@
                         if (xhr.responseJSON && xhr.responseJSON.errors) {
                             var errors = xhr.responseJSON.errors;
                             for (var field in errors) {
-                                toastr.error(errors[field]); // Display field-specific error messages
+                                toastr.error(errors[
+                                field]); // Display field-specific error messages
                             }
                         }
                     }

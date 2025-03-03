@@ -184,6 +184,7 @@
                         // Hide loading spinner
                         $('#spinner').addClass('d-none');
                         if (response.success) {
+                            $('#agentForm')[0].reset();
                             toastr.success(response.message);
                         } else {
                             toastr.error(response.message);

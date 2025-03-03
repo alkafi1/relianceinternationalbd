@@ -1,45 +1,31 @@
 @extends('layouts.layout')
-@section('breadcame', 'Agent List')
+@section('breadcame', 'Party List')
 @section('content')
     <div class="row">
         <div class="col-md-12 event-list-col">
             <div class="card">
                 <div class="card-body">
-                    @include('agent.partials.datatables.agent-data-table')
+                    @include('party.partials.datatables.party-data-table')
                 </div>
             </div>
         </div>
     </div>
-   @include('agent.partials.modal.status-modal')
+    @include('party.partials.modal.status-modal')
 
     @push('custom-js')
         <script>
             // Define columns
             const columns = [{
-                    data: 'agent_id', // Corresponds to the 'agent_id' field in your data
-                    name: 'agent_id', // Name for server-side processing
+                    data: 'party_id', // Corresponds to the 'party_id' field in your data
+                    name: 'party_id', // Name for server-side processing
                     className: 'fw-bold text-dark', // Add classes for styling
-                    orderable: true, // Allow sorting
-                    searchable: true // Allow searching
+                    orderable: true,
+                    searchable: true
                 },
                 {
-                    data: 'agent_name', // Corresponds to the 'agent_name' field in your data
-                    name: 'agent_name',
+                    data: 'party_name', // Corresponds to the 'party_name' field in your data
+                    name: 'party_name',
                     className: 'min-w-50px fw-bold text-dark firstTheadColumn',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'todays_job', // Corresponds to the "today's_job" field in your data
-                    name: 'todays_job',
-                    className: 'min-w-150px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'phone', // Corresponds to the 'phone' field in your data
-                    name: 'phone',
-                    className: 'min-w-50px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
@@ -51,15 +37,16 @@
                     searchable: true
                 },
                 {
-                    data: 'age', // Corresponds to the 'age' field in your data
-                    name: 'age',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    data: 'phone', // Corresponds to the 'phone' field in your data
+                    name: 'phone',
+                    className: 'min-w-150px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
+                
                 {
-                    data: 'full_address', // Corresponds to the 'full_address' field in your data
-                    name: 'full_address',
+                    data: 'address', // Corresponds to the 'full_address' field in your data
+                    name: 'address',
                     className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
                     orderable: true,
                     searchable: true
@@ -69,7 +56,7 @@
                     name: 'status',
                     className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
                     orderable: true,
-                    searchable: true,
+                    searchable: true
                 },
                 {
                     data: 'last_updated', // Corresponds to the 'last_updated' field in your data
@@ -93,17 +80,17 @@
                         return new Date(data).toLocaleDateString();
                     }
                 },
-
                 {
-                    data: 'action', // Corresponds to the 'status' field in your data
+                    data: 'action', // Corresponds to the 'action' field in your data
                     name: 'action',
                     className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
-                    orderable: true,
-                    searchable: true,
+                    orderable: false, // Action columns are usually not orderable
+                    searchable: false, // Action columns are usually not searchable
                 },
             ];
+
             // Initialize DataTable
-            initializeDataTable('agent-data', "{{ route('agent.datatable') }}", columns);
+            initializeDataTable('party-data', "{{ route('party.datatable') }}", columns);
 
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior
