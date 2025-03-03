@@ -61,6 +61,13 @@ Route::prefix('admin')->group(function () {
             Route::get('/datatable', [PartyController::class, 'datatable'])->name('party.datatable');
         });
         // party route end
+
+        // content manegment route start
+        Route::prefix('system-content')->group(function () {
+            Route::get('/', [SystemController::class, 'index'])->name('system');
+            Route::post('/systempost', [SystemController::class, 'systemPost'])->name('system.post');
+            Route::get('/system-database', [SystemController::class, 'systemDatabase'])->name('system.database');
+        });
         
     });
 });

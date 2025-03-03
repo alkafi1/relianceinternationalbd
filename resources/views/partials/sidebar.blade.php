@@ -294,6 +294,87 @@
                 </div>
                 {{-- Parties End --}}
 
+
+                {{-- System setting Start --}}
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">System Settings</span>
+                    </div>
+                </div>
+                <div data-kt-menu-trigger="click"
+                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'party.create' || Route::currentRouteName() == 'party.index' ? 'hover show' : '' }}">
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <i class="fas fa-users"></i>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title position-relative">System Settings
+                        </span>
+                        <span class="menu-arrow"></span>
+                    </span>
+
+                    <div
+                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'party.index' || Route::currentRouteName() == 'party.create' ? 'hover show' : '' }}">
+                        {{-- @can('member-list-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('party.index') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'party.index' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">System Settings</span>
+
+                                </span>
+                            </a>
+                        {{-- @endcan --}}
+                    </div>
+                </div>
+                {{-- System setting End --}}
+
+                {{-- Role And Permission Start --}}
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Role Management</span>
+                    </div>
+                </div>
+                <div data-kt-menu-trigger="click"
+                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'party.create' || Route::currentRouteName() == 'party.index' ? 'hover show' : '' }}">
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <i class="fas fa-users"></i>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title position-relative">Role Management
+                        </span>
+                        <span class="menu-arrow"></span>
+                    </span>
+
+                    <div
+                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'party.index' || Route::currentRouteName() == 'party.create' ? 'hover show' : '' }}">
+                        {{-- @can('member-list-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('party.index') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'party.index' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Permission</span>
+
+                                </span>
+                            </a>
+                        {{-- @endcan --}}
+                    </div>
+                </div>
+                {{-- System setting End --}}
+
             {{-- @endif --}}
             {{-- member sidebar end --}}
 
