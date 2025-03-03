@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'dashboard' || Route::currentRouteName() == 'dashboard' ? 'hover show' : '' }}">
+                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'admin.index' || Route::currentRouteName() == 'admin.create' ? 'hover show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
@@ -83,24 +83,15 @@
                             <!--end::Svg Icon-->
                         </span>
                         <span class="menu-title position-relative">Admin
-                            {{-- <div class="pendingMemberCount">
-                                    @if ($global['pendingMemberCount'] > 0)
-                                        <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                            style="top: 9px !important; margin-left: -12px;">
-                                            {{ $global['pendingMemberCount'] }}
-                                        </span>
-                                    @endif
-                                </div> --}}
                         </span>
                         <span class="menu-arrow"></span>
                     </span>
 
                     <div
-                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'dashboard' || Route::currentRouteName() == 'dashboard' ? 'hover show' : '' }}">
+                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'admin.index' || Route::currentRouteName() == 'admin.index' ? 'hover show' : '' }}">
                         {{-- @can('member-list-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('dashboard') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}">
+                        <a class="menu-item menu-accordion" href="{{ route('admin.index') }}">
+                            <span class="menu-link {{ Route::currentRouteName() == 'admin.index' ? 'active' : '' }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -110,21 +101,12 @@
                         </a>
                         {{-- @endcan --}}
                         {{-- @can('member-request-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('dashboard') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}">
+                        <a class="menu-item menu-accordion" href="{{ route('admin.create') }}">
+                            <span class="menu-link {{ Route::currentRouteName() == 'admin.create' ? 'active' : '' }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title position-relative">Admin Create
-                                    {{-- <div class="pendingMemberCount">
-                                                @if ($global['pendingMemberCount'] > 0)
-                                                    <span
-                                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                                        style="top: 9px !important; margin-left: -12px;">
-                                                        {{ $global['pendingMemberCount'] }}
-                                                    </span>
-                                                @endif
-                                            </div> --}}
                                 </span>
                             </span>
                         </a>

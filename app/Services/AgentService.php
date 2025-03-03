@@ -19,14 +19,6 @@ class AgentService
      */
     public function store(array $validatedData): ?array
     {
-        // Handle the image upload
-        // if ($validatedData['image']) {
-        //     $image = $validatedData['image'];
-        //     $imageName = time() . '.' . $image->getClientOriginalExtension();
-        //     $image->move(public_path('images'), $imageName);
-        //     $validatedData['image'] = $imageName;
-        // }
-
         // Create the agent
         $agent = Agent::create([
             'first_name' => $validatedData['first_name'],

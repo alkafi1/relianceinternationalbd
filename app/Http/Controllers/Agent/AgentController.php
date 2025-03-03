@@ -319,6 +319,12 @@ class AgentController extends Controller
     }
 
 
+    /**
+     * Get the status of an agent by uid.
+     *
+     * @param int $agent The agent uid
+     * @return string The status of the agent
+     */
     public function getStatusByUid($agent)
     {
         return Agent::getStatus($agent);

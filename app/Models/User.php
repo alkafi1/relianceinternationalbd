@@ -3,7 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Traits\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles; // Ensure this line is present
@@ -11,7 +14,7 @@ use Spatie\Permission\Traits\HasRoles; // Ensure this line is present
 class User extends Authenticatable
 {
 
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, BaseModel;
 
     // Set the primary key
     protected $primaryKey = 'uid';
@@ -56,5 +59,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    
+    /**
+     * Get the display name.
+     */
+    public function displayName(): string
+    {
+        return isset($this->first_name, $this->last_name) ? "{$this->first_name} {$this->last_name}" : '';
+    }
 }

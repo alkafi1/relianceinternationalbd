@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Admincontroller;
 use App\Http\Controllers\Agent\AgentController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
@@ -17,7 +18,22 @@ Route::prefix('admin')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Route::get('/create-admin', [AdminController::class, 'index'])->name('admin.index');
+        Route::prefix('admin')->group(function () {
+            Route::get('/index', [Admincontroller::class, 'index'])->name('admin.index');
+            Route::get('/create', [AdminController::class, 'create'])->name('admin.create');
+            Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
+            // Route::get('/{admin}', [AdminController::class, 'show'])->name('admin.show');
+            Route::get('/{admin}/edit', [AdminController::class, 'edit'])->name('admin.edit');
+            Route::put('/{admin}/update', [AdminController::class, 'update'])->name('admin.update');
+            Route::put('/{admin}', [AdminController::class, 'update'])->name('admin.update');
+            Route::delete('/{admin}', [AdminController::class, 'destroy'])->name('admin.destroy');
+            Route::post('/status/update', [AdminController::class, 'statusUpdate'])->name('admin.status.update');
+            Route::put('/status/{admin}', [AdminController::class, 'getStatusByUid'])->name('admin.status');
+            
+            // datatable
+            Route::get('/datatable', [AdminController::class, 'datatable'])->name('admin.datatable');
+        });
+        
 
         Route::prefix('agent')->group(function () {
             Route::get('/index', [AgentController::class, 'index'])->name('agent.index');

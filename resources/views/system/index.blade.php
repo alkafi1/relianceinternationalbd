@@ -134,8 +134,6 @@
 
                     let url = $('#myForm').attr('action');
 
-                    console.log([...formData.entries()]); // Debugging: Check the data being sent
-
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -159,7 +157,6 @@
                         $('#spinner').addClass('d-none');
                             var errors = xhr.responseJSON.errors;
                             $.each(errors, function(key, value) {
-                                console.log(key, value);
                                 toastr.error(value); // Display error message
                             });
                         }

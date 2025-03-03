@@ -5,6 +5,7 @@ return [
     'agent_id' => 'Agent ID',
     'party_id' => 'Party ID',
     'party_name' => 'Party Name',
+    'admin_name' => 'Admin Name',
     'today_job' => "Today's Job",
     'phone' => 'Phone',
     'email' => 'Email',

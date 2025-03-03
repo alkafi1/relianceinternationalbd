@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Traits;
+
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 trait BaseModel
@@ -10,22 +13,22 @@ trait BaseModel
      *
      * @var string
      */
-    protected $primaryKey = 'uid';
+    protected $primaryKey = 'uid'; // Use 'uid' as the primary key
 
     /**
-     * The "type" of the auto-incrementing ID.
+     * The "type" of the primary key.
      *
      * @var string
      */
-    protected $keyType = 'string';
+    protected $keyType = 'string'; // Primary key is a string (UUID)
 
     /**
      * Indicates if the IDs are auto-incrementing.
      *
      * @var bool
      */
-    public $incrementing = false;
-    
+    public $incrementing = false; // Disable auto-incrementing for UUIDs
+
     /**
      * Boot the model.
      */
@@ -33,27 +36,99 @@ trait BaseModel
     {
         parent::boot();
 
-        // Automatically generate a UUID when creating a new user
+        // Automatically generate a UUID when creating a new model instance
         static::creating(function ($model) {
-            $model->uid = Str::uuid()->toString();
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = Str::uuid()->toString();
+            }
         });
     }
 
-    public static function findByColumn($column, $value)
+    /**
+     * Find a record by a specific column and return JSON response.
+     *
+     * @param string $column
+     * @param mixed $value
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public static function getStatus($uid)
     {
-        $record = self::where($column, $value)->first();
+        // Retrieve the 'status' value for the given UID
+        $status = self::where('uid', $uid)->value('status');
 
-        if (!$record) {
+
+
+        // Check if the status is null, meaning the agent was not found
+        if (is_null($status)) {
             return response()->json([
                 'success' => false,
                 'message' => ucfirst(self::class) . ' not found.',
             ], 404);
         }
 
+        // Return the status data as part of a successful response
         return response()->json([
             'success' => true,
             'message' => ucfirst(self::class) . ' retrieved successfully.',
-            'data' => $record
+            'data' => [
+                'status' => $status,
+                'uid' => $uid
+            ]
         ], 200);
+    }
+
+    /**
+     * Update a record by a given column and value.
+     *
+     * @param string $column
+     * @param mixed $value
+     * @param array $data
+     * @return array
+     */
+    public static function updateByColumn(string $column, $value, array $data): array
+    {
+        try {
+            // Perform the update
+            $result = static::where($column, $value)->update($data);
+
+            // Check if the update was successful
+            if ($result) {
+                return [
+                    'success' => true,
+                    'message' => '<b>Record updated successfully.</b>',
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => '<b>No records found or no changes made.</b>',
+                ];
+            }
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => '<b>An error occurred while updating the record.</b>',
+            ];
+        }
+    }
+
+
+    /**
+     * Delete the given model and return a response.
+     *
+     * @param Model $model
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public static function destroyModel(Model $model)
+    {
+        if ($model->delete()) {
+            return response()->json([
+                'success' => true,
+                'message' => ucfirst(class_basename(get_class($model))) . ' deleted successfully.',
+            ]);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => ucfirst(class_basename(get_class($model))) . ' deleted failed.',
+        ], 400);
     }
 }
