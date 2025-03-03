@@ -15,7 +15,7 @@
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Reliance International BD" />
     <meta property="og:url" content="{{ url()->current() }}" />
-    {{-- <link rel="shortcut icon" href="{{ asset('public/frontend/images/' . $global['favicon']) }}" /> --}}
+    <link rel="shortcut icon" href="{{ asset('public/frontend/images/' . $global['favicon']) }}" />
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <!--end::Fonts-->

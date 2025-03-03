@@ -4,6 +4,7 @@ use App\Http\Controllers\Agent\AgentController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Party\PartyController;
+use App\Http\Controllers\System\SystemController;
 use App\Http\Controllers\TerminalController;
 use Illuminate\Support\Facades\Route;
 
@@ -62,11 +63,10 @@ Route::prefix('admin')->group(function () {
         });
         // party route end
 
-        // content manegment route start
-        Route::prefix('system-content')->group(function () {
-            Route::get('/', [SystemController::class, 'index'])->name('system');
+        //system manegment route start
+        Route::prefix('system-management')->group(function () {
+            Route::get('/', [SystemController::class, 'index'])->name('system.index');
             Route::post('/systempost', [SystemController::class, 'systemPost'])->name('system.post');
-            Route::get('/system-database', [SystemController::class, 'systemDatabase'])->name('system.database');
         });
         
     });
