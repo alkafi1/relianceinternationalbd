@@ -102,7 +102,7 @@ class AgentController extends Controller
     {
         // Validate the request
         $validatedData = $request->validated();
-
+        // $agent = Agent::find($agent);
         $agent->update($validatedData);
 
         return redirect()->route('agent.index')->with([
@@ -110,6 +110,12 @@ class AgentController extends Controller
         ]);
     }
 
+    /**
+     * Update the status of an agent.
+     *
+     * @param \App\Http\Requests\Agent\AgentStatusUpdateRequest $request
+     * @return \Illuminate\Http\Response
+     */
     public function statusUpdate(AgentStatusUpdateRequest $request)
     {
         // Agent::where('uid', $request['uid'])->update(['status' => $request['status']]);

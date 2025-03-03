@@ -96,11 +96,11 @@
                 e.preventDefault(); // Prevent default link behavior
 
                 var uid = $(this).attr('data-id');
-                var url = `{{ route('agent.destroy', ':agent') }}`.replace(':agent', uid);
+                var url = `{{ route('party.destroy', ':party') }}`.replace(':party', uid);
                 // Show SweetAlert confirmation dialog
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: 'This action will delete this agent!',
+                    text: 'This action will delete this party!',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Yes, delete it!',
@@ -121,7 +121,7 @@
                 var uid = $(this).attr('data-id'); // Get the URL from the href attribute
                 var status = $(this).attr('data-status');
                 $('#exampleModal').modal('show');
-                var url = `{{ route('agent.status', ':agent') }}`.replace(':agent', uid);
+                var url = `{{ route('party.status', ':party') }}`.replace(':party', uid);
                 sendAjaxReq(uid, status, url, 'PUT');
             });
 
@@ -133,7 +133,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }, // You can send additional data if needed
                     success: function(response) {
-                        $('#agent-data').DataTable().ajax.reload(null, false);
+                        $('#party-data').DataTable().ajax.reload(null, false);
                         if (response.success) {
                             console.log(response);
                             if (response.data && response.data.status) {
@@ -154,7 +154,7 @@
             }
             $(document).ready(function() {
                 // Handle form submission
-                $('#agentStatusUpdateForm').on('submit', function(e) {
+                $('#partyStatusUpdateForm').on('submit', function(e) {
                     e.preventDefault(); // Prevent the default form submission
                     // Show loading spinner
                     $('#spinner').removeClass('d-none');
@@ -162,7 +162,7 @@
                     const formData = new FormData(this);
                     // Send the AJAX request
                     $.ajax({
-                        url: '{{ route('agent.status.update') }}', // URL to submit the form data
+                        url: '{{ route('party.status.update') }}', // URL to submit the form data
                         type: 'POST',
                         data: formData,
                         processData: false, // Prevent jQuery from processing the data
@@ -173,8 +173,8 @@
                             if (response.success) {
                                 toastr.success(response.message);
                                 $('#exampleModal').modal('hide');
-                                $('#agentStatusUpdateForm')[0].reset();
-                                $('#agent-data').DataTable().ajax.reload(null, false);
+                                $('#partyStatusUpdateForm')[0].reset();
+                                $('#party-data').DataTable().ajax.reload(null, false);
                             } else {
                                 toastr.error(response.message);
                             }

@@ -2,11 +2,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agent Status</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Party Status</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="agentStatusUpdateForm">
+                <form id="partyStatusUpdateForm">
                     @csrf
                     <select id="status" name="status" class="form-control">
                         <option value="approved">APPROVED</option>

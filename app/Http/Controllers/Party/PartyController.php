@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Party;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Part\PartyStatusUpdateRequest;
 use App\Http\Requests\Party\PartyStoreRequest;
+use App\Http\Requests\Party\PartyUpdateRequest;
+use App\Http\Resources\Party\PartyEditResource;
 use App\Models\Party;
 use App\Services\PartyService;
 use Illuminate\Http\Request;
@@ -32,7 +35,7 @@ class PartyController extends Controller
     {
         return view('party.index');
     }
-    
+
     /**
      * Show the form for creating a new party.
      *
@@ -44,6 +47,13 @@ class PartyController extends Controller
         return view('party.create');
     }
 
+    /**
+     * Store a newly created party in storage.
+     *
+     * @param \App\Http\Requests\Party\PartyStoreRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(PartyStoreRequest $request)
     {
         // Validate the request
@@ -62,20 +72,72 @@ class PartyController extends Controller
         // Handle the validated data, e.g., save it to the database
     }
 
+    public function edit(Party $party)
+    {
+        $party = new PartyEditResource($party);
+        return view('party.edit', compact('party'));
+    }
+
+    public function update(PartyUpdateRequest $request, Party $party)
+    {
+        // Validate the request
+        $validatedData = $request->validated();
+
+        $party->update($validatedData);
+
+        return redirect()->route('party.index')->with([
+            'success' => 'Party updated successfully.',
+        ]);
+    }
+
+    /**
+     * Update the status of a party.
+     *
+     * @param \App\Http\Requests\Part\PartyStatusUpdateRequest $request The request containing the party UID and new status.
+     * @return mixed The result of the update operation.
+     */
+
+    public function statusUpdate(PartyStatusUpdateRequest $request)
+    {
+        return $result = Party::updateByColumn('uid', $request['uid'], [
+            'status' => $request['status'],
+        ]);
+    }
+
+
+    /**
+     * Remove the specified party from storage.
+     *
+     * @param \App\Models\Party $party The party instance to be destroyed
+     * @return bool|null True if the party was successfully deleted, false if the deletion failed, or null if the party doesn't exist
+     */
+    public function destroy(Party $party)
+    {
+        return Party::destroyModel($party);
+    }
+
+    /**
+     * Retrieve and format the party data for DataTables.
+     *
+     * This method handles AJAX requests to fetch party data, formats various columns
+     * for display, and supports custom sorting and filtering on specific fields.
+     *
+     * @param \Illuminate\Http\Request $request The incoming request instance.
+     *
+     * @return \Yajra\DataTables\DataTableAbstract The formatted DataTable response.
+     */
     public function datatable(Request $request)
     {
-
+        // Check if the request is an AJAX request
         if ($request->ajax()) {
             $query = Party::query();
 
-
+            // Apply custom sorting and filtering to the query
             return DataTables::of($query)
                 // Agent ID (Sortable & Searchable)
                 ->addColumn('party_id', function ($data) {
                     return $data->party_id ?? '';
                 })
-
-
                 // Full Name (Concatenated, needs custom sorting & filtering)
                 ->addColumn('party_name', function ($data) {
                     return $data->party_name;
@@ -86,8 +148,6 @@ class PartyController extends Controller
                 ->orderColumn('party_name', function ($query, $order) {
                     $query->orderByRaw("CONCAT(party_name) {$order}");
                 })
-
-
                 // Phone, Email, Age, Address (Sortable & Searchable)
                 ->addColumn('phone', function ($data) {
                     return $data->phone ?? '';
@@ -98,8 +158,6 @@ class PartyController extends Controller
                 ->addColumn('address', function ($data) {
                     return $data->address ?? '';
                 })
-
-
                 ->addColumn('status', function ($data) {
                     // Define status colors and labels
                     $statusColors = [
@@ -140,11 +198,9 @@ class PartyController extends Controller
                 ->orderColumn('status', function ($query, $order) {
                     $query->orderBy('status', $order);
                 })
-
-
                 // Action Buttons (Not Sortable or Searchable)
                 ->addColumn('action', function ($data) {
-                    $editUrl = route('agent.edit', $data->uid);
+                    $editUrl = route('party.edit', $data->uid);
                     return '
                         <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '">
                             <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
@@ -156,8 +212,6 @@ class PartyController extends Controller
                             <i class="fas fa-trash text-danger" style="font-size: 16px;"></i>
                         </a>';
                 })
-
-
                 // Last Updated & Created At (Formatted, Sortable & Searchable)
                 ->editColumn('last_updated', function ($data) {
                     return $data->updated_at ? $data->updated_at->format('Y-m-d H:i:s') : '';
@@ -168,8 +222,6 @@ class PartyController extends Controller
                 ->orderColumn('last_updated', function ($query, $order) {
                     $query->orderBy('updated_at', $order);
                 })
-
-
                 ->editColumn('created_at', function ($data) {
                     return $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '';
                 })
@@ -179,11 +231,22 @@ class PartyController extends Controller
                 ->orderColumn('created_at', function ($query, $order) {
                     $query->orderBy('created_at', $order);
                 })
-
-
                 // Allow raw HTML in action and status columns
                 ->rawColumns(['action', 'status'])
                 ->toJson();
         }
+    }
+
+
+    /**
+     * Retrieve the status of a party by its unique identifier.
+     *
+     * @param mixed $party The unique identifier or instance of the party.
+     * @return mixed The status of the specified party.
+     */
+
+    public function getStatusByUid($party)
+    {
+        return Party::getStatus($party);
     }
 }
