@@ -6,8 +6,7 @@
 <head>
     <title>Reliance International BD</title>
     <meta name="description" content="Reliance International BD" />
-    <meta name="keywords"
-        content="Reliance International BD" />
+    <meta name="keywords" content="Reliance International BD" />
     <meta charset="utf-8" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
@@ -111,36 +110,86 @@
 
     <script>
         $(document).ready(function() {
-            $('#kt_sign_in_submit').on('click', function(e) {
-                e.preventDefault();
-                let form = $('#kt_sign_in_form');
-                let url = form.attr('action');
-                let formData = form.serialize();
+            // $('#kt_sign_in_submit').on('click', function(e) {
+            //     e.preventDefault();
+            //     let form = $('#kt_sign_in_form');
 
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: formData,
-                    beforeSend: function() {
-                        $('#kt_sign_in_submit .indicator-progress').show();
-                        $('#kt_sign_in_submit .indicator-label').hide();
-                    },
-                    success: function(response) {
-                        window.location.href = response.redirect;
-                    },
-                    error: function(xhr) {
-                        var errors = xhr.responseJSON.errors;
-                        // Iterate through each error and display it
-                        $.each(errors, function(key, value) {
-                            console.log(key, value);
-                            toastr.error(value); // Displaying each error message
-                        });
 
-                    },
-                    complete: function() {
-                        // Action after the request completes (both success and error)
-                        $('#kt_sign_in_submit .indicator-progress').hide();
-                        $('#kt_sign_in_submit .indicator-label').show();
+            //     let url = form.attr('action');
+            //     let formData = form.serialize();
+
+            //     $.ajax({
+            //         type: 'POST',
+            //         url: url,
+            //         data: formData,
+            //         beforeSend: function() {
+            //             $('#kt_sign_in_submit .indicator-progress').show();
+            //             $('#kt_sign_in_submit .indicator-label').hide();
+            //         },
+            //         success: function(response) {
+            //             window.location.href = response.redirect;
+            //         },
+            //         error: function(xhr) {
+            //             var errors = xhr.responseJSON.errors;
+            //             // Iterate through each error and display it
+            //             $.each(errors, function(key, value) {
+            //                 console.log(key, value);
+            //                 toastr.error(value); // Displaying each error message
+            //             });
+
+            //         },
+            //         complete: function() {
+            //             // Action after the request completes (both success and error)
+            //             $('#kt_sign_in_submit .indicator-progress').hide();
+            //             $('#kt_sign_in_submit .indicator-label').show();
+            //         }
+            //     });
+            // });
+            $(document).ready(function() {
+                // Function to handle form submission
+                function submitForm() {
+                    let form = $('#kt_sign_in_form');
+                    let url = form.attr('action');
+                    let formData = form.serialize();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: formData,
+                        beforeSend: function() {
+                            $('#kt_sign_in_submit .indicator-progress').show();
+                            $('#kt_sign_in_submit .indicator-label').hide();
+                        },
+                        success: function(response) {
+                            window.location.href = response.redirect;
+                        },
+                        error: function(xhr) {
+                            var errors = xhr.responseJSON.errors;
+                            // Iterate through each error and display it
+                            $.each(errors, function(key, value) {
+                                console.log(key, value);
+                                toastr.error(value); // Displaying each error message
+                            });
+                        },
+                        complete: function() {
+                            // Action after the request completes (both success and error)
+                            $('#kt_sign_in_submit .indicator-progress').hide();
+                            $('#kt_sign_in_submit .indicator-label').show();
+                        }
+                    });
+                }
+
+                // Handle form submission on button click
+                $('#kt_sign_in_submit').on('click', function(e) {
+                    e.preventDefault();
+                    submitForm();
+                });
+
+                // Handle form submission on Enter key press
+                $('#kt_sign_in_form').on('keypress', function(e) {
+                    if (e.which === 13) { // 13 is the keycode for the Enter key
+                        e.preventDefault();
+                        submitForm();
                     }
                 });
             });

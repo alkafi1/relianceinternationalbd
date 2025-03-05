@@ -66,4 +66,12 @@ class User extends Authenticatable
     {
         return isset($this->first_name, $this->last_name) ? "{$this->first_name} {$this->last_name}" : '';
     }
+
+    /**
+     * Get the accounts for the user.
+     */
+    public function accounts()
+    {
+        return $this->morphMany(Account::class, 'account_holder');
+    }
 }

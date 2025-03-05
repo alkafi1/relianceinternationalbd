@@ -7,11 +7,12 @@ use App\Traits\BaseEnum;
 use Spatie\Enum\Enum;       
 
 /**
- * @method static self ACTIVE()
- * @method static self DEACTIVE()
+ * @method static self MASTER()
+ * @method static self EMOPLOYEE()
+ * @method static self PARTY()
  */
 
-class TerminalStatusEnum extends Enum
+class AccountTypeEnum extends Enum
 {
     use BaseEnum;
 
@@ -19,8 +20,9 @@ class TerminalStatusEnum extends Enum
     {
         // Define account category
         return [
-            'ACTIVE' => 'active',
-            'DEACTIVE' => 'deactive',
+            'MASTER' => 'master',
+            'EMOPLOYEE' => 'employee',
+            'PARTY' => 'party',
         ];
     }
 }

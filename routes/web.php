@@ -29,11 +29,11 @@ Route::prefix('admin')->group(function () {
             Route::delete('/{admin}', [AdminController::class, 'destroy'])->name('admin.destroy');
             Route::post('/status/update', [AdminController::class, 'statusUpdate'])->name('admin.status.update');
             Route::put('/status/{admin}', [AdminController::class, 'getStatusByUid'])->name('admin.status');
-            
+
             // datatable
             Route::get('/datatable', [AdminController::class, 'datatable'])->name('admin.datatable');
         });
-        
+
 
         Route::prefix('agent')->group(function () {
             Route::get('/index', [AgentController::class, 'index'])->name('agent.index');
@@ -57,8 +57,20 @@ Route::prefix('admin')->group(function () {
         Route::prefix('terminal')->group(function () {
             Route::get('/index', [TerminalController::class, 'index'])->name('terminal.index');
             Route::get('/create', [TerminalController::class, 'create'])->name('terminal.create');
-            Route::post('/create', [TerminalController::class, 'store'])->name('terminal.store');
-            Route::get('/datatable', [TerminalController::class, 'datatable'])->name('terminal.datatable');
+            Route::post('/store', [TerminalController::class, 'store'])->name('terminal.store');
+            Route::put('/status/{terminal}', [TerminalController::class, 'updateStatus'])->name('terminal.status');
+            Route::delete('/{terminal}', [TerminalController::class, 'destroy'])->name('terminal.destroy');
+
+            Route::get('/{terminal}/edit', [TerminalController::class, 'edit'])->name('terminal.edit');
+            Route::put('/{terminal}/update', [TerminalController::class, 'update'])->name('terminal.update');
+            // expense
+            Route::get('/expense/list', [TerminalController::class, 'expenseList'])->name('terminal.expense.index');
+            Route::get('/expense/create', [TerminalController::class, 'expenseCreate'])->name('terminal.expense.create');
+            Route::post('/expense/store', [TerminalController::class, 'expenseStore'])->name('terminal.expense.store');
+            Route::put('/expense/status/{terminalExpense}', [TerminalController::class, 'updateStatusExpense'])->name('terminal.expense.status');
+            Route::delete('expense/{terminalExpense}', [TerminalController::class, 'destroyExpense'])->name('terminal.expense.destroy');
+            Route::get('/datatable/terminal/expense', [TerminalController::class, 'datatableTerminalExpense'])->name('terminal.expense.datatable');
+            Route::get('/datatable/terminal', [TerminalController::class, 'datatable'])->name('terminal.datatable');
         });
         // terminal route end
 
@@ -73,7 +85,7 @@ Route::prefix('admin')->group(function () {
             Route::delete('/{party}', [PartyController::class, 'destroy'])->name('party.destroy');
             Route::post('/status/update', [PartyController::class, 'statusUpdate'])->name('party.status.update');
             Route::put('/status/{party}', [PartyController::class, 'getStatusByUid'])->name('party.status');
-        
+
             // datatable
             Route::get('/datatable', [PartyController::class, 'datatable'])->name('party.datatable');
         });
@@ -84,6 +96,5 @@ Route::prefix('admin')->group(function () {
             Route::get('/', [SystemController::class, 'index'])->name('system.index');
             Route::post('/systempost', [SystemController::class, 'systemPost'])->name('system.post');
         });
-        
     });
 });

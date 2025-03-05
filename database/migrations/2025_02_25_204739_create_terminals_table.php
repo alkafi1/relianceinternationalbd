@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('terminal_name', 256);
 
             // Terminal short form (optional), maximum length of 15 characters
-            $table->string('terminal_short_form', 15)->nullable();
+            $table->string('terminal_short_form', 256)->nullable();
 
             // Description for the terminal, maximum length of 512 characters
             $table->string('description', 512);

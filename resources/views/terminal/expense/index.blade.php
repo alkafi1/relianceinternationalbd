@@ -1,11 +1,11 @@
 @extends('layouts.layout')
-@section('breadcame', 'Terminal List')
+@section('breadcame', 'Terminal Expense List')
 @section('content')
     <div class="row">
         <div class="col-md-12 event-list-col">
             <div class="card">
                 <div class="card-body">
-                    @include('terminal.datatables.terminal-data-table')
+                    @include('terminal.expense.datatables.terminal-expense-data-table')
                 </div>
             </div>
         </div>
@@ -14,72 +14,57 @@
         <script>
             // Define columns
             const columns = [{
-                    data: 'terminal_id', // Corresponds to the 'terminal_id' field in your data
-                    name: 'terminal_id', // Name for server-side processing
-                    className: 'fw-bold text-dark', // Add classes for styling
+                    data: 'terminal_name', // Corresponds to the 'terminal_name' field in your data
+                    name: 'terminal_name', // Name for server-side processing
+                    className: 'min-w-50px fw-bold text-dark firstTheadColumn', // Add classes for styling
                     orderable: true, // Allow sorting
                     searchable: true // Allow searching
                 },
                 {
-                    data: 'terminal_name', // Corresponds to the 'terminal_name' field in your data
-                    name: 'terminal_name',
-                    className: 'min-w-50px fw-bold text-dark firstTheadColumn',
+                    data: 'title', // Corresponds to the 'title' field in your data
+                    name: 'title',
+                    className: 'min-w-30px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: 'terminal_short_form', // Corresponds to the "today's_job" field in your data
-                    name: 'terminal_short_form',
+                    data: 'job_type', // Corresponds to the 'job_type' field in your data
+                    name: 'job_type',
                     className: 'min-w-150px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: 'description', // Corresponds to the 'phone' field in your data
-                    name: 'description',
+                    data: 'comission_rate', // Corresponds to the 'comission_rate' field in your data
+                    name: 'comission_rate',
                     className: 'min-w-50px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: 'terminal_type', // Corresponds to the 'email' field in your data
-                    name: 'terminal_type',
-                    className: 'min-w-50px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'address', // Corresponds to the 'age' field in your data
-                    name: 'address',
+                    data: 'minimum_comission', // Corresponds to the 'minimum_comission' field in your data
+                    name: 'minimum_comission',
                     className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: 'status', // Corresponds to the 'full_address' field in your data
+                    data: 'status', // Corresponds to the 'status' field in your data
                     name: 'status',
                     className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: 'created_at', // Corresponds to the 'status' field in your data
-                    name: 'created_at',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
-                    orderable: true,
-                    searchable: true,
-                },
-                {
-                    data: 'action', // Corresponds to the 'last_updated' field in your data
+                    data: 'action', // Corresponds to the 'action' field in your data
                     name: 'action',
                     className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
-                    orderable: true,
-                    searchable: true,
-                },
-
+                    orderable: false, // Action column is not sortable
+                    searchable: false // Action column is not searchable
+                }
             ];
             // Initialize DataTable
-            initializeDataTable('terminal-data', "{{ route('terminal.datatable') }}", columns);
+            initializeDataTable('terminal-expense-data', "{{ route('terminal.expense.datatable') }}", columns);
 
             $(document).on('click', '.status', function(e) {
                 e.preventDefault(); // Prevent default link behavior
@@ -87,7 +72,7 @@
                 // Show SweetAlert confirmation dialog
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: 'This action will change status of this terminal!',
+                    text: 'This action will change status of this terminal expense!',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Yes, Change it!',
@@ -130,7 +115,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }, // You can send additional data if needed
                     success: function(response) {
-                        $('#terminal-data').DataTable().ajax.reload(null, false);
+                        $('#terminal-expense-data').DataTable().ajax.reload(null, false);
                         toastr.success(response.message);
                     },
                     error: function(xhr, status, error) {
