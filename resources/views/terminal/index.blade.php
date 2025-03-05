@@ -14,14 +14,14 @@
         <script>
             // Define columns
             const columns = [{
-                    data: 'terminal_id', // Corresponds to the 'agent_id' field in your data
+                    data: 'terminal_id', // Corresponds to the 'terminal_id' field in your data
                     name: 'terminal_id', // Name for server-side processing
                     className: 'fw-bold text-dark', // Add classes for styling
                     orderable: true, // Allow sorting
                     searchable: true // Allow searching
                 },
                 {
-                    data: 'terminal_name', // Corresponds to the 'agent_name' field in your data
+                    data: 'terminal_name', // Corresponds to the 'terminal_name' field in your data
                     name: 'terminal_name',
                     className: 'min-w-50px fw-bold text-dark firstTheadColumn',
                     orderable: true,
@@ -68,22 +68,26 @@
                     className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
                     orderable: true,
                     searchable: true,
-                }
+                },
+                {
+                    data: 'action', // Corresponds to the 'last_updated' field in your data
+                    name: 'action',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true,
+                },
 
             ];
             // Initialize DataTable
-            initializeDataTable('agent-data', "{{ route('terminal.datatable') }}", columns);
+            initializeDataTable('terminal-data', "{{ route('terminal.datatable') }}", columns);
 
             $(document).on('click', '.status', function(e) {
                 e.preventDefault(); // Prevent default link behavior
-
-                var id = $(this).attr('data-id'); // Get the URL from the href attribute
-                var status = $(this).attr('data-status');
-                var url = "";
+                const url = $(this).data('url');
                 // Show SweetAlert confirmation dialog
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: 'This action will change status of this agent!',
+                    text: 'This action will change status of this terminal!',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Yes, Change it!',
@@ -94,32 +98,39 @@
                         // Send AJAX request
                         // sendAjaxRequest(url, row);
 
-                        sendAjaxReq(id, status, url);
+                        sendAjaxReq(url, 'PUT');
+                    }
+                });
+            });
+            $(document).on('click', '.delete', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+
+                const url = $(this).data('url');
+                // Show SweetAlert confirmation dialog
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This action will delete of this terminal!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Delete it!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        sendAjaxReq(url, 'DELETE');
                     }
                 });
             });
 
-            function sendAjaxReq(id, status, url, type) {
-                var requestData = {
-                    id: id,
-                    // Optionally include status if it's provided
-                };
-
-                // Check if status is defined and not null
-                if (typeof status !== 'undefined' && status !== null) {
-                    requestData.status = status;
-                }
+            function sendAjaxReq(url, type) {
                 $.ajax({
                     url: url,
                     type: type, // or 'GET' depending on your server endpoint
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: requestData, // You can send additional data if needed
+                    }, // You can send additional data if needed
                     success: function(response) {
-                        $('#agent-data').DataTable().ajax.reload(null, false);
-                        // Swal.fire('Success!', response.success,
-                        //     'success');
+                        $('#terminal-data').DataTable().ajax.reload(null, false);
                         toastr.success(response.message);
                     },
                     error: function(xhr, status, error) {
@@ -128,7 +139,6 @@
                     }
                 });
             }
-
         </script>
     @endpush
 @endsection

@@ -15,4 +15,10 @@ return [
     'action' => 'Action',
     'last_updated' => 'Last Updated',
     'created_at' => 'Created At',
+    'terminal_id' => 'Terminal ID',
+    'terminal_name' => 'Terminal Name',
+    'terminal_short_form' => 'Terminal Short Form',
+    'description' => 'Description',
+    'terminal_type' => 'Terminal Type',
+    'address' => 'Address',
 ];

@@ -2,61 +2,104 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TerminalStatusEnum;
+use App\Enums\TerminalTypeEnum;
+use App\Http\Requests\Terminal\TerminalStoreRequest;
 use App\Models\Terminal;
-use App\Services\AgentService;
-use Carbon\Carbon;
+use App\Services\TerminalService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Str;
 
 class TerminalController extends Controller
 {
 
-    // protected $agentService;
+    protected $terminalService;
 
-    // public function __construct(AgentService $agentService)
-    // {
-    //     $this->agentService = $agentService;
-    // }
-
-    function index()
+    public function __construct(TerminalService $terminalService)
     {
-        $terminal_infos = Terminal::all();
-        return view('terminal.index', [
-            'terminal_infos' => $terminal_infos,
-        ]);
+        $this->terminalService = $terminalService;
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    function index()
+    {
+        return view('terminal.index');
+    }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     function create()
     {
         return view('terminal.create');
     }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \App\Http\Requests\Terminal\TerminalStoreRequest  $request
+     * @return \Illuminate\Http\Response
+     */
 
-    function store(Request $request)
+    function store(TerminalStoreRequest $request)
     {
-        Terminal::insert([
-            // 'uid' => $request->uid,
-            'uid' => Str::uuid()->toString(),
-            'terminal_id' => $request->terminal_id,
-            'terminal_name' => $request->terminal_name,
-            'terminal_short_form' => $request->terminal_short_form,
-            'description' => $request->description,
-            'terminal_type' => $request->terminal_type,
-            'address' => $request->address,
-            'created_at' => Carbon::now(),
-        ]);
-        return back();
+        // Validate the request
+        $validatedData = $request->validated();
+
+        // Store the terminal
+        $termianl = $this->terminalService->store($validatedData);
+
+        // Return a success response
+        return response()->json([
+            'success' => true,
+            'message' => 'Terminal created successfully.',
+            'data' => $termianl,
+        ], 201);
+    }
+
+    /**
+     * Toggle the status of a terminal.
+     *
+     * @param \App\Models\Terminal $terminal
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateStatus(Terminal $terminal)
+    {
+        // Toggle the status (1 to 0 or 0 to 1)
+        $terminal->status = $terminal->status == 'active' ? 'deactive' : 'active';
+        $terminal->save();
+
+        // Return the new status in the response
+        return response()->json([
+            'success' => true,
+            'message' => 'Terminal Status change successfully.',
+        ], 201);
+    }
+
+    /**
+     * Remove the specified terminal from storage.
+     *
+     * @param \App\Models\terminal $terminal The terminal instance to be destroyed
+     * @return bool|null True if the terminal was successfully deleted, false if the deletion failed, or null if the terminal doesn't exist
+     */
+    public function destroy(Terminal $terminal)
+    {
+        return Terminal::destroyModel($terminal);
     }
 
     public function datatable(Request $request)
     {
-        $query = Terminal::latest();
-
         if ($request->ajax()) {
             $query = Terminal::query();
 
             return DataTables::of($query)
-                // Agent ID (Sortable & Searchable)
+                // terminal ID (Sortable & Searchable)
                 ->addColumn('terminal_id', function ($data) {
                     return $data->terminal_id ?? '';
                 })
@@ -73,10 +116,17 @@ class TerminalController extends Controller
 
                 // Phone, Email, Age, Address (Sortable & Searchable)
                 ->addColumn('description', function ($data) {
-                    return $data->description ?? '';
+                    return \Illuminate\Support\Str::limit($data->description ?? '', 20, '...');
                 })
                 ->addColumn('terminal_type', function ($data) {
-                    return $data->terminal_type ?? '';
+                    $terminalTypeBadge = '<span class="terminal_type badge badge-light-' .
+                        ($data->terminal_type == TerminalTypeEnum::BOTH()->value ? 'success' : ($data->terminal_type == TerminalTypeEnum::IMPORT()->value ? 'info' : 'warning')) . '"
+                    title="Terminal Type: ' .
+                        ($data->terminal_type == TerminalTypeEnum::BOTH()->value ? 'Both' : ($data->terminal_type == TerminalTypeEnum::IMPORT()->value ? 'Import' : 'Export')) . '">' .
+                        ($data->terminal_type == TerminalTypeEnum::BOTH()->value ? 'Both' : ($data->terminal_type == TerminalTypeEnum::IMPORT()->value ? 'Import' : 'Export')) .
+                        '</span>';
+
+                    return $terminalTypeBadge;
                 })
                 ->addColumn('address', function ($data) {
                     return $data->address ?? '';
@@ -84,9 +134,15 @@ class TerminalController extends Controller
 
                 // Status Badge (Sortable & Searchable)
                 ->addColumn('status', function ($data) {
-                    return '<span class="status badge badge-light-' . ($data->status == 1 ? 'success' : 'danger') . '"
-                            title="Status: ' . ($data->status == 1 ? 'Active' : 'Inactive') . '">' .
-                        ($data->status == 1 ? 'Active' : 'Inactive') . '</span>';
+                    $statusUrl = route('terminal.status', $data->uid);
+
+                    return '<span class="status badge badge-light-' .
+                        ($data->status == TerminalStatusEnum::ACTIVE()->value ? 'success' : 'danger') . '"
+    title="Status: ' .
+                        ($data->status == TerminalStatusEnum::ACTIVE()->value ? 'Active' : 'Deactive') . '"
+    data-url="' . ($statusUrl ?? '#') . '">' .
+                        ($data->status == TerminalStatusEnum::ACTIVE()->value ? 'Active' : 'Deactive') .
+                        '</span>';
                 })
                 ->filterColumn('status', function ($query, $keyword) {
                     if (stripos('Active', $keyword) !== false) {
@@ -101,6 +157,8 @@ class TerminalController extends Controller
 
                 // Action Buttons (Not Sortable or Searchable)
                 ->addColumn('action', function ($data) {
+
+                    $deleteUrl = route('terminal.destroy', $data->uid);
                     return '
                         <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '">
                             <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
@@ -108,7 +166,7 @@ class TerminalController extends Controller
                         <a href="javascript:void(0)" class="edit text-primary me-2" data-id="' . $data->uid . '">
                             <i class="fas fa-edit text-primary" style="font-size: 16px;"></i>
                         </a>
-                        <a href="javascript:void(0)" class="delete text-danger" data-id="' . $data->uid . '">
+                        <a href="javascript:void(0)" class="delete text-danger" data-id="' . $data->uid . '" data-url="' . $deleteUrl . '">
                             <i class="fas fa-trash text-danger" style="font-size: 16px;"></i>
                         </a>';
                 })
@@ -135,7 +193,7 @@ class TerminalController extends Controller
                 })
 
                 // Allow raw HTML in action and status columns
-                ->rawColumns(['action', 'status'])
+                ->rawColumns(['action', 'status', 'terminal_type'])
                 ->toJson();
         }
     }
