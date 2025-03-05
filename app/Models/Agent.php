@@ -9,7 +9,6 @@ class Agent extends BaseModel
 {
     use HasFactory;
 
-
     /**
      * The attributes that are mass assignable.
      */
@@ -96,5 +95,13 @@ class Agent extends BaseModel
                 $agent->agent_id = $newAgentId;
             }
         });
+    }
+
+    /**
+     * Get the accounts for the user.
+     */
+    public function accounts()
+    {
+        return $this->morphMany(Account::class, 'account_holder');
     }
 }

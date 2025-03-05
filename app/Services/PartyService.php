@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Enums\AccountTypeEnum;
 use App\Enums\AdminStatus;
+use App\Models\Account;
 use App\Models\Agent;
 use App\Models\Party;
 use App\Models\User;
@@ -28,11 +30,25 @@ class PartyService
             'address' => $validatedData['address'],
             'status' => $validatedData['status'],
         ]);
+        
+        // Create the account
+        $this->createAccount($party,$validatedData);
 
         // Return the agent data
         return [
             'party' => $party,
         ];
+    }
+
+    public function createAccount($party, $validatedData)
+    {
+        // Create the account
+        $account = Account::create([
+            'account_holder_uid' => $party->uid,
+            'account_holder_type' => Party::class,
+            'account_name' => $validatedData['party_name'],
+            'account_type' => AccountTypeEnum::PARTY()->value,
+        ]);
     }
 
     /**

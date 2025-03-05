@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Jobexpense extends BaseModel
 {
     use HasFactory;
+    
     protected $table = 'job_expenses';
     /**
      * The primary key associated with the table.

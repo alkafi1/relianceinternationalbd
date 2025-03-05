@@ -68,4 +68,12 @@ class Party extends BaseModel
             }
         });
     }
+
+    /**
+     * Get the accounts for the party.
+     */
+    public function accounts()
+    {
+        return $this->morphMany(Account::class, 'account_holder');
+    }
 }
