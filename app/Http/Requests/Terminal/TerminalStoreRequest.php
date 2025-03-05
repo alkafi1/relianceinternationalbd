@@ -25,7 +25,7 @@ class TerminalStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'terminal_name' => 'required|string|max:255',
+            'terminal_name' => 'required|string|max:255|unique:terminals,terminal_name,except,uid',
             'terminal_short_form' => 'required|string|max:50',
             'description' => 'nullable|string|max:500',
             'terminal_type' => [

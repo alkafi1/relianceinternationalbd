@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('breadcame', 'Agent')
+@section('breadcame', 'Terminal Create')
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12">

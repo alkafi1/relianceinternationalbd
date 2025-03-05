@@ -21,4 +21,9 @@ return [
     'description' => 'Description',
     'terminal_type' => 'Terminal Type',
     'address' => 'Address',
+    'terminal_name' => 'Terminal Name',
+    'title' => 'Title',
+    'job_type' => 'Job Type',
+    'comission_rate' => 'Comission Rate',
+    'minimum_comission' => 'Minimum Comission',
 ];

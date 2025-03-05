@@ -25,7 +25,7 @@ class PartyUpdateRequest extends FormRequest
     {
         return [
             'party_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'unique:parties,email'],
+            'email' => ['required', 'email',],
             'phone' => ['required', 'string', 'max:20'],
             'address' => ['nullable', 'string', 'max:500'],
             'status' => ['required', 'string', 'max:255', Rule::in(PartyStatusEnum::getValues())],

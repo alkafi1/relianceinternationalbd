@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Jobexpense;
 use App\Models\terminal;
+use App\Models\TerminalExpense;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -33,5 +35,48 @@ class TerminalService
         ];
     }
 
-    
+    public function expenseStore(array $validatedData): ?array
+    {
+        // Check if a terminal expense record already exists
+        $terminalExpense = TerminalExpense::updateOrCreate(
+            [
+                'terminal_id' => $validatedData['terminal_id'], // Unique identifier
+            ],
+            [
+                'title' => $validatedData['title'],
+                'job_type' => $validatedData['job_type'],
+                'comission_rate' => $validatedData['comission_rate'],
+                'minimum_comission' => $validatedData['minimum_comission'],
+                'status' => $validatedData['status'],
+            ]
+        );
+
+        // Create or update the job expense records
+        $this->jobExpenseStore($terminalExpense->uid, $validatedData);
+
+        // Return the terminal data
+        return [
+            'terminalExpense' => $terminalExpense,
+        ];
+    }
+
+    public function jobExpenseStore($terminalExpenseId, $validatedData)
+    {
+        // Loop through the job expenditure fieldss
+        
+        foreach ($validatedData['job_expend_field'] as $index => $field) {
+            // Check if a job expense record already exists
+            JobExpense::updateOrCreate(
+                [
+                    'terminal_expense_id' => $terminalExpenseId, // Unique identifier
+                    'job_expend_field' => $field,               // Unique identifier
+                ],
+                [
+                    'terminal_id' => $validatedData['terminal_id'],
+                    'amount' => $validatedData['amount'][$index],
+                    'status' => $validatedData['status'],
+                ]
+            );
+        }
+    }
 }

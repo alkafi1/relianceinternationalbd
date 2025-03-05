@@ -215,6 +215,30 @@
                             </span>
                         </a>
                         {{-- @endcan --}}
+                        {{-- @can('member-request-view') --}}
+                        <a class="menu-item menu-accordion" href="{{ route('terminal.expense.index') }}">
+                            <span
+                                class="menu-link {{ Route::currentRouteName() == 'terminal.expense.index' ? 'active' : '' }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title position-relative">Terminal Expense List
+                                </span>
+                            </span>
+                        </a>
+                        {{-- @endcan --}}
+                        {{-- @can('member-request-view') --}}
+                        <a class="menu-item menu-accordion" href="{{ route('terminal.expense.create') }}">
+                            <span
+                                class="menu-link {{ Route::currentRouteName() == 'terminal.expense.create' ? 'active' : '' }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title position-relative">Terminal Expense Create
+                                </span>
+                            </span>
+                        </a>
+                        {{-- @endcan --}}
                     </div>
                 </div>
                 {{-- Terminal End --}}
