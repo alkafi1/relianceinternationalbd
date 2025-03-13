@@ -63,8 +63,9 @@ Route::prefix('admin')->group(function () {
 
             Route::get('/{terminal}/edit', [TerminalController::class, 'edit'])->name('terminal.edit');
             Route::put('/{terminal}/update', [TerminalController::class, 'update'])->name('terminal.update');
+
             // expense
-            Route::get('/expense/list', [TerminalController::class, 'expenseList'])->name('terminal.expense.index');
+            Route::put('/expense/list', [TerminalController::class, 'expenseList'])->name('terminal.expense.index');
             Route::get('/expense/create', [TerminalController::class, 'expenseCreate'])->name('terminal.expense.create');
             Route::post('/expense/store', [TerminalController::class, 'expenseStore'])->name('terminal.expense.store');
             Route::put('/expense/status/{terminalExpense}', [TerminalController::class, 'updateStatusExpense'])->name('terminal.expense.status');
