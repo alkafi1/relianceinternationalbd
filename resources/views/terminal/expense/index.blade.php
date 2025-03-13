@@ -10,6 +10,8 @@
             </div>
         </div>
     </div>
+    
+   @include('terminal.expense.modal.show-modal')
     @push('custom-js')
         <script>
             // Define columns
@@ -87,6 +89,14 @@
                     }
                 });
             });
+            $(document).on('click', '.show', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+                const url = $(this).data('url');
+
+                // Send AJAX request
+                sendShowAjaxReq(url, 'PUT');
+
+            });
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior
 
@@ -121,6 +131,24 @@
                     error: function(xhr, status, error) {
                         // Handle AJAX error
                         Swal.fire('Error!', 'An error occurred.', 'error');
+                    }
+                });
+            }
+
+            function sendShowAjaxReq(url, type) {
+                $.ajax({
+                    url: url,
+                    type: type, // or 'GET' depending on your server endpoint
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }, // You can send additional data if needed
+                    success: function(response) {
+                        $('#exampleModal').modal('show');
+                        $('.modal-body').html(response.html);
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle AJAX error
+                        toastr.success(response.message);
                     }
                 });
             }

@@ -26,4 +26,5 @@ return [
     'job_type' => 'Job Type',
     'comission_rate' => 'Comission Rate',
     'minimum_comission' => 'Minimum Comission',
+    'amount' => 'Amount',
 ];

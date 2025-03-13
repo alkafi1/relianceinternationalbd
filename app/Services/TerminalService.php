@@ -9,7 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-class TerminalService
+class  TerminalService
 {
     /**
      * Create a new terminal.

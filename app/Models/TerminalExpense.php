@@ -33,7 +33,7 @@ class TerminalExpense extends BaseModel
      */
     public function jobExpense()
     {
-        return $this->hasMany(Jobexpense::class);
+        return $this->hasMany(Jobexpense::class, 'terminal_expense_id');
     }
 
     public function terminal()

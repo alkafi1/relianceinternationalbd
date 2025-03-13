@@ -6,6 +6,8 @@ use App\Enums\TerminalStatusEnum;
 use App\Enums\TerminalTypeEnum;
 use App\Http\Requests\Terminal\TerminalExpenseStoreRequest;
 use App\Http\Requests\Terminal\TerminalStoreRequest;
+use App\Http\Resources\Termina\Expesne\TerminalExpenseShowResource;
+use App\Models\Jobexpense;
 use App\Models\Terminal;
 use App\Models\TerminalExpense;
 use App\Services\TerminalService;
@@ -162,7 +164,7 @@ class TerminalController extends Controller
 
                     $deleteUrl = route('terminal.destroy', $data->uid);
                     return '
-                        <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '">
+                        <a href="javascript:void(0)" class="show text-info me-2" data-id="' . $data->uid . '">
                             <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
                         </a>
                         <a href="javascript:void(0)" class="edit text-primary me-2" data-id="' . $data->uid . '">
@@ -283,11 +285,13 @@ class TerminalController extends Controller
                 // Action Buttons (Not Sortable or Searchable)
                 ->addColumn('action', function ($data) {
                     $deleteUrl = route('terminal.expense.destroy', $data->uid);
+
+                    $showUrl = route('terminal.expense.show', $data->uid);
                     return '
-                    <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '">
+                    <a href="javascript:void(0)" class="show text-info me-2" data-id="' . $data->uid . '" data-url="' . $showUrl . '">
                         <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
                     </a>
-                    <a href="javascript:void(0)" class="edit text-primary me-2" data-id="' . $data->uid . '">
+                    <a href="javascript:void(0)" class="edit text-primary me-2" data-id="' . $data->uid . '" >
                         <i class="fas fa-edit text-primary" style="font-size: 16px;"></i>
                     </a>
                     <a href="javascript:void(0)" class="delete text-danger" data-id="' . $data->uid . '" data-url="' . $deleteUrl . '">
@@ -376,5 +380,55 @@ class TerminalController extends Controller
         ], 201);
     }
 
-      
+    public function show(TerminalExpense $terminalExpense)
+    {
+        // $terminalExpense = new TerminalExpenseShowResource($terminalExpense->load('jobExpense', 'terminal'));
+        $terminalExpense->load('jobExpense', 'terminal');
+        // Generate HTML using a Blade view
+        $html = view('terminal.expense.partials.terminal_expense_details', [
+            'terminalExpense' => $terminalExpense,
+        ])->render();
+
+        // dd($html);
+        // $terminalExpense->load('jobExpense');
+        return response()->json([
+            'success' => true,
+            'data' => $terminalExpense,
+            'html' => $html
+        ], 200);
+    }
+
+    public function datatableTerminalExpenseJObField(Request $request, $terminalExpense)
+    {
+        dd($terminalExpense);
+        if ($request->ajax()) {
+            $query = Jobexpense::with('terminal')->where('terminal_expense_id', $terminalExpense->uid);
+
+            return DataTables::of($query)
+                // Terminal Name (Sortable & Searchable)
+                ->addColumn('terminal_name', function ($data) {
+                    return $data->terminal->terminal_name ?? ''; // Assuming a relationship with the Terminal model
+                })
+
+                // Title (Sortable & Searchable)
+                ->addColumn('title', function ($data) {
+                    return $data->title ?? '';
+                })
+
+                // Amount (Sortable & Searchable)
+
+                // Action Buttons (Not Sortable or Searchable)
+                ->addColumn('action', function ($data) {
+                    $deleteUrl = route('terminal.expense.destroy', $data->uid);
+
+                    return '
+                    <a href="javascript:void(0)" class="delete text-danger" data-id="' . $data->uid . '" data-url="' . $deleteUrl . '">
+                        <i class="fas fa-trash text-danger" style="font-size: 16px;"></i>
+                    </a>';
+                })
+                // Allow raw HTML in action, status, and job_type columns
+                ->rawColumns(['action', 'status'])
+                ->toJson();
+        }
+    }
 }
