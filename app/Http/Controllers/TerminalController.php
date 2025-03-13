@@ -348,11 +348,6 @@ class TerminalController extends Controller
             'message' => 'Terminal expense created successfully.',
             'data' => $termianl,
         ], 201);
-
-
-
-        // Redirect with a success message
-        // return redirect()->route('terminal.expense.index')->with('success', 'Terminal expense created successfully.');
     }
 
     public function destroyExpense(TerminalExpense $terminalExpense)

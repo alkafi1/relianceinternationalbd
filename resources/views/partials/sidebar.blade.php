@@ -340,7 +340,7 @@
                     </div>
                 </div>
                 <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'party.create' || Route::currentRouteName() == 'party.index' ? 'hover show' : '' }}">
+                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'role.create' || Route::currentRouteName() == 'role.index' ? 'hover show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
@@ -356,10 +356,10 @@
                     </span>
 
                     <div
-                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'party.index' || Route::currentRouteName() == 'party.create' ? 'hover show' : '' }}">
+                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'role.index' || Route::currentRouteName() == 'role.create' ? 'hover show' : '' }}">
                         {{-- @can('member-list-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('party.index') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'party.index' ? 'active' : '' }}">
+                        <a class="menu-item menu-accordion" href="{{ route('role.index') }}">
+                            <span class="menu-link {{ Route::currentRouteName() == 'role.index' ? 'active' : '' }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>

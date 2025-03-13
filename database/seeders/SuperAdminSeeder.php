@@ -19,10 +19,11 @@ class SuperAdminSeeder extends Seeder
     public function run(): void
     {
         // Create or find the 'super_admin' role
-        $superAdminRole = Role::firstOrCreate(['name' => 'super_admin']);
+        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin']);
 
         // Grant all permissions to the 'super_admin' role
         $superAdminRole->syncPermissions(Permission::all());
+        
         // Create the super admin user
         $user = User::create([
             'uid' => Str::uuid()->toString(), // Generate UUID
