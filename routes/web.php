@@ -65,20 +65,19 @@ Route::prefix('admin')->group(function () {
             Route::put('/{terminal}/update', [TerminalController::class, 'update'])->name('terminal.update');
 
             // expense
-            Route::put('/expense/list', [TerminalController::class, 'expenseList'])->name('terminal.expense.index');
+            Route::get('/expense/list', [TerminalController::class, 'expenseList'])->name('terminal.expense.index');
             Route::get('/expense/create', [TerminalController::class, 'expenseCreate'])->name('terminal.expense.create');
             Route::post('/expense/store', [TerminalController::class, 'expenseStore'])->name('terminal.expense.store');
             Route::put('/expense/status/{terminalExpense}', [TerminalController::class, 'updateStatusExpense'])->name('terminal.expense.status');
             Route::put('/expense/show/{terminalExpense}', [TerminalController::class, 'show'])->name('terminal.expense.show');
             Route::delete('/expense/{terminalExpense}', [TerminalController::class, 'destroyExpense'])->name('terminal.expense.destroy');
             
+
+
             Route::get('/datatable/terminal', [TerminalController::class, 'datatable'])->name('terminal.datatable');
 
             Route::get('/datatable/terminal/expense', [TerminalController::class, 'datatableTerminalExpense'])->name('terminal.expense.datatable');
 
-            Route::get('/datatable/terminal/expense/jobField/{terminalExpense}', [TerminalController::class, 'datatableTerminalExpenseJObField'])->name('terminal.jobField.datatable');
-
-            
         });
         // terminal route end
 

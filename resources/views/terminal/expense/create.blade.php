@@ -73,7 +73,7 @@
                                     <label for="status" class="required">Status</label>
                                     <select id="status" name="status" class="form-control mt-3" required>
                                         <option value="active">Active</option>
-                                        <option value="inactive">Inactive</option>
+                                        <option value="deactive">Deactive</option>
                                     </select>
                                 </div>
                             </div>

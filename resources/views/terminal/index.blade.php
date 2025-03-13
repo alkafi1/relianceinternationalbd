@@ -135,7 +135,8 @@
                     },
                     error: function(xhr, status, error) {
                         // Handle AJAX error
-                        Swal.fire('Error!', 'An error occurred.', 'error');
+                        toastr.success('An error occurred.');
+                        // Swal.fire('Error!', 'An error occurred.', 'error');
                     }
                 });
             }

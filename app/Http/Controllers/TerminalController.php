@@ -204,6 +204,11 @@ class TerminalController extends Controller
 
     // expense
 
+    /**
+     * Renders the terminal expense list view
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function expenseList()
     {
         return view('terminal.expense.index');
@@ -288,11 +293,8 @@ class TerminalController extends Controller
 
                     $showUrl = route('terminal.expense.show', $data->uid);
                     return '
-                    <a href="javascript:void(0)" class="show text-info me-2" data-id="' . $data->uid . '" data-url="' . $showUrl . '">
+                    <a href="javascript:void(0)" class="details text-info me-2" data-id="' . $data->uid . '" data-url="' . $showUrl . '">
                         <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
-                    </a>
-                    <a href="javascript:void(0)" class="edit text-primary me-2" data-id="' . $data->uid . '" >
-                        <i class="fas fa-edit text-primary" style="font-size: 16px;"></i>
                     </a>
                     <a href="javascript:void(0)" class="delete text-danger" data-id="' . $data->uid . '" data-url="' . $deleteUrl . '">
                         <i class="fas fa-trash text-danger" style="font-size: 16px;"></i>
@@ -337,7 +339,6 @@ class TerminalController extends Controller
     {
         // Validate the request
         $validatedData = $request->validated();
-
         // Store the terminal
         $termianl = $this->terminalService->expenseStore($validatedData);
 
@@ -398,37 +399,37 @@ class TerminalController extends Controller
         ], 200);
     }
 
-    public function datatableTerminalExpenseJObField(Request $request, $terminalExpense)
-    {
-        dd($terminalExpense);
-        if ($request->ajax()) {
-            $query = Jobexpense::with('terminal')->where('terminal_expense_id', $terminalExpense->uid);
+    // public function datatableTerminalExpenseJObField(Request $request, $terminalExpense)
+    // {
+    //     dd($terminalExpense);
+    //     if ($request->ajax()) {
+    //         $query = Jobexpense::with('terminal')->where('terminal_expense_id', $terminalExpense->uid);
 
-            return DataTables::of($query)
-                // Terminal Name (Sortable & Searchable)
-                ->addColumn('terminal_name', function ($data) {
-                    return $data->terminal->terminal_name ?? ''; // Assuming a relationship with the Terminal model
-                })
+    //         return DataTables::of($query)
+    //             // Terminal Name (Sortable & Searchable)
+    //             ->addColumn('terminal_name', function ($data) {
+    //                 return $data->terminal->terminal_name ?? ''; // Assuming a relationship with the Terminal model
+    //             })
 
-                // Title (Sortable & Searchable)
-                ->addColumn('title', function ($data) {
-                    return $data->title ?? '';
-                })
+    //             // Title (Sortable & Searchable)
+    //             ->addColumn('title', function ($data) {
+    //                 return $data->title ?? '';
+    //             })
 
-                // Amount (Sortable & Searchable)
+    //             // Amount (Sortable & Searchable)
 
-                // Action Buttons (Not Sortable or Searchable)
-                ->addColumn('action', function ($data) {
-                    $deleteUrl = route('terminal.expense.destroy', $data->uid);
+    //             // Action Buttons (Not Sortable or Searchable)
+    //             ->addColumn('action', function ($data) {
+    //                 $deleteUrl = route('terminal.expense.destroy', $data->uid);
 
-                    return '
-                    <a href="javascript:void(0)" class="delete text-danger" data-id="' . $data->uid . '" data-url="' . $deleteUrl . '">
-                        <i class="fas fa-trash text-danger" style="font-size: 16px;"></i>
-                    </a>';
-                })
-                // Allow raw HTML in action, status, and job_type columns
-                ->rawColumns(['action', 'status'])
-                ->toJson();
-        }
-    }
+    //                 return '
+    //                 <a href="javascript:void(0)" class="delete text-danger" data-id="' . $data->uid . '" data-url="' . $deleteUrl . '">
+    //                     <i class="fas fa-trash text-danger" style="font-size: 16px;"></i>
+    //                 </a>';
+    //             })
+    //             // Allow raw HTML in action, status, and job_type columns
+    //             ->rawColumns(['action', 'status'])
+    //             ->toJson();
+    //     }
+    // }
 }

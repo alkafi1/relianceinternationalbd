@@ -89,14 +89,7 @@
                     }
                 });
             });
-            $(document).on('click', '.show', function(e) {
-                e.preventDefault(); // Prevent default link behavior
-                const url = $(this).data('url');
-
-                // Send AJAX request
-                sendShowAjaxReq(url, 'PUT');
-
-            });
+            
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior
 
@@ -135,7 +128,14 @@
                 });
             }
 
-            function sendShowAjaxReq(url, type) {
+
+            $(document).on('click', '.details', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+                const url = $(this).data('url');
+                // Send AJAX request
+                sendDetailsAjaxReq(url, 'PUT');
+            });
+            function sendDetailsAjaxReq(url, type) {
                 $.ajax({
                     url: url,
                     type: type, // or 'GET' depending on your server endpoint
@@ -148,7 +148,7 @@
                     },
                     error: function(xhr, status, error) {
                         // Handle AJAX error
-                        toastr.success(response.message);
+                        // toastr.success(response.message);
                     }
                 });
             }

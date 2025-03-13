@@ -190,7 +190,7 @@
                     </span>
 
                     <div
-                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'terminal.index' || Route::currentRouteName() == 'terminal.create' ? 'hover show' : '' }}">
+                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'terminal.index' || Route::currentRouteName() == 'terminal.create' || Route::currentRouteName() == 'terminal.expense.index' || Route::currentRouteName() == 'terminal.expense.create' ? 'hover show' : '' }}">
                         {{-- @can('member-list-view') --}}
                         <a class="menu-item menu-accordion" href="{{ route('terminal.index') }}">
                             <span
