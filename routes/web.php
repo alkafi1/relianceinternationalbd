@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Admincontroller;
 use App\Http\Controllers\Agent\AgentController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Job\JobController;
 use App\Http\Controllers\Party\PartyController;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\System\SystemController;
@@ -108,7 +109,6 @@ Route::prefix('admin')->group(function () {
             Route::get('/index', [RoleController::class, 'index'])->name('role.index');
             Route::get('/create', [RoleController::class, 'create'])->name('role.create');
             Route::post('/store', [RoleController::class, 'store'])->name('role.store');
-            Route::put('/status/{role}', [RoleController::class, 'updateStatus'])->name('role.status');
             Route::post('/delete', [RoleController::class, 'destroy'])->name('role.destroy');
 
             Route::post('/edit', [RoleController::class, 'edit'])->name('role.edit');
@@ -117,6 +117,19 @@ Route::prefix('admin')->group(function () {
             Route::get('/datatable/role', [RoleController::class, 'datatable'])->name('role.datatable');
         });
         // role route end
+
+        // job route start
+        Route::prefix('jobs')->group(function () {
+            Route::get('/', [JobController::class, 'index'])->name('job.index');
+            Route::get('/create', [JobController::class, 'create'])->name('job.create');
+            Route::post('/store', [JobController::class, 'store'])->name('job.store');
+            Route::post('/delete', [JobController::class, 'destroy'])->name('job.destroy');
+
+            Route::post('/edit', [JobController::class, 'edit'])->name('job.edit');
+            Route::post('/update', [JobController::class, 'update'])->name('job.update');
+
+            Route::get('/datatable/job', [JobController::class, 'datatable'])->name('job.datatable');
+        });
 
     });
 });

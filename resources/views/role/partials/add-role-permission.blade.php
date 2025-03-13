@@ -34,7 +34,8 @@
                                                         data-bs-toggle="tooltip"
                                                         data-bs-original-title="Enable Permission"
                                                         data-kt-initialized="1">
-                                                        {{ $permission->name }}
+                                                        {{ str_replace('-', ' ', ucwords(collect(explode('.', $permission->name, 2))->last(), '-')) }}
+
                                                     </label>
                                                     <!--end::Label-->
                                                 </div>

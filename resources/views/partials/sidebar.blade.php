@@ -293,6 +293,67 @@
                 </div>
                 {{-- Parties End --}}
 
+                {{-- Jobs Start --}}
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Jobs</span>
+                    </div>
+                </div>
+                <div data-kt-menu-trigger="click"
+                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'party.create' || Route::currentRouteName() == 'party.index' ? 'hover show' : '' }}">
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <i class="fas fa-users"></i>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title position-relative">Jobs
+                        </span>
+                        <span class="menu-arrow"></span>
+                    </span>
+
+                    <div
+                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'job.index' || Route::currentRouteName() == 'job.create' ? 'hover show' : '' }}">
+                        {{-- @can('member-list-view') --}}
+                        <a class="menu-item menu-accordion" href="{{ route('job.index') }}">
+                            <span class="menu-link {{ Route::currentRouteName() == 'job.index' ? 'active' : '' }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Job List</span>
+
+                            </span>
+                        </a>
+                        {{-- @endcan --}}
+                        {{-- @can('member-request-view') --}}
+                        <a class="menu-item menu-accordion" href="{{ route('job.create') }}">
+                            <span class="menu-link {{ Route::currentRouteName() == 'job.create' ? 'active' : '' }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title position-relative">Job Create
+                                </span>
+                            </span>
+                        </a>
+                        {{-- @endcan --}}
+                        {{-- @can('member-request-view') --}}
+                        <a class="menu-item menu-accordion" href="{{ route('job.create') }}">
+                            <span class="menu-link {{ Route::currentRouteName() == 'job.create' ? 'active' : '' }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title position-relative">Job Report
+                                </span>
+                            </span>
+                        </a>
+                        {{-- @endcan --}}
+                    </div>
+                </div>
+                {{-- Parties End --}}
+
 
                 {{-- System setting Start --}}
                 <div class="menu-item">

@@ -135,5 +135,17 @@ class BaseModel extends Model
         ], 400);
     }
 
+    /**
+     * Fetch records based on status.
+     *
+     * @param string $statusColumn
+     * @param string $statusValue
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function fetchByStatus(string $statusColumn, string $statusValue)
+    {
+        return static::where($statusColumn, $statusValue)->get();
+    }
+
     
 }
