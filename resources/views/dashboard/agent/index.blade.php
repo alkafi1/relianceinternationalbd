@@ -1,10 +1,10 @@
 @extends('layouts.layout')
 @section('breadcame')
-    Dashboard
+    Agent Dashboard
 @endsection
 @section('content')
     <div>
-        <h1>Admin DAshboard Page</h1>
+        <h1>Agent Dashboard Page</h1>
     </div>
 @endsection
 

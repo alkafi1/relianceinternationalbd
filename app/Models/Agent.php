@@ -3,12 +3,21 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use App\Traits\BaseModel as TraitsBaseModel;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Agent extends BaseModel
+class Agent extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, TraitsBaseModel;
+    // Set the primary key
+    protected $primaryKey = 'uid';
 
+    // Set the key type to string (for UUID)
+    protected $keyType = 'string';
+
+    // Disable auto-incrementing (since UUIDs are used)
+    public $incrementing = false;
     /**
      * The attributes that are mass assignable.
      */

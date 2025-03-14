@@ -3,39 +3,35 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Agent\AgentLoginRequest;
 use App\Http\Requests\Login\LoginRequest;
-use App\Services\LoginService;
-use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
+use App\Services\AgentLoginService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller
+class AgentLoginController extends Controller
 {
-
-    protected $loginService;
+    protected $agentLoginService;
 
     /**
-     * Constructor to inject the LoginService class
+     * Constructor to inject the agentLoginService class
      *
-     * @param LoginService $loginService The LoginService class to handle the login request
+     * @param AgentLoginService $agentLoginService The agentLoginService class to handle the login request
      */
-    public function __construct(LoginService $loginService)
+    public function __construct(AgentLoginService $agentLoginService)
     {
         // Inject the LoginService class
-        $this->loginService = $loginService;
+        $this->agentLoginService = $agentLoginService;
     }
 
     /**
-     * Show the login form.
+     * Show the agent login form.
      *
      * @return \Illuminate\Http\Response
      */
     public function login()
     {
-        // Show the login form
-        return view('auth.login.login');
+        return view('auth.agent.login');
     }
 
     /**
@@ -44,19 +40,18 @@ class AuthController extends Controller
      * @param LoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function loginPost(LoginRequest $request)
+    public function loginPost(AgentLoginRequest $request)
     {
         // Simplifying the login process by directly returning the response
-        $result = $this->loginService->login($request->only('email', 'password'));
+        $result = $this->agentLoginService->login($request->only('email', 'password'));
 
         return $result ? response()->json([
             'redirect' => $result['redirect'],
-            'user' => $result['user'],
+            'agent' => $result['agent'],
         ]) : response()->json([
             'message' => 'Invalid credentials',
         ], 401);
     }
-
 
     /**
      * Logout the user and redirect to the login page
@@ -64,13 +59,18 @@ class AuthController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function logout(Request $request): JsonResponse
+    public function logout(Request $request)
     {
-        // Logout the user
-        $this->loginService->logout(Auth::user());
+        // Get the agent
+        $agent = Auth::guard('agent')->user();
 
+        // Log the agent out
+        $this->agentLoginService->agentLogout();
+
+        // Redirect to the agent login page
         return response()->json([
-            'redirect' => route('login')
+            'redirect' => route('agent.login'),
+            // 'agent' => $agent
         ]);
     }
 }

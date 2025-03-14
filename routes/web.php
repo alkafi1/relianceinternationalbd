@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Admincontroller;
 use App\Http\Controllers\Agent\AgentController;
+use App\Http\Controllers\Auth\AgentLoginController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Job\JobController;
@@ -130,6 +131,15 @@ Route::prefix('admin')->group(function () {
 
             Route::get('/datatable/job', [JobController::class, 'datatable'])->name('job.datatable');
         });
+    });
+});
 
+Route::name('agent.')->prefix('agent')->group(function () {
+    Route::get('/', [AgentLoginController::class, 'login'])->name('login');
+    Route::post('/', [AgentLoginController::class, 'loginPost']);
+    Route::post('/logout', [AgentLoginController::class, 'logout'])->name('logout');
+
+    Route::middleware('auth.agent')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'agentIndex'])->name('dashboard');
     });
 });

@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -130,5 +129,17 @@ trait BaseModel
             'success' => false,
             'message' => ucfirst(class_basename(get_class($model))) . ' deleted failed.',
         ], 400);
+    }
+
+    /**
+     * Fetch records based on status.
+     *
+     * @param string $statusColumn
+     * @param string $statusValue
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function fetchByStatus(string $statusColumn, string $statusValue)
+    {
+        return static::where($statusColumn, $statusValue)->get();
     }
 }

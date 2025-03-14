@@ -23,13 +23,12 @@ class AuthnicationMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // Check if the user is not authenticated or not approved
-        if (Auth::check() && Auth::user()->status === AdminStatus::APPROVED()->value) {
+        if (Auth::guard('agent')->check() && Auth::guard('agent')->user()->status === AdminStatus::APPROVED()->value) {
             // If the user is authenticated and approved, let the request pass through
             return $next($request);
         }
 
         // If the user is not authenticated or not approved, redirect to the login page
-        return redirect()->route('login')->withErrors(['message' => 'User not authorized.']);
-        return redirect()->route('login');
+        return redirect()->route('agent.login')->withErrors(['message' => 'Agent not authorized.']);
     }
 }
