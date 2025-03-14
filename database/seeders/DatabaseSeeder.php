@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             SeedFromSqlFileSeeder::class,
             PermissionSeeder::class,
             SuperAdminSeeder::class,
+            // AgentRolePermissionSeeder::class,
             TerminalSeeder::class,
             // AccountSeeder::class
         ]);

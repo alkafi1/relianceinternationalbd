@@ -16,6 +16,7 @@ class PermissionSeeder extends Seeder
         // Define permissions based on route names
         $routes = [
             'dashboard',
+            'agent.dashboard',
             'admin.index',
             'admin.create',
             'admin.store',
@@ -47,12 +48,39 @@ class PermissionSeeder extends Seeder
             'party.destroy',
             'party.status.update',
             'party.status',
+            'job.index',
+            'job.create',
+            'job.store',
+            'job.edit',
+            'job.update',
+            'job.destroy',
+            'job.status.update',
+            'job.status',
+            // 'job.datatable',
+            'role.index',
+            'role.create',
+            'role.store',
+            'role.edit',
+            'role.update',
+            'role.destroy',
             'system.index',
             'system.post',
         ];
 
+        // Create permissions for the 'web' guard (default)
         foreach ($routes as $route) {
-            Permission::create(['name' => $route]);
+            Permission::firstOrCreate([
+                'name' => $route,
+                'guard_name' => 'web', // Specify the guard name
+            ]);
+        }
+
+        // Create permissions for the 'agent' guard
+        foreach ($routes as $route) {
+            Permission::firstOrCreate([
+                'name' => $route,
+                'guard_name' => 'agent', // Specify the guard name
+            ]);
         }
 
         $this->command->info('All permissions created successfully.');

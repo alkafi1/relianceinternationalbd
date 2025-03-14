@@ -12,6 +12,10 @@ use App\Http\Controllers\System\SystemController;
 use App\Http\Controllers\TerminalController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
+
 //
 Route::prefix('admin')->group(function () {
     Route::get('/', [AuthController::class, 'login'])->name('login');
@@ -119,18 +123,7 @@ Route::prefix('admin')->group(function () {
         });
         // role route end
 
-        // job route start
-        Route::prefix('jobs')->group(function () {
-            Route::get('/', [JobController::class, 'index'])->name('job.index');
-            Route::get('/create', [JobController::class, 'create'])->name('job.create');
-            Route::post('/store', [JobController::class, 'store'])->name('job.store');
-            Route::post('/delete', [JobController::class, 'destroy'])->name('job.destroy');
 
-            Route::post('/edit', [JobController::class, 'edit'])->name('job.edit');
-            Route::post('/update', [JobController::class, 'update'])->name('job.update');
-
-            Route::get('/datatable/job', [JobController::class, 'datatable'])->name('job.datatable');
-        });
     });
 });
 
@@ -141,5 +134,19 @@ Route::name('agent.')->prefix('agent')->group(function () {
 
     Route::middleware('auth.agent')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'agentIndex'])->name('dashboard');
+    });
+});
+Route::middleware('auth.agent_or_web')->group(function () {
+    // job route start
+    Route::prefix('jobs')->group(function () {
+        Route::get('/', [JobController::class, 'index'])->name('job.index');
+        Route::get('/create', [JobController::class, 'create'])->name('job.create');
+        Route::post('/store', [JobController::class, 'store'])->name('job.store');
+        Route::post('/delete', [JobController::class, 'destroy'])->name('job.destroy');
+
+        Route::post('/edit', [JobController::class, 'edit'])->name('job.edit');
+        Route::post('/update', [JobController::class, 'update'])->name('job.update');
+
+        Route::get('/datatable/job', [JobController::class, 'datatable'])->name('job.datatable');
     });
 });

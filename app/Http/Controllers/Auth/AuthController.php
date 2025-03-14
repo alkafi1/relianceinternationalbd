@@ -48,7 +48,7 @@ class AuthController extends Controller
     {
         // Simplifying the login process by directly returning the response
         $result = $this->loginService->login($request->only('email', 'password'));
-
+        
         return $result ? response()->json([
             'redirect' => $result['redirect'],
             'user' => $result['user'],

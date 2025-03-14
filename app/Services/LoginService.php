@@ -15,7 +15,7 @@ class LoginService
      * @return array|null
      */
     public function login(array $credentials): ?array
-    {
+    { 
         // Attempt to log the user in
         if (Auth::attempt($credentials)) {
             // Get the user that was logged in

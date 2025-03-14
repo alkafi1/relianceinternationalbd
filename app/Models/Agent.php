@@ -6,10 +6,11 @@ use App\Models\BaseModel;
 use App\Traits\BaseModel as TraitsBaseModel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Traits\HasRoles;
 
 class Agent extends Authenticatable
 {
-    use HasFactory, TraitsBaseModel;
+    use HasFactory, TraitsBaseModel, HasRoles;
     // Set the primary key
     protected $primaryKey = 'uid';
 

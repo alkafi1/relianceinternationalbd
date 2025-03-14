@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Middleware\AuthAgentCheck;
 use App\Http\Middleware\AuthnicationMiddleware;
+use App\Http\Middleware\EnsureAgentOrWebAuth;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -14,7 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'auth' => AuthnicationMiddleware::class,
-            'auth.agent' => AuthnicationMiddleware::class,
+            'auth.agent' => AuthAgentCheck::class,
+            'auth.agent_or_web' => EnsureAgentOrWebAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
