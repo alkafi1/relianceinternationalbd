@@ -114,4 +114,28 @@ class Agent extends Authenticatable
     {
         return $this->morphMany(Account::class, 'account_holder');
     }
+
+    /**
+     * Get the creator of the record (User or Agent).
+     */
+    public function createdBy()
+    {
+        return $this->morphTo(__FUNCTION__, 'created_by_type', 'created_by_uid');
+    }
+
+    /**
+     * Get the updater of the record (User or Agent).
+     */
+    public function updatedBy()
+    {
+        return $this->morphTo(__FUNCTION__, 'updated_by_type', 'updated_by_uid');
+    }
+
+    /**
+     * Get the deleter of the record (User or Agent).
+     */
+    public function deletedBy()
+    {
+        return $this->morphTo(__FUNCTION__, 'deleted_by_type', 'deleted_by_uid');
+    }
 }

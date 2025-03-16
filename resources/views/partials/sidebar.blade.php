@@ -46,8 +46,7 @@
                 id="#kt_aside_menu" data-kt-menu="true">
                 {{-- dashboard sidebar start --}}
 
-                @if (
-                    (auth('agent')->check() && auth('agent')->user()->hasAnyPermission('agent.dashboard')) ||
+                @if ((auth('agent')->check() && auth('agent')->user()->hasAnyPermission('agent.dashboard')) ||
                         (auth()->check() && auth()->user()->hasAnyPermission('dashboard')))
                     <div class="menu-item">
                         @if (auth()->guard('agent')->check())

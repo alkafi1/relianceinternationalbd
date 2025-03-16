@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\AdminStatus;
+use App\Enums\AgentStatus;
 use App\Models\Agent;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -19,11 +20,11 @@ class AgentLoginService
     {
         // Attempt to log the user in
         if (Auth::guard('agent')->attempt($credentials)) {
+            
             // Get the user that was logged in
             $agent = Auth::guard('agent')->user();
-            
             // If the user is not approved, return null
-            if ($agent->status !== AdminStatus::APPROVED()->value) {
+            if ($agent->status !== AgentStatus::APPROVED()->value) {
                 return null;
             }
 

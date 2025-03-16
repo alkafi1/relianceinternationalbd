@@ -48,9 +48,12 @@ class AgentLoginController extends Controller
         return $result ? response()->json([
             'redirect' => $result['redirect'],
             'agent' => $result['agent'],
+            'success' => true,
+            'message' => 'Agent Login Successfully',
         ]) : response()->json([
-            'message' => 'Invalid credentials',
-        ], 401);
+            'success' => false,
+            'message' => 'Invalid Cridentials',
+        ], 201);
     }
 
     /**

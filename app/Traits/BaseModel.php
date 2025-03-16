@@ -41,6 +41,28 @@ trait BaseModel
                 $model->{$model->getKeyName()} = Str::uuid()->toString();
             }
         });
+
+        // Set `created_by` when creating
+        static::creating(function ($model) {
+            if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
+                $model->created_by = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
+            }
+        });
+
+        // Set `updated_by` when updating
+        static::updating(function ($model) {
+            if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
+                $model->updated_by = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
+            }
+        });
+
+        // Set `deleted_by` when deleting
+        static::deleting(function ($model) {
+            if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
+                $model->deleted_by = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
+                $model->save(); // Save the `deleted_by` field before deletion
+            }
+        });
     }
 
     /**

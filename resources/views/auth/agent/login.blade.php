@@ -126,7 +126,13 @@
                             $('#kt_sign_in_submit .indicator-label').hide();
                         },
                         success: function(response) {
-                            window.location.href = response.redirect;
+                            if(response.success) {
+                                toastr.success(response.message);
+                                window.location.href = response.redirect;
+                            }
+                            else{
+                                toastr.error(response.message);
+                            }
                         },
                         error: function(xhr) {
                             var errors = xhr.responseJSON.errors;
