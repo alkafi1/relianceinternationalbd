@@ -19,18 +19,18 @@ class SuperAdminSeeder extends Seeder
     public function run(): void
     {
         // Create or find the 'super_admin' role
-        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin']);
+        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'web']);
 
         // Grant all permissions to the 'super_admin' role
-        $superAdminRole->syncPermissions(Permission::all());
-        
+        $superAdminRole->syncPermissions(Permission::where('guard_name', 'web')->get());
+
         // Create the super admin user
         $user = User::create([
             'uid' => Str::uuid()->toString(), // Generate UUID
             'first_name' => 'Super',
             'last_name' => 'Admin',
             'email' => 'superadmin@gmail.com',
-            'email_verified_at' => now(),    
+            'email_verified_at' => now(),
             'status' => AdminStatus::APPROVED(),
             'password' => Hash::make('password'), // Hash the password
             'remember_token' => Str::random(10),

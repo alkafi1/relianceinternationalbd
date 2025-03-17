@@ -5,48 +5,69 @@
         <div class="col-md-12 event-list-col">
             <div class="card">
                 <div class="card-body">
-                    @include('party.partials.datatables.party-data-table')
+                    @include('job.partials.datatables.job-data-table')
                 </div>
             </div>
         </div>
     </div>
-    @include('party.partials.modal.status-modal')
+    @include('job.partials.modal.status-modal')
 
     @push('custom-js')
         <script>
             // Define columns
             const columns = [{
-                    data: 'party_id', // Corresponds to the 'party_id' field in your data
-                    name: 'party_id', // Name for server-side processing
-                    className: 'fw-bold text-dark', // Add classes for styling
+                    data: 'action', // Corresponds to the 'status' field in your data
+                    name: 'action',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: 'party_name', // Corresponds to the 'party_name' field in your data
-                    name: 'party_name',
+                    data: 'job_no', // Corresponds to the 'status' field in your data
+                    name: 'job_no',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'job_no', // Corresponds to the 'status' field in your data
+                    name: 'job_no',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'terminal', // Corresponds to the 'party_name' field in your data
+                    name: 'terminal',
                     className: 'min-w-50px fw-bold text-dark firstTheadColumn',
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: 'email', // Corresponds to the 'email' field in your data
-                    name: 'email',
+                    data: 'party_name', // Corresponds to the 'party_id' field in your data
+                    name: 'party_name', // Name for server-side processing
+                    className: 'fw-bold text-dark', // Add classes for styling
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'agent', // Corresponds to the 'email' field in your data
+                    name: 'agent',
                     className: 'min-w-50px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: 'phone', // Corresponds to the 'phone' field in your data
-                    name: 'phone',
+                    data: 'buyer_name', // Corresponds to the 'phone' field in your data
+                    name: 'buyer_name',
                     className: 'min-w-150px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
-                
+
                 {
-                    data: 'address', // Corresponds to the 'full_address' field in your data
-                    name: 'address',
+                    data: 'invoice_no', // Corresponds to the 'full_address' field in your data
+                    name: 'invoice_no',
                     className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
                     orderable: true,
                     searchable: true
@@ -59,8 +80,110 @@
                     searchable: true
                 },
                 {
-                    data: 'last_updated', // Corresponds to the 'last_updated' field in your data
-                    name: 'last_updated',
+                    data: 'value_usd', // Corresponds to the 'status' field in your data
+                    name: 'value_usd',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'usd_rate', // Corresponds to the 'status' field in your data
+                    name: 'usd_rate',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'item', // Corresponds to the 'status' field in your data
+                    name: 'item',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'lc_no', // Corresponds to the 'status' field in your data
+                    name: 'lc_no',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'be_no', // Corresponds to the 'status' field in your data
+                    name: 'be_no',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'ud_no', // Corresponds to the 'status' field in your data
+                    name: 'ud_no',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'ud_amendment_no', // Corresponds to the 'status' field in your data
+                    name: 'ud_amendment_no',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'job_type', // Corresponds to the 'status' field in your data
+                    name: 'job_type',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'master_bl_number', // Corresponds to the 'status' field in your data
+                    name: 'master_bl_number',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'house_bl_number', // Corresponds to the 'status' field in your data
+                    name: 'house_bl_number',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'quantity', // Corresponds to the 'status' field in your data
+                    name: 'quantity',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'ctns_pieces', // Corresponds to the 'status' field in your data
+                    name: 'ctns_pieces',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                
+                {
+                    data: 'weight', // Corresponds to the 'status' field in your data
+                    name: 'weight',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+                
+                {
+                    data: 'voucher_amount', // Corresponds to the 'status' field in your data
+                    name: 'voucher_amount',
+                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+
+
+                {
+                    data: 'updated_at', // Corresponds to the 'last_updated' field in your data
+                    name: 'updated_at',
                     className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
                     orderable: true,
                     searchable: true,
@@ -80,17 +203,10 @@
                         return new Date(data).toLocaleDateString();
                     }
                 },
-                {
-                    data: 'action', // Corresponds to the 'action' field in your data
-                    name: 'action',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
-                    orderable: false, // Action columns are usually not orderable
-                    searchable: false, // Action columns are usually not searchable
-                },
             ];
 
             // Initialize DataTable
-            initializeDataTable('party-data', "{{ route('party.datatable') }}", columns);
+            initializeDataTable('job-data', "{{ route('job.datatable') }}", columns);
 
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior

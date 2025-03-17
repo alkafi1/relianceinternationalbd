@@ -16,4 +16,15 @@ class DashboardController extends Controller
         // Return the dashboard index view
         return view('dashboard.index');
     }
+
+    /**
+     * Display the agent dashboard index view.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function agentIndex()
+    {
+        // Return the dashboard index view
+        return view('dashboard.agent.index');
+    }
 }

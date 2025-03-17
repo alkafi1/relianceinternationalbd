@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Login\LoginRequest;
 use App\Services\LoginService;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,7 +48,7 @@ class AuthController extends Controller
     {
         // Simplifying the login process by directly returning the response
         $result = $this->loginService->login($request->only('email', 'password'));
-
+        
         return $result ? response()->json([
             'redirect' => $result['redirect'],
             'user' => $result['user'],
@@ -63,12 +64,13 @@ class AuthController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function logout(Request $request): RedirectResponse
+    public function logout(Request $request): JsonResponse
     {
         // Logout the user
         $this->loginService->logout(Auth::user());
 
-        // Redirect to the login page
-        return redirect()->route('login');
+        return response()->json([
+            'redirect' => route('login')
+        ]);
     }
 }
