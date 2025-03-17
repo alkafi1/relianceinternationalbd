@@ -152,7 +152,6 @@ class AgentSeeder extends Seeder
             $agent->assignRole('agent');
         }
 
-        
         $this->command->info('Agents created successfully.');
     }
 }

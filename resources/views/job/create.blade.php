@@ -356,19 +356,4 @@
         });
     </script>
 
-    <script>
-        function getDistricts(division_id) {
-            $.ajax({
-                url: '{{ route('get.districts') }}',
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    division_id: division_id
-                },
-                success: function(response) {
-                    $('#district_id').html(response.option);
-                }
-            });
-        }
-    </script>
 @endpush

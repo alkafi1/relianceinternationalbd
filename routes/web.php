@@ -144,8 +144,8 @@ Route::middleware('auth.agent_or_web')->group(function () {
         Route::post('/store', [JobController::class, 'store'])->name('job.store');
         Route::post('/delete', [JobController::class, 'destroy'])->name('job.destroy');
 
-        Route::post('/edit', [JobController::class, 'edit'])->name('job.edit');
-        Route::post('/update', [JobController::class, 'update'])->name('job.update');
+        Route::get('/edit/{job}', [JobController::class, 'edit'])->name('job.edit');
+        Route::post('/update/{job}', [JobController::class, 'update'])->name('job.update');
 
         Route::get('/datatable/job', [JobController::class, 'datatable'])->name('job.datatable');
     });

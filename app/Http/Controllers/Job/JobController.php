@@ -7,10 +7,12 @@ use App\Enums\PartyStatusEnum;
 use App\Enums\TerminalStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\StoreJobRequest;
+use App\Http\Requests\Job\UpdateJobRequest;
 use App\Models\Agent;
 use App\Models\Party;
 use App\Models\RelianceJob;
 use App\Models\Terminal;
+use App\Models\TerminalExpense;
 use App\Services\JobService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -156,7 +158,7 @@ class JobController extends Controller
                     $query->orderBy('status', $order);
                 })
                 ->addColumn('action', function ($data) {
-                    $editUrl = route('job.edit', $data->id);
+                    $editUrl = route('job.edit', ['job' => $data->uid]);
                     return '
                     <div class="dropdown">
                         <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuButton' . $data->id . '" data-bs-toggle="dropdown" aria-expanded="false">
@@ -243,6 +245,48 @@ class JobController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred while creating the job.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function edit(RelianceJob $job)
+    {
+        // Fetch approved agents
+        $agents = Agent::fetchByStatus('status', AgentStatus::APPROVED()->value);
+
+        // Fetch active terminals
+        $terminals = Terminal::fetchByStatus('status', TerminalStatusEnum::ACTIVE()->value);
+
+        // Fetch approved parties
+        $parties = Party::fetchByStatus('status', PartyStatusEnum::APPROVED()->value);
+
+        $terminalExpense = TerminalExpense::with('jobExpense')->where('terminal_id', $job->terminal_id)->first();
+        
+        // Pass the agents, terminals, and parties to the view
+        return view('job.edit', compact('job', 'agents', 'terminals', 'parties','terminalExpense'));
+    }
+
+    public function update(UpdateJobRequest $request, $id)
+    {
+        try {
+            // Get validated data from the request
+            $data = $request->validated();
+
+            // Use the service to update the job
+            $job = $this->jobService->updateJob($id, $data);
+
+            // Return a success response
+            return response()->json([
+                'success' => true,
+                'message' => 'Job updated successfully!',
+                'data' => $job,
+            ], 200);
+        } catch (\Exception $e) {
+            // Return an error response
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while updating the job.',
                 'error' => $e->getMessage(),
             ], 500);
         }
