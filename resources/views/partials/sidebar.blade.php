@@ -5,8 +5,12 @@
     <!--begin::Brand-->
     <div class="aside-logo flex-column-auto" id="kt_aside_logo">
         <!--begin::Logo-->
-        <a href="{{ route('dashboard') }}">
-            <img alt="Logo" src="{{ asset('public/frontend/images/' . $global['logo']) }}" class="h-25px logo" />
+        @if (auth()->guard('agent')->check())
+            <a href="{{ route('agent.dashboard') }}">
+            @else
+                <a href="{{ route('dashboard') }}">
+        @endif
+        <img alt="Logo" src="{{ asset('public/frontend/images/' . $global['logo']) }}" class="h-25px logo" />
         </a>
         <!--end::Logo-->
         <!--begin::Aside toggler-->
@@ -41,15 +45,17 @@
             <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500"
                 id="#kt_aside_menu" data-kt-menu="true">
                 {{-- dashboard sidebar start --}}
-                {{-- @if (Auth::guard('admin')->user()->hasAnyPermission(['dashboard-view'])) --}}
-                <div class="menu-item">
-                    <div class="menu-content pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Dashboard</span>
-                    </div>
-                </div>
-                <div class="menu-item">
-                    <a class="menu-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}"
-                        href="{{ route('dashboard') }}">
+
+                @if ((auth('agent')->check() && auth('agent')->user()->hasAnyPermission('agent.dashboard')) ||
+                        (auth()->check() && auth()->user()->hasAnyPermission('dashboard')))
+                    <div class="menu-item">
+                        @if (auth()->guard('agent')->check())
+                            <a class="menu-link {{ Route::currentRouteName() == 'agent.dashboard' ? 'active' : '' }}"
+                                href="{{ route('agent.dashboard') }}">
+                            @elseif(auth()->guard('web')->check())
+                                <a class="menu-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}"
+                                    href="{{ route('dashboard') }}">
+                        @endif
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -59,384 +65,381 @@
                             <!--end::Svg Icon-->
                         </span>
                         <span class="menu-title">Dashboard</span>
-                    </a>
-                </div>
-                {{-- @endif --}}
+                        </a>
+                    </div>
+                @endif
                 {{-- dashboard sidebar end --}}
 
-                {{-- member sidebar start --}}
-                {{-- @if (Auth::guard('admin')->user()->hasAnyPermission(['member-list-view', 'member-request-view'])) --}}
-                <div class="menu-item">
-                    <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Admin</span>
-                    </div>
-                </div>
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'admin.index' || Route::currentRouteName() == 'admin.create' ? 'hover show' : '' }}">
-                    <span class="menu-link">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <i class="fas fa-users"></i>
-                                </svg>
+                {{-- admin sidebar start --}}
+                @if (auth('web')->check() &&
+                        auth('web')->user()->hasAnyPermission(['admin.index', 'admin.create']))
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ Route::currentRouteName() == 'admin.index' || Route::currentRouteName() == 'admin.create' ? 'hover show' : '' }}">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <i class="fas fa-users"></i>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
                             </span>
-                            <!--end::Svg Icon-->
+                            <span class="menu-title position-relative">Admin
+                            </span>
+                            <span class="menu-arrow"></span>
                         </span>
-                        <span class="menu-title position-relative">Admin
-                        </span>
-                        <span class="menu-arrow"></span>
-                    </span>
 
-                    <div
-                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'admin.index' || Route::currentRouteName() == 'admin.index' ? 'hover show' : '' }}">
-                        {{-- @can('member-list-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('admin.index') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'admin.index' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Admin List</span>
+                        <div
+                            class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'admin.index' || Route::currentRouteName() == 'admin.index' ? 'hover show' : '' }}">
+                            {{-- @can('member-list-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('admin.index') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'admin.index' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Admin List</span>
 
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
-                        {{-- @can('member-request-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('admin.create') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'admin.create' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title position-relative">Admin Create
+                            </a>
+                            {{-- @endcan --}}
+                            {{-- @can('member-request-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('admin.create') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'admin.create' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title position-relative">Admin Create
+                                    </span>
                                 </span>
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
+                            </a>
+                            {{-- @endcan --}}
+                        </div>
                     </div>
-                </div>
+                @endif
+                {{-- aqdmin sidebar end --}}
 
-                {{-- @endif --}}
-                {{-- member sidebar end --}}
-
-                {{-- member sidebar start --}}
-                {{-- @if (Auth::guard('admin')->user()->hasAnyPermission(['member-list-view', 'member-request-view'])) --}}
-                <div class="menu-item">
-                    <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Agent</span>
-                    </div>
-                </div>
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'agent.create' || Route::currentRouteName() == 'agent.index' ? 'hover show' : '' }}">
-                    <span class="menu-link">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <i class="fas fa-users"></i>
-                                </svg>
+                {{-- agent sidebar start --}}
+                @if (auth('web')->check() &&
+                        Auth::guard('web')->user()->hasAnyPermission(['agent.index', 'agent.create', 'agent.edit']))
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ Route::currentRouteName() == 'agent.create' || Route::currentRouteName() == 'agent.index' ? 'hover show' : '' }}">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <i class="fas fa-user-tie"></i>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
                             </span>
-                            <!--end::Svg Icon-->
+                            <span class="menu-title position-relative">Agent
+                            </span>
+                            <span class="menu-arrow"></span>
                         </span>
-                        <span class="menu-title position-relative">Agent
-                        </span>
-                        <span class="menu-arrow"></span>
-                    </span>
 
-                    <div
-                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'agent.index' || Route::currentRouteName() == 'agent.create' ? 'hover show' : '' }}">
-                        {{-- @can('member-list-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('agent.index') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'agent.index' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Agent List</span>
+                        <div
+                            class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'agent.index' || Route::currentRouteName() == 'agent.create' ? 'hover show' : '' }}">
+                            {{-- @can('member-list-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('agent.index') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'agent.index' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Agent List</span>
 
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
-                        {{-- @can('member-request-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('agent.create') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'agent.create' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title position-relative">Agent Create
+                            </a>
+                            {{-- @endcan --}}
+                            {{-- @can('member-request-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('agent.create') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'agent.create' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title position-relative">Agent Create
+                                    </span>
                                 </span>
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
+                            </a>
+                            {{-- @endcan --}}
+                        </div>
                     </div>
-                </div>
+                @endif
+                {{-- agent sidebar end --}}
 
                 {{-- Terminal Start --}}
-                <div class="menu-item">
-                    <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Terminal</span>
-                    </div>
-                </div>
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'terminal.create' || Route::currentRouteName() == 'terminal.index' ? 'hover show' : '' }}">
-                    <span class="menu-link">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <i class="fas fa-users"></i>
-                                </svg>
+                @if (auth('web')->check() &&
+                        Auth::guard('web')->user()->hasAnyPermission([
+                                'terminal.index',
+                                'terminal.create',
+                                'terminal.expense.create',
+                                'terminal.expense.index',
+                            ]))
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ Route::currentRouteName() == 'terminal.create' || Route::currentRouteName() == 'terminal.index' ? 'hover show' : '' }}">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/maps/map003.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <i class="fas fa-plane-departure"></i>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
                             </span>
-                            <!--end::Svg Icon-->
+                            <span class="menu-title position-relative">Terminal
+                            </span>
+                            <span class="menu-arrow"></span>
                         </span>
-                        <span class="menu-title position-relative">Terminal
-                        </span>
-                        <span class="menu-arrow"></span>
-                    </span>
 
-                    <div
-                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'terminal.index' || Route::currentRouteName() == 'terminal.create' || Route::currentRouteName() == 'terminal.expense.index' || Route::currentRouteName() == 'terminal.expense.create' ? 'hover show' : '' }}">
-                        {{-- @can('member-list-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('terminal.index') }}">
-                            <span
-                                class="menu-link {{ Route::currentRouteName() == 'terminal.index' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Terminal List</span>
+                        <div
+                            class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'terminal.index' || Route::currentRouteName() == 'terminal.create' || Route::currentRouteName() == 'terminal.expense.index' || Route::currentRouteName() == 'terminal.expense.create' ? 'hover show' : '' }}">
+                            {{-- @can('member-list-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('terminal.index') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'terminal.index' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Terminal List</span>
 
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
-                        {{-- @can('member-request-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('terminal.create') }}">
-                            <span
-                                class="menu-link {{ Route::currentRouteName() == 'terminal.create' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title position-relative">Terminal Create
+                            </a>
+                            {{-- @endcan --}}
+                            {{-- @can('member-request-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('terminal.create') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'terminal.create' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title position-relative">Terminal Create
+                                    </span>
                                 </span>
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
-                        {{-- @can('member-request-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('terminal.expense.index') }}">
-                            <span
-                                class="menu-link {{ Route::currentRouteName() == 'terminal.expense.index' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
+                            </a>
+                            {{-- @endcan --}}
+                            {{-- @can('member-request-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('terminal.expense.index') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'terminal.expense.index' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title position-relative">Terminal Expense List
+                                    </span>
                                 </span>
-                                <span class="menu-title position-relative">Terminal Expense List
+                            </a>
+                            {{-- @endcan --}}
+                            {{-- @can('member-request-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('terminal.expense.create') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'terminal.expense.create' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title position-relative">Terminal Expense Create
+                                    </span>
                                 </span>
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
-                        {{-- @can('member-request-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('terminal.expense.create') }}">
-                            <span
-                                class="menu-link {{ Route::currentRouteName() == 'terminal.expense.create' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title position-relative">Terminal Expense Create
-                                </span>
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
+                            </a>
+                            {{-- @endcan --}}
+                        </div>
                     </div>
-                </div>
+                @endif
                 {{-- Terminal End --}}
 
                 {{-- Parties Start --}}
-                <div class="menu-item">
-                    <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Parties</span>
-                    </div>
-                </div>
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'party.create' || Route::currentRouteName() == 'party.index' ? 'hover show' : '' }}">
-                    <span class="menu-link">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <i class="fas fa-users"></i>
-                                </svg>
+                @if (auth('web')->check() &&
+                        Auth::guard('web')->user()->hasAnyPermission(['party.index', 'party.create']))
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ Route::currentRouteName() == 'party.create' || Route::currentRouteName() == 'party.index' ? 'hover show' : '' }}">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen002.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <i class="fas fa-user-tie"></i>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
                             </span>
-                            <!--end::Svg Icon-->
+                            <span class="menu-title position-relative">Parties
+                            </span>
+                            <span class="menu-arrow"></span>
                         </span>
-                        <span class="menu-title position-relative">Parties
-                        </span>
-                        <span class="menu-arrow"></span>
-                    </span>
 
-                    <div
-                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'party.index' || Route::currentRouteName() == 'party.create' ? 'hover show' : '' }}">
-                        {{-- @can('member-list-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('party.index') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'party.index' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Parties List</span>
+                        <div
+                            class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'party.index' || Route::currentRouteName() == 'party.create' ? 'hover show' : '' }}">
+                            {{-- @can('member-list-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('party.index') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'party.index' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Parties List</span>
 
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
-                        {{-- @can('member-request-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('party.create') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'party.create' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title position-relative">Parties Create
+                            </a>
+                            {{-- @endcan --}}
+                            {{-- @can('member-request-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('party.create') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'party.create' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title position-relative">Parties Create
+                                    </span>
                                 </span>
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
+                            </a>
+                            {{-- @endcan --}}
+                        </div>
                     </div>
-                </div>
+                @endif
                 {{-- Parties End --}}
 
                 {{-- Jobs Start --}}
-                <div class="menu-item">
-                    <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Jobs</span>
-                    </div>
-                </div>
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'party.create' || Route::currentRouteName() == 'party.index' ? 'hover show' : '' }}">
-                    <span class="menu-link">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <i class="fas fa-users"></i>
-                                </svg>
+                @if (
+                    (auth('agent')->check() &&
+                        auth('agent')->user()->hasAnyPermission(['job.index', 'job.create'])) ||
+                        (auth('web')->check() &&
+                            auth()->user()->hasAnyPermission(['job.index', 'job.create'])))
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ Route::currentRouteName() == 'party.create' || Route::currentRouteName() == 'party.index' ? 'hover show' : '' }}">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <i class="fas fa-briefcase"></i>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
                             </span>
-                            <!--end::Svg Icon-->
+                            <span class="menu-title position-relative">Jobs
+                            </span>
+                            <span class="menu-arrow"></span>
                         </span>
-                        <span class="menu-title position-relative">Jobs
-                        </span>
-                        <span class="menu-arrow"></span>
-                    </span>
 
-                    <div
-                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'job.index' || Route::currentRouteName() == 'job.create' ? 'hover show' : '' }}">
-                        {{-- @can('member-list-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('job.index') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'job.index' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Job List</span>
+                        <div
+                            class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'job.index' || Route::currentRouteName() == 'job.create' ? 'hover show' : '' }}">
+                            {{-- @can('member-list-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('job.index') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'job.index' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Job List</span>
 
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
-                        {{-- @can('member-request-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('job.create') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'job.create' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title position-relative">Job Create
+                            </a>
+                            {{-- @endcan --}}
+                            {{-- @can('member-request-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('job.create') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'job.create' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title position-relative">Job Create
+                                    </span>
                                 </span>
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
-                        {{-- @can('member-request-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('job.create') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'job.create' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
+                            </a>
+                            {{-- @endcan --}}
+                            {{-- @can('member-request-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('job.create') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'job.create' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title position-relative">Job Report
+                                    </span>
                                 </span>
-                                <span class="menu-title position-relative">Job Report
-                                </span>
-                            </span>
-                        </a>
-                        {{-- @endcan --}}
+                            </a>
+                            {{-- @endcan --}}
+                        </div>
                     </div>
-                </div>
+                @endif
                 {{-- Parties End --}}
 
 
                 {{-- System setting Start --}}
-                <div class="menu-item">
-                    <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">System Settings</span>
-                    </div>
-                </div>
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'system.index' ? 'hover show' : '' }}">
-                    <span class="menu-link">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <i class="fas fa-users"></i>
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </span>
-                        <span class="menu-title position-relative">System Settings
-                        </span>
-                        <span class="menu-arrow"></span>
-                    </span>
-
-                    <div
-                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'system.index' || Route::currentRouteName() == 'party.create' ? 'hover show' : '' }}">
-                        {{-- @can('member-list-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('system.index') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'system.index' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
+                @if (auth('web')->check() &&
+                        Auth::guard('web')->user()->hasAnyPermission(['system.index']))
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ Route::currentRouteName() == 'system.index' ? 'hover show' : '' }}">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <i class="fas fa-cog"></i>
+                                    </svg>
                                 </span>
-                                <span class="menu-title">System Settings</span>
-
+                                <!--end::Svg Icon-->
                             </span>
-                        </a>
-                        {{-- @endcan --}}
+                            <span class="menu-title position-relative">System Settings
+                            </span>
+                            <span class="menu-arrow"></span>
+                        </span>
+
+                        <div
+                            class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'system.index' || Route::currentRouteName() == 'party.create' ? 'hover show' : '' }}">
+                            {{-- @can('member-list-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('system.index') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'system.index' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">System Settings</span>
+
+                                </span>
+                            </a>
+                            {{-- @endcan --}}
+                        </div>
                     </div>
-                </div>
+                @endif
                 {{-- System setting End --}}
 
                 {{-- Role And Permission Start --}}
-                <div class="menu-item">
-                    <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Role Management</span>
-                    </div>
-                </div>
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ Route::currentRouteName() == 'role.create' || Route::currentRouteName() == 'role.index' ? 'hover show' : '' }}">
-                    <span class="menu-link">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <i class="fas fa-users"></i>
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </span>
-                        <span class="menu-title position-relative">Role Management
-                        </span>
-                        <span class="menu-arrow"></span>
-                    </span>
-
-                    <div
-                        class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'role.index' || Route::currentRouteName() == 'role.create' ? 'hover show' : '' }}">
-                        {{-- @can('member-list-view') --}}
-                        <a class="menu-item menu-accordion" href="{{ route('role.index') }}">
-                            <span class="menu-link {{ Route::currentRouteName() == 'role.index' ? 'active' : '' }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
+                @if (auth('web')->check() &&
+                        Auth::guard('web')->user()->hasAnyPermission(['role.index']))
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ Route::currentRouteName() == 'role.create' || Route::currentRouteName() == 'role.index' ? 'hover show' : '' }}">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <i class="fas fa-user-lock"></i>
+                                    </svg>
                                 </span>
-                                <span class="menu-title">Permission</span>
-
+                                <!--end::Svg Icon-->
                             </span>
-                        </a>
-                        {{-- @endcan --}}
+                            <span class="menu-title position-relative">Role Management
+                            </span>
+                            <span class="menu-arrow"></span>
+                        </span>
+
+                        <div
+                            class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'role.index' || Route::currentRouteName() == 'role.create' ? 'hover show' : '' }}">
+                            {{-- @can('member-list-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('role.index') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'role.index' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Permission</span>
+
+                                </span>
+                            </a>
+                            {{-- @endcan --}}
+                        </div>
                     </div>
-                </div>
-                {{-- System setting End --}}
-
-                {{-- @endif --}}
-                {{-- member sidebar end --}}
-
-
+                @endif
+                {{-- Role And Permission End --}}
 
             </div>
             <!--end::Menu-->

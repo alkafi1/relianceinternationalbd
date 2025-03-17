@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\CommonFillableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class BaseModel extends Model
 {
+
+    use CommonFillableTrait;
 
     /**
      * The primary key for the model.
@@ -146,6 +149,4 @@ class BaseModel extends Model
     {
         return static::where($statusColumn, $statusValue)->get();
     }
-
-    
 }

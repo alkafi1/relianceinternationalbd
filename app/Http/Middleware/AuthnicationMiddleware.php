@@ -22,14 +22,20 @@ class AuthnicationMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if the user is not authenticated or not approved
-        if (Auth::check() && Auth::user()->status === AdminStatus::APPROVED()->value) {
-            // If the user is authenticated and approved, let the request pass through
-            return $next($request);
+        // Check if the current user is authenticated as a member
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+
+            // Check if the user's status is 1
+            if ($user->status == AdminStatus::APPROVED()->value) {
+                return $next($request);
+            }
+
+            // If the user's status is not 1, handle accordingly
+            return redirect()->route('login')->with('failed', 'Access restricted to approved admins');
         }
 
-        // If the user is not authenticated or not approved, redirect to the login page
-        return redirect()->route('login')->withErrors(['message' => 'User not authorized.']);
-        return redirect()->route('login');
+        // If not authenticated as member, redirect or handle accordingly
+        return redirect()->route('login')->with('failed', 'Access restricted to approved admin');
     }
 }

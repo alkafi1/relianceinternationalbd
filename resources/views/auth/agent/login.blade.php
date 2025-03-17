@@ -40,7 +40,7 @@
                 <!--begin::Wrapper-->
                 <div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
                     <!--begin::Form-->
-                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" action="{{ route('login') }}"
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" action="{{ route('agent.login') }}"
                         method="POST">
                         @csrf
                         <div class="text-center mb-10">
@@ -110,41 +110,6 @@
 
     <script>
         $(document).ready(function() {
-            // $('#kt_sign_in_submit').on('click', function(e) {
-            //     e.preventDefault();
-            //     let form = $('#kt_sign_in_form');
-
-
-            //     let url = form.attr('action');
-            //     let formData = form.serialize();
-
-            //     $.ajax({
-            //         type: 'POST',
-            //         url: url,
-            //         data: formData,
-            //         beforeSend: function() {
-            //             $('#kt_sign_in_submit .indicator-progress').show();
-            //             $('#kt_sign_in_submit .indicator-label').hide();
-            //         },
-            //         success: function(response) {
-            //             window.location.href = response.redirect;
-            //         },
-            //         error: function(xhr) {
-            //             var errors = xhr.responseJSON.errors;
-            //             // Iterate through each error and display it
-            //             $.each(errors, function(key, value) {
-            //                 console.log(key, value);
-            //                 toastr.error(value); // Displaying each error message
-            //             });
-
-            //         },
-            //         complete: function() {
-            //             // Action after the request completes (both success and error)
-            //             $('#kt_sign_in_submit .indicator-progress').hide();
-            //             $('#kt_sign_in_submit .indicator-label').show();
-            //         }
-            //     });
-            // });
             $(document).ready(function() {
                 // Function to handle form submission
                 function submitForm() {
@@ -161,7 +126,13 @@
                             $('#kt_sign_in_submit .indicator-label').hide();
                         },
                         success: function(response) {
-                            window.location.href = response.redirect;
+                            if(response.success) {
+                                toastr.success(response.message);
+                                window.location.href = response.redirect;
+                            }
+                            else{
+                                toastr.error(response.message);
+                            }
                         },
                         error: function(xhr) {
                             var errors = xhr.responseJSON.errors;
@@ -195,51 +166,7 @@
             });
         });
     </script>
-    @if (session('success'))
-        <script>
-            toastr.success('{{ session('success') }}');
-        </script>
-    @endif
-
-    @if (session('info'))
-        <script>
-            toastr.info('{{ session('info') }}');
-        </script>
-    @endif
-
-    @if (session('warning'))
-        <script>
-            toastr.warning('{{ session('warning') }}');
-        </script>
-    @endif
-
-    @if (session('error'))
-        <script>
-            toastr.error('{{ session('error') }}');
-        </script>
-    @endif
-
-    @if (session('failed'))
-        <script>
-            toastr.error('{{ session('failed') }}');
-        </script>
-    @endif
-
-    @if (session('errors'))
-        @foreach (session('errors') as $error)
-            <script>
-                toastr.error('{{ $error }}');
-            </script>
-        @endforeach
-    @endif
-
-    @if ($errors->any())
-        <script>
-            @foreach ($errors->all() as $error)
-                toastr.error('{{ $error }}');
-            @endforeach
-        </script>
-    @endif
+    @include('partials.tostr')
 
     <!--end::Javascript-->
 </body>

@@ -1,48 +1,44 @@
 @extends('layouts.layout')
 @section('breadcame', 'Job')
 @section('content')
-<style>
-    /* Hide increase/decrease buttons for number input */
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-</style>
+
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
                     <form action="{{ route('job.store') }}" id="jobForm" method="POST" enctype="multipart/form-data">
                         @csrf <!-- Add CSRF token for security -->
-                    
+
                         <div class="row">
                             <!-- Buyer Name -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="buyer_name" class="required">Buyer Name</label>
-                                    <input type="text" id="buyer_name" name="buyer_name" class="form-control mt-3" required>
+                                    <input type="text" id="buyer_name" name="buyer_name" class="form-control mt-3"
+                                        required>
                                 </div>
                             </div>
-                    
+
                             <!-- Invoice No -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="invoice_no" class="required">Invoice No</label>
-                                    <input type="text" id="invoice_no" name="invoice_no" class="form-control mt-3" required>
+                                    <input type="text" id="invoice_no" name="invoice_no" class="form-control mt-3"
+                                        required>
                                 </div>
                             </div>
                         </div>
-                    
+
                         <div class="row">
                             <!-- Value (USD) -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="value_usd" class="required">Value (USD)</label>
-                                    <input type="text" id="value_usd" name="value_usd" class="form-control mt-3" required>
+                                    <input type="text" id="value_usd" name="value_usd" class="form-control mt-3"
+                                        required>
                                 </div>
                             </div>
-                    
+
                             <!-- USD Rate (in BDT) -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
@@ -51,7 +47,7 @@
                                 </div>
                             </div>
                         </div>
-                    
+
                         <div class="row">
                             <!-- Item -->
                             <div class="col-md-12">
@@ -61,14 +57,14 @@
                                 </div>
                             </div>
                         </div>
-                    
+
                         <div class="row">
                             <!-- Terminal -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="terminal_id" class="required">Terminal</label>
                                     <select id="terminal_id" name="terminal_id" class="form-control mt-3" required>
-                                        <option value="" >Select Terminal</option>
+                                        <option value="">Select Terminal</option>
                                         @forelse ($terminals as $terminal)
                                             <option value="{{ $terminal->uid }}">{{ $terminal->terminal_name }}</option>
                                         @empty
@@ -77,13 +73,13 @@
                                     </select>
                                 </div>
                             </div>
-                    
+
                             <!-- Bill To -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="party_id" class="required">Bill to</label>
                                     <select id="party_id" name="party_id" class="form-control mt-3" required>
-                                        <option value="" >Select Bill To</option>
+                                        <option value="">Select Bill To</option>
                                         @forelse ($parties as $party)
                                             <option value="{{ $party->uid }}">{{ $party->party_name }}</option>
                                         @empty
@@ -93,7 +89,7 @@
                                 </div>
                             </div>
                         </div>
-                    
+
                         <div class="row">
                             <!-- L/C No -->
                             <div class="col-md-6">
@@ -102,7 +98,7 @@
                                     <input type="text" id="lc_no" name="lc_no" class="form-control mt-3">
                                 </div>
                             </div>
-                    
+
                             <!-- B/E No -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
@@ -118,25 +114,26 @@
                                 </div>
                             </div>
                         </div>
-                    
+
                         <div class="row">
                             <!-- U/D No -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="ud_no" class="">U/D No</label>
-                                    <input type="text" id="ud_no" name="ud_no" class="form-control mt-3" >
+                                    <input type="text" id="ud_no" name="ud_no" class="form-control mt-3">
                                 </div>
                             </div>
-                    
+
                             <!-- U/D Amendment No -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="ud_amendment_no" class="">U/D Amendment No</label>
-                                    <input type="text" id="ud_amendment_no" name="ud_amendment_no" class="form-control mt-3" >
+                                    <input type="text" id="ud_amendment_no" name="ud_amendment_no"
+                                        class="form-control mt-3">
                                 </div>
                             </div>
                         </div>
-                    
+
                         <div class="row">
                             <!-- Job Type -->
                             <div class="col-md-6">
@@ -149,52 +146,61 @@
                                     </select>
                                 </div>
                             </div>
+                        
+                            <!-- Air Import Checkbox -->
+                            <div class="col-md-6 d-none" id="air_import_container">
+                                <div class="form-group mt-16">
+                                    <input type="checkbox" id="air_import" name="air_import">
+                                    <label for="air_import">Air Import</label>
+                                </div>
+                            </div>
                         </div>
-                    
-                        <div class="row">
+                        
+                        <div class="row d-none" id="bl_numbers_container">
                             <!-- Master Air Way Bill / BL Number -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="master_bl_number" class="">Master Air Way Bill / BL Number</label>
-                                    <input type="text" id="master_bl_number" name="master_bl_number" class="form-control mt-3" >
+                                    <label for="master_bl_number">Master Air Way Bill / BL Number</label>
+                                    <input type="text" id="master_bl_number" name="master_bl_number" class="form-control mt-3">
                                 </div>
                             </div>
-                    
+                        
                             <!-- House Air Way Bill -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="house_bl_number" class="">House Air Way Bill</label>
-                                    <input type="text" id="house_bl_number" name="house_bl_number" class="form-control mt-3" >
+                                    <label for="house_bl_number">House Air Way Bill</label>
+                                    <input type="text" id="house_bl_number" name="house_bl_number" class="form-control mt-3">
                                 </div>
                             </div>
                         </div>
-                    
+
                         <div class="row">
                             <!-- Quantity -->
                             <div class="col-md-4">
                                 <div class="form-group mt-3">
                                     <label for="quantity" class="required">Quantity</label>
-                                    <input type="number" id="quantity" name="quantity" class="form-control mt-3" required>
+                                    <input type="number" id="quantity" name="quantity" class="form-control mt-3"
+                                        required>
                                 </div>
                             </div>
-                    
+
                             <!-- CTNS Pieces -->
                             <div class="col-md-4">
                                 <div class="form-group mt-3">
                                     <label for="ctns_pieces" class="">CTNS Pieces</label>
-                                    <input type="number" id="ctns_pieces" name="ctns_pieces" class="form-control mt-3" >
+                                    <input type="number" id="ctns_pieces" name="ctns_pieces" class="form-control mt-3">
                                 </div>
                             </div>
-                    
+
                             <!-- Weight -->
                             <div class="col-md-4">
                                 <div class="form-group mt-3">
                                     <label for="weight" class="">Weight</label>
-                                    <input type="number" id="weight" name="weight" class="form-control mt-3" >
+                                    <input type="number" id="weight" name="weight" class="form-control mt-3">
                                 </div>
                             </div>
                         </div>
-                    
+
                         <div class="row">
                             <!-- Truck Agent -->
                             <div class="col-md-6">
@@ -210,7 +216,7 @@
                                     </select>
                                 </div>
                             </div>
-                    
+
                             <!-- Status -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
@@ -223,32 +229,35 @@
                                 </div>
                             </div>
                         </div>
-                    
+
                         <div class="row">
                             <!-- Voucher Amount -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="voucher_amount" class="required">Voucher Amount</label>
-                                    <input type="number" id="voucher_amount" name="voucher_amount" class="form-control mt-3" required style="-moz-appearance: textfield;">
-                                    
+                                    <input type="number" id="voucher_amount" name="voucher_amount"
+                                        class="form-control mt-3" required style="-moz-appearance: textfield;">
+
                                 </div>
                             </div>
-                    
+
                             <!-- Job No -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="job_no" class="required">Job No</label>
-                                    <input type="number" id="job_no" name="job_no" class="form-control mt-3" required>
+                                    <input type="number" id="job_no" name="job_no" class="form-control mt-3"
+                                        required>
                                 </div>
                             </div>
                         </div>
-                    
+
                         <!-- Submit Button -->
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group mt-3">
                                     <button type="submit" id="submit" class="btn btn-primary mt-4">
-                                        <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true"></span>
+                                        <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none"
+                                            role="status" aria-hidden="true"></span>
                                         <i class="fas fa-upload"></i> Submit
                                     </button>
                                 </div>
@@ -323,7 +332,8 @@
                             for (var field in errors) {
                                 const $this = $(`[name="${field}"]`);
                                 $this.addClass('is-invalid');
-                                toastr.error(errors[field]); // Display field-specific error messages
+                                toastr.error(errors[
+                                field]); // Display field-specific error messages
                             }
                             setTimeout(() => {
                                 $("[name]").removeClass('is-invalid');
@@ -332,22 +342,18 @@
                     }
                 });
             });
+
+            $("#job_type").change(function() {
+                let isImport = $(this).val() === "import";
+                $("#air_import_container").toggleClass("d-none", !isImport);
+                $("#bl_numbers_container").toggleClass("d-none", true);
+                $("#air_import").prop("checked", false);
+            });
+
+            $("#air_import").change(function() {
+                $("#bl_numbers_container").toggleClass("d-none", !this.checked);
+            });
         });
     </script>
 
-    <script>
-        function getDistricts(division_id) {
-            $.ajax({
-                url: '{{ route('get.districts') }}',
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    division_id: division_id
-                },
-                success: function(response) {
-                    $('#district_id').html(response.option);
-                }
-            });
-        }
-    </script>
 @endpush

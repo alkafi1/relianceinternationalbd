@@ -21,6 +21,7 @@ class AgentService
     {
         // Create the agent
         $agent = Agent::create([
+            'uid' => Str::uuid()->toString(), // Generate UUID
             'first_name' => $validatedData['first_name'],
             'last_name' => $validatedData['last_name'],
             'age' => $validatedData['age'],
@@ -34,6 +35,9 @@ class AgentService
             'status' => $validatedData['status'],
             // 'image' => $imagePath, // Store the image path
         ]);
+
+        // Assign the 'agent' role to the user
+        $agent->assignRole('agent');
 
         // Return the agent data
         return [
