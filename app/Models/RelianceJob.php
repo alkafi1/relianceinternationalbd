@@ -15,7 +15,7 @@ class RelianceJob extends BaseModel
      * @var string
      */
     protected $primaryKey = 'uid';
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -43,5 +43,61 @@ class RelianceJob extends BaseModel
         'status',
         'voucher_amount',
         'job_no',
+        'created_by_id',
+        'updated_by',
+        'deleted_by',
     ];
+
+    public function terminal()
+    {
+        return $this->belongsTo(Terminal::class, 'terminal_id');
+    }
+
+    public function party()
+    {
+        return $this->belongsTo(Party::class, 'party_id');
+    }
+
+    public function agent()
+    {
+        return $this->belongsTo(Agent::class, 'agent_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by_type = auth()->guard('web')->check() ? 'App\Models\User' : 'App\Models\Agent';
+            $model->created_by_uid = auth()->user()->uid ?? auth()->guard('agent')->user()->uid;
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by_type = auth()->guard('web')->check() ? 'App\Models\User' : 'App\Models\Agent';
+            $model->updated_by_uid = auth()->user()->uid ?? auth()->guard('agent')->user()->uid;
+        });
+
+        static::deleting(function ($model) {
+            $model->deleted_by_type = auth()->guard('web')->check() ? 'App\Models\User' : 'App\Models\Agent';
+            $model->deleted_by_uid = auth()->user()->uid ?? auth()->guard('agent')->user()->uid;
+            $model->save();
+        });
+    }
+
+    public function createdBy()
+    {
+        return $this->morphTo(__FUNCTION__, 'created_by_type', 'created_by_uid');
+    }
+
+    public function updatedBy()
+    {
+        return $this->morphTo(__FUNCTION__, 'updated_by_type', 'updated_by_uid');
+    }
+
+    public function deletedBy()
+    {
+        return $this->morphTo(__FUNCTION__, 'deleted_by_type', 'deleted_by_uid');
+    }
+
+
 }

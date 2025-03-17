@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Job;
 use App\Models\RelianceJob;
+use App\Models\Terminal;
 use Illuminate\Support\Facades\DB;
 
 class  JobService
@@ -13,7 +14,7 @@ class  JobService
         return DB::transaction(function () use ($data) {
             $job = RelianceJob::create([
                 'buyer_name' => $data['buyer_name'],
-                'invoice_no' => $data['invoice_no'],
+                'invoice_no' => $this->generateInvoiceNo(),
                 'value_usd' => $data['value_usd'],
                 'usd_rate' => $data['usd_rate'],
                 'item' => $data['item'],
@@ -33,15 +34,38 @@ class  JobService
                 'agent_id' => $data['agent_id'],       // Ensure this is a valid UUID
                 'status' => $data['status'],
                 'voucher_amount' => $data['voucher_amount'],
-                'job_no' => $data['job_no'],
+                'job_no' => $this->generateJobNo($data),
+                'created_by_type' => auth()->guard('web')->check() ? 'App\Models\User' : 'App\Models\Agent',
+                'created_by_uid' => auth()->user()->uid ?? auth()->guard('agent')->user()->uid,
             ]);
 
             // Perform additional operations if needed
             // Example: Log the job creation, send notifications, etc.
 
             return $job;
-
-            return $job;
         });
+    }
+
+    public function generateJobNo($data)
+    {
+        $agent_job_no = $data['job_no'];
+        $termina_short_form = Terminal::where('uid', $data['terminal_id'])->first()->terminal_short_form;
+        if ($agent_job_no) {
+            $job_type = strtoupper($data['job_type']);
+            if ($job_type == 'IMPORT') {
+                $job_no = 'RI-(' . $termina_short_form . ')-I-' . $agent_job_no;
+            } else {
+                $job_no = 'RI-(' . $termina_short_form . ')-E-' . $agent_job_no;
+            }
+
+            return $job_no;
+        }
+        return 'JOB-' . time();
+    }
+
+    public function generateInvoiceNo()
+    {
+        $maxInvoiceNo = RelianceJob::max('invoice_no');
+        return $maxInvoiceNo + 1;
     }
 }

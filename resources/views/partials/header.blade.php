@@ -205,13 +205,14 @@
                                     <!--end::Avatar-->
                                     <!--begin::Username-->
                                     <div class="d-flex flex-column">
-                                        <div class="fw-bolder d-flex align-items-center fs-5">Admin
+                                        <div class="fw-bolder d-flex align-items-center fs-5">
+                                            {{ auth('agent')->user() ? auth('agent')->user()->display_name : auth()->user()->display_name }}
                                             <span
                                                 class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">Admin role
                                             </span>
                                         </div>
                                         <a href="#"
-                                            class="fw-bold text-muted text-hover-primary fs-7">Emial</a>
+                                            class="fw-bold text-muted text-hover-primary fs-7">{{ auth('agent')->user() ? auth('agent')->user()->email : auth()->user()->email }}</a>
                                     </div>
                                     <!--end::Username-->
                                 </div>
@@ -234,11 +235,17 @@
                             <!--end::Menu item-->
                             <!--begin::Menu item-->
                             <div class="menu-item px-5">
-                                <form id="logout-form" action="{{route('logout')}}" method="POST"
-                                    style="display: inline;">
-                                    @csrf
-                                    <a href="javascript:void(0);" class="menu-link px-5" id="logout-link">Sign
-                                        Out</a>
+                                @if (auth()->guard('agent')->check())
+                                    <form id="logout-form" action="{{route('agent.logout')}}" method="POST"
+                                        style="display: inline;">
+                                        
+                                @else
+                                    <form id="logout-form" action="{{route('logout')}}" method="POST"
+                                        style="display: inline;">
+                                @endif
+                                @csrf
+                                <a href="javascript:void(0);" class="menu-link px-5" id="logout-link">Sign
+                                    Out</a>
                                 </form>
                                 @push('custom-js')
                                     <script>
@@ -261,7 +268,7 @@
                                                     data: $(this).serialize(),
                                                     success: function(response) {
                                                         // Handle success response, e.g., redirect to login page
-                                                        window.location.href = "{{ route('login') }}";
+                                                        window.location.href = response.redirect;
                                                     },
                                                     error: function(xhr) {
                                                         // Handle error response

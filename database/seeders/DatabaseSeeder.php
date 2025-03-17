@@ -14,9 +14,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SeedFromSqlFileSeeder::class,
             PermissionSeeder::class,
+            AgentRolePermissionSeeder::class,
             SuperAdminSeeder::class,
+            // AccountSeeder::class,
+            AgentSeeder::class,
+            PartySeeder::class,
             TerminalSeeder::class,
-            // AccountSeeder::class
         ]);
     }
 }

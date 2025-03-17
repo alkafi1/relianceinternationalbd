@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -40,6 +39,28 @@ trait BaseModel
         static::creating(function ($model) {
             if (empty($model->{$model->getKeyName()})) {
                 $model->{$model->getKeyName()} = Str::uuid()->toString();
+            }
+        });
+
+        // Set `created_by` when creating
+        static::creating(function ($model) {
+            if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
+                $model->created_by = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
+            }
+        });
+
+        // Set `updated_by` when updating
+        static::updating(function ($model) {
+            if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
+                $model->updated_by = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
+            }
+        });
+
+        // Set `deleted_by` when deleting
+        static::deleting(function ($model) {
+            if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
+                $model->deleted_by = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
+                $model->save(); // Save the `deleted_by` field before deletion
             }
         });
     }
@@ -130,5 +151,17 @@ trait BaseModel
             'success' => false,
             'message' => ucfirst(class_basename(get_class($model))) . ' deleted failed.',
         ], 400);
+    }
+
+    /**
+     * Fetch records based on status.
+     *
+     * @param string $statusColumn
+     * @param string $statusValue
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function fetchByStatus(string $statusColumn, string $statusValue)
+    {
+        return static::where($statusColumn, $statusValue)->get();
     }
 }

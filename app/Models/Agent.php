@@ -3,12 +3,22 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use App\Traits\BaseModel as TraitsBaseModel;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Traits\HasRoles;
 
-class Agent extends BaseModel
+class Agent extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, TraitsBaseModel, HasRoles;
+    // Set the primary key
+    protected $primaryKey = 'uid';
 
+    // Set the key type to string (for UUID)
+    protected $keyType = 'string';
+
+    // Disable auto-incrementing (since UUIDs are used)
+    public $incrementing = false;
     /**
      * The attributes that are mass assignable.
      */
@@ -103,5 +113,29 @@ class Agent extends BaseModel
     public function accounts()
     {
         return $this->morphMany(Account::class, 'account_holder');
+    }
+
+    /**
+     * Get the creator of the record (User or Agent).
+     */
+    public function createdBy()
+    {
+        return $this->morphTo(__FUNCTION__, 'created_by_type', 'created_by_uid');
+    }
+
+    /**
+     * Get the updater of the record (User or Agent).
+     */
+    public function updatedBy()
+    {
+        return $this->morphTo(__FUNCTION__, 'updated_by_type', 'updated_by_uid');
+    }
+
+    /**
+     * Get the deleter of the record (User or Agent).
+     */
+    public function deletedBy()
+    {
+        return $this->morphTo(__FUNCTION__, 'deleted_by_type', 'deleted_by_uid');
     }
 }
