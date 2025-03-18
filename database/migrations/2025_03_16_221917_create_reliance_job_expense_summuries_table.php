@@ -19,11 +19,20 @@ return new class extends Migration
             $table->foreign('job_id')->references('uid')->on('reliance_jobs')->onDelete('cascade');
 
             $table->decimal('agency_commission', 10, 2);
-            $table->decimal('total_expenses', 10, 2); 
-            $table->decimal('advanced_received', 10, 2); 
-            $table->decimal('due', 10, 2); 
-            $table->decimal('grand_total', 10, 2); 
+            $table->decimal('total_expenses', 10, 2);
+            $table->decimal('advanced_received', 10, 2);
+            $table->decimal('due', 10, 2);
+            $table->decimal('grand_total', 10, 2);
+            $table->string('created_by_type', 50)->nullable();
+            $table->string('created_by_uid', 50)->nullable();
+
+            $table->string('updated_by_type', 50)->nullable();
+            $table->string('updated_by_uid', 50)->nullable();
+
+            $table->string('deleted_by_type', 50)->nullable();
+            $table->string('deleted_by_uid', 50)->nullable();
             $table->timestamps();
+
         });
     }
 

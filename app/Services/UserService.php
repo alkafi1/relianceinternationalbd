@@ -48,7 +48,7 @@ class UserService
         $role = Role::firstOrCreate(['name' => 'admin']);
 
         // Grant all permissions to the 'super_admin' role
-        $role->syncPermissions(Permission::all());
+        $role->syncPermissions(Permission::where('guard_name', 'web')->get());
         
         // Create the super admin user
         $admin = User::create([

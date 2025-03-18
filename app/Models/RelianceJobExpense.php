@@ -12,4 +12,9 @@ class RelianceJobExpense extends BaseModel
         'job_expend_field',
         'amount',
     ];
+
+    public function job()
+    {
+        return $this->belongsTo(RelianceJob::class, 'job_id');
+    }
 }

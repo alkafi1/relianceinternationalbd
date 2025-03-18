@@ -13,6 +13,8 @@ class RoleController extends Controller
 {
     public function index(Request $request)
     {
+        $roles = Role::where('name', '!=', 'super-admin')->with('permissions')->get();
+        // dd($roles);
         if ($request->ajax()) {
             // Fetch roles excluding the "super admin" role
             $roles = Role::where('name', '!=', 'super-admin')->with('permissions')->get();

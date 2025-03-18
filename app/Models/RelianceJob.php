@@ -63,6 +63,27 @@ class RelianceJob extends BaseModel
         return $this->belongsTo(Agent::class, 'agent_id');
     }
 
+
+    public function relianceJobExpense()
+    {
+        return $this->hasMany(RelianceJobExpense::class, 'job_id');
+    }
+
+    public function relianceJobExpenseSummury()
+    {
+        return $this->hasMany(RelianceJobExpenseSummury::class, 'job_id');
+    }
+
+    public function billRegister()
+    {
+        return $this->belongsTo(BillRegister::class, 'uid', 'job_id');
+    }
+
+    public function billStatement()
+    {
+        return $this->belongsTo(BillStatement::class, 'job_id');
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -98,6 +119,4 @@ class RelianceJob extends BaseModel
     {
         return $this->morphTo(__FUNCTION__, 'deleted_by_type', 'deleted_by_uid');
     }
-
-
 }

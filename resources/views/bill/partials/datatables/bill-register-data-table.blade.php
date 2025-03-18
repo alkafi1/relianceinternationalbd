@@ -1,0 +1,50 @@
+<div class="table-responsive table-container">
+    <!--begin::Table-->
+    <table class="table relance-datatable align-middle table-bordered fs-6 gy-5 m-auto display responsive"
+        id="bill-register-data">
+        <!--begin::Table head-->
+        <thead>
+            <thead>
+                <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0" style="background: #690f0f;">
+                    
+                    <th class="fw-bold text-dark" style="font-weight: 900">
+                        {{ __('english.bill_date') }}
+                    </th>
+                    <th class="fw-bold text-dark" style="font-weight: 900">
+                        {{ __('english.job_no') }}
+                    </th>
+                    <th class="fw-bold text-dark" style="font-weight: 900">
+                        {{ __('english.bill_no') }}
+                    </th>
+                    <th class="fw-bold text-dark" style="font-weight: 900">
+                        {{ __('english.bill_amount') }}
+                    </th>
+                    <th class="fw-bold text-dark" style="font-weight: 900">
+                        {{ __('english.received_amount') }}
+                    </th>
+                    <th class="fw-bold text-dark" style="font-weight: 900">
+                        {{ __('english.due_balance') }}
+                    </th>
+                    <th class="fw-bold text-dark" style="font-weight: 900">
+                        {{ __('english.remarks') }}
+                    </th>
+                    <th class="fw-bold text-dark" style="font-weight: 900">
+                        {{ __('english.action') }}
+                    </th>
+                    
+                    
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            
+            
+            
+        </thead>
+        <tbody>
+
+        </tbody>
+        <!--end::Table head-->
+    </table>
+    <!--end::Table-->
+</div>

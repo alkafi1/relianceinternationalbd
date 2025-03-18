@@ -37,8 +37,17 @@ return new class extends Migration
 
             $table->string('remarks');
 
-            
+            $table->string('created_by_type', 50)->nullable();
+            $table->string('created_by_uid', 50)->nullable();
+
+            $table->string('updated_by_type', 50)->nullable();
+            $table->string('updated_by_uid', 50)->nullable();
+
+            $table->string('deleted_by_type', 50)->nullable();
+            $table->string('deleted_by_uid', 50)->nullable();
             $table->timestamps();
+
+            
         });
     }
 

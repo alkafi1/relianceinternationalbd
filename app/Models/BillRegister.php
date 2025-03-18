@@ -19,5 +19,18 @@ class BillRegister extends BaseModel
         'received_date',
         'due_amount',
         'remarks',
+        'job_type'
     ];
+
+    public function job()
+    {
+        return $this->belongsTo(RelianceJob::class, 'job_id');
+    }
+
+    public function party()
+    {
+        return $this->belongsTo(Party::class, 'party_id');
+    }
+
+    
 }

@@ -56,7 +56,7 @@
                                         <option value="">Select Bill To</option>
                                         @forelse ($parties as $party)
                                             <option value="{{ $party->uid }}"
-                                                {{ $job->party_id == $party->uid ? 'selected' : '' }}>
+                                                {{ $job->party_id == $party->uid ? '' : 'selected' }}>
                                                 {{ $party->party_name }}</option>
                                         @empty
                                             <option value="" disabled>No party found</option>
@@ -248,24 +248,28 @@
                                 <div class="form-group mt-3">
                                     <label for="job_expend_field" class="required">Terminal Expense</label>
                                     <div id="job_expenditure_fields">
-                                        @forelse ($terminalExpense as $expense)
-                                            <div class="row mb-3">
-                                                <div class="col-md-5">
-                                                    <input type="text" name="job_expend_field[]" class="form-control"
-                                                        value="{{ $expense->job_expend_field ?? '' }}"
-                                                        placeholder="Expenditure Field" required>
+                                        @if ($terminalExpense && $terminalExpense->jobExpense)
+                                            @foreach ($terminalExpense->jobExpense as $expense)
+                                                <div class="row mb-3">
+                                                    <div class="col-md-5">
+                                                        <input type="text" name="job_expend_field[]"
+                                                            class="form-control"
+                                                            value="{{ $expense->job_expend_field ?? '' }}"
+                                                            placeholder="Expenditure Field" required>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <input type="number" name="amount[]"
+                                                            class="form-control text-end"
+                                                            value="{{ $expense->amount ?? '' }}" placeholder="Amount"
+                                                            required>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <button type="button"
+                                                            class="btn btn-danger remove-field">Remove</button>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-5">
-                                                    <input type="number" name="amount[]" class="form-control text-end"
-                                                        value="{{ $expense->amount ?? '' }}" placeholder="Amount"
-                                                        required>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <button type="button"
-                                                        class="btn btn-danger remove-field">Remove</button>
-                                                </div>
-                                            </div>
-                                        @empty
+                                            @endforeach
+                                        @else
                                             <div class="row mb-3">
                                                 <div class="col-md-5">
                                                     <input type="text" name="job_expend_field[]" class="form-control"
@@ -280,8 +284,7 @@
                                                             class="fas fa-times"></i></button>
                                                 </div>
                                             </div>
-                                        @endforelse
-
+                                        @endif
                                     </div>
                                     <button type="button" id="add_field" class="btn btn-success mt-3">
                                         <i class="fas fa-plus"></i> Add Field
@@ -297,18 +300,14 @@
                                         <h6>AGENCY COMMISSION</h6>
                                     </div>
                                     @php
-                                    
-                                        $commission_by_rate =
-                                            $job->value_usd *
-                                                $job->usd_rate *
-                                                $job->terminal->terminalExpense
-                                                    ->where('job_type', $job->job_type)
-                                                    ->first()->comission_rate ??
-                                            0;
+                                        $commission_by_rate = 0;
+                                        if ($job->value_usd && $job->usd_rate) {
+                                            $commission_by_rate =
+                                                $job->value_usd * $job->usd_rate * $terminalExpense->comission_rate??0;
+                                        }
                                         $agency_commission = max(
                                             $commission_by_rate,
-                                            $job->terminal->terminalExpense->where('job_type', $job->job_type)->first()
-                                                ->minimum_comission,
+                                            $terminalExpense->minimum_comission,
                                         );
                                     @endphp
                                     <div class="col-md-6 mt-2 text-end">
@@ -321,8 +320,8 @@
                                     </div>
                                     <div class="col-md-6 mt-2 text-end">
                                         <input type="number" id="total_expenses" name="total_expenses"
-                                            value="{{ $job->terminal->terminalExpense->sum('amount') }}"
-                                            class="form-control  text-end" />
+                                            value="{{ $terminalExpense->jobExpense->sum('amount') }}"
+                                            class="form-control  text-end"  />
                                     </div>
 
                                     <div class="col-md-4 mt-5 text-end">
@@ -330,7 +329,7 @@
                                     </div>
                                     <div class="col-md-6 mt-2 text-end">
                                         <input type="number" id="advanced_received" name="advanced_received"
-                                            value="0.00" class="form-control  text-end" />
+                                            value="0.00" class="form-control  text-end"  />
                                     </div>
 
                                     <div class="col-md-4 mt-5 text-end">
@@ -346,8 +345,7 @@
                                     </div>
                                     <div class="col-md-6 mt-2 text-end">
                                         <input type="number" id="grand_total" name="grand_total"
-                                            value="{{ $job->terminal->terminalExpense->where('job_type', $job->job_type)->first()
-                                                ->minimum_comission + $job->terminal->terminalExpense->where('job_type', $job->job_type)->sum('amount') }}"
+                                            value="{{ $terminalExpense->minimum_comission + $terminalExpense->jobExpense->sum('amount') }}"
                                             class="form-control fw-bold text-end" readonly />
                                     </div>
                                 </div>

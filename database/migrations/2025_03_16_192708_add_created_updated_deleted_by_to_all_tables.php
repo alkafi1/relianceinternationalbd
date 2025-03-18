@@ -12,12 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         $tables = [
+            'users',
             'agents',
             'terminals',
             'parties',
+            'system_contens',
             'terminal_expenses',
             'job_expenses',
             'reliance_jobs',
+            'accounts',
         ];
 
         foreach ($tables as $table) {
