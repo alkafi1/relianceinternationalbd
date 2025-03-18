@@ -413,6 +413,44 @@
                     </div>
                 @endif
                 {{-- Bills End --}}
+                {{-- Bills Start --}}
+                @if (auth('web')->check() &&
+                        Auth::guard('web')->user()->hasAnyPermission(['account.index', 'party.create']))
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ Route::currentRouteName() == 'account.index' || Route::currentRouteName() == 'party.index' ? 'hover show' : '' }}">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen002.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <i class="fas fa-user-tie"></i>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title position-relative">Account
+                            </span>
+                            <span class="menu-arrow"></span>
+                        </span>
+
+                        <div
+                            class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'account.index' || Route::currentRouteName() == 'party.create' ? 'hover show' : '' }}">
+                            {{-- @can('member-list-view') --}}
+                            <a class="menu-item menu-accordion" href="{{ route('account.index') }}">
+                                <span
+                                    class="menu-link {{ Route::currentRouteName() == 'account.index' ? 'active' : '' }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Account List</span>
+
+                                </span>
+                            </a>
+                            {{-- @endcan --}}
+                            
+                        </div>
+                    </div>
+                @endif
+                {{-- Bills End --}}
 
 
                 {{-- System setting Start --}}

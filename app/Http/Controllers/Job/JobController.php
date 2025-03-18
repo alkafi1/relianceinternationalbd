@@ -45,12 +45,24 @@ class JobController extends Controller
 
     public function datatable(Request $request)
     {
-        $query = RelianceJob::with([
-            'billRegister',
-            'terminal',
-            'party',
-            'agent'
-        ])->latest();
+
+
+        if (auth('agent')->check()) {
+            $query = RelianceJob::with([
+                'billRegister',
+                'terminal',
+                'party',
+                'agent'
+            ])->where('agent_id', auth('agent')->user()->uid);
+        } else {
+            $query = RelianceJob::with([
+                'billRegister',
+                'terminal',
+                'party',
+                'agent'
+            ]);
+        }
+        $query->latest();
 
         if ($request->ajax()) {
             return DataTables::of($query)
@@ -134,28 +146,26 @@ class JobController extends Controller
                 ->orderColumn('status', fn($query, $order) => $query->orderBy('status', $order))
 
                 ->addColumn('action', function ($data) {
+                    $guard = auth()->guard('agent')->check() ? 'agent' : 'web';
                     $editUrl = route('job.edit', ['job' => $data->uid]);
+                    $actions = [
+                        'view' => '<a href="javascript:void(0)" class="dropdown-item view" data-id="' . $data->id . '">
+                                    <i class="fas fa-eye text-info"></i> View
+                                </a>',
+                        'edit' => $guard === 'web' ? '<a href="' . $editUrl . '" class="dropdown-item">
+                                    <i class="fas fa-edit text-primary"></i> Edit
+                                </a>' : '',
+                        'delete' => '<a href="javascript:void(0)" class="dropdown-item delete text-danger" data-id="' . $data->id . '">
+                                    <i class="fas fa-trash text-danger"></i> Delete
+                                </a>',
+                    ];
                     return '
                         <div class="dropdown">
                             <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuButton' . $data->id . '" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton' . $data->id . '">
-                                <li>
-                                    <a href="javascript:void(0)" class="dropdown-item view" data-id="' . $data->id . '">
-                                        <i class="fas fa-eye text-info"></i> View
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="' . $editUrl . '" class="dropdown-item">
-                                        <i class="fas fa-edit text-primary"></i> Edit
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" class="dropdown-item delete text-danger" data-id="' . $data->id . '">
-                                        <i class="fas fa-trash text-danger"></i> Delete
-                                    </a>
-                                </li>
+                                ' . implode('', $actions) . '
                             </ul>
                         </div>';
                 })
@@ -237,7 +247,7 @@ class JobController extends Controller
         // Fetch approved parties
         $parties = Party::fetchByStatus('status', PartyStatusEnum::APPROVED()->value);
 
-        if ($job->status != JobStatusEnum::COMPLETED()->value) {
+        if ($job->status == JobStatusEnum::COMPLETED()->value) {
             $terminalExpense = $job->relianceJobExpense;
         } else {
             $terminalExpense = $job->terminal->terminalExpense->where('job_type', $job->job_type)->first()->jobExpense;
