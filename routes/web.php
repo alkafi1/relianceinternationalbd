@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Admin\Admincontroller;
 use App\Http\Controllers\Agent\AgentController;
 use App\Http\Controllers\Auth\AgentLoginController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Bill\BillController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Job\JobController;
 use App\Http\Controllers\Party\PartyController;
@@ -102,6 +104,22 @@ Route::prefix('admin')->group(function () {
             Route::get('/datatable', [PartyController::class, 'datatable'])->name('party.datatable');
         });
         // party route end
+        Route::prefix('account')->group(function () {
+            Route::get('/index', [AccountController::class, 'index'])->name('account.index');
+            Route::get('/datatable/account', [AccountController::class, 'datatable'])->name('account.datatable');
+        });
+        // bill route start
+
+        Route::prefix('bill-register')->group(function () {
+            Route::get('/index', [BillController::class, 'index'])->name('bill.register.index');
+            Route::get('/datatable/bill-register', [BillController::class, 'datatable'])->name('bill.register.datatable');
+        });
+
+        Route::prefix('bill-statement')->group(function () {
+            Route::get('/index', [BillController::class, 'index'])->name('bill.statement.index');
+        });
+
+        // bill route end
 
         //system manegment route start
         Route::prefix('system-management')->group(function () {

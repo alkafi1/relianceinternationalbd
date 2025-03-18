@@ -2,23 +2,17 @@
 
 namespace App\Console\Commands;
 
-use Database\Seeders\AgentRolePermissionSeeder;
-use Database\Seeders\AgentSeeder;
-use Database\Seeders\PartySeeder;
-use Database\Seeders\PermissionSeeder;
 use Database\Seeders\SeedFromSqlFileSeeder;
-use Database\Seeders\SuperAdminSeeder;
-use Database\Seeders\TerminalSeeder;
 use Illuminate\Console\Command;
 
-class SeedAllCommand extends Command
+class SqlSeeder extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'seed:all';
+    protected $signature = 'sql:seed';
 
     /**
      * The console command description.
@@ -34,14 +28,10 @@ class SeedAllCommand extends Command
     {
         $this->info('Running all seeders...');
 
-        $this->callSeeder(PermissionSeeder::class);
-        $this->callSeeder(AgentRolePermissionSeeder::class);
-        $this->callSeeder(SuperAdminSeeder::class);
-        // $this->callSeeder(AgentSeeder::class);
-        // $this->callSeeder(PartySeeder::class);
-        // $this->callSeeder(TerminalSeeder::class);
+        // Run each seeder
+        $this->callSeeder(SeedFromSqlFileSeeder::class);
 
-        $this->info('All seeders completed successfully.');
+        $this->info('Sql seeders completed successfully.');
     }
 
     /**

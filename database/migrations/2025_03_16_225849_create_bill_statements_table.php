@@ -21,13 +21,24 @@ return new class extends Migration
             $table->string('bill_group');
 
             $table->string('party_id');
-            
+
             $table->string('bill_id');
 
             $table->string('bill_date');
 
             $table->decimal('amount', 10, 2);
+
+            $table->string('created_by_type', 50)->nullable();
+            $table->string('created_by_uid', 50)->nullable();
+
+            $table->string('updated_by_type', 50)->nullable();
+            $table->string('updated_by_uid', 50)->nullable();
+
+            $table->string('deleted_by_type', 50)->nullable();
+            $table->string('deleted_by_uid', 50)->nullable();
             $table->timestamps();
+
+            
         });
     }
 

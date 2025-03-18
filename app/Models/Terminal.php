@@ -88,4 +88,15 @@ class Terminal extends BaseModel
             }
         });
     }
+
+    public function jobs()
+    {
+        return $this->hasMany(RelianceJob::class, 'terminal_id');
+    }
+
+    public function terminalExpense()
+    {
+        return $this->hasMany(TerminalExpense::class, 'terminal_id');
+    }
+
 }

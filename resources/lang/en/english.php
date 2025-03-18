@@ -52,4 +52,9 @@ return [
     'action' => 'Action',
     'last_updated' => 'Last Updated',
     'created_at' => 'Created At',
+    'bill_amount' => 'Bill Amount',
+    'received_amount' => 'Received Amount',
+    'due_balance' => 'Due Balance',
+    'remarks' => 'Remarks',
+    'bill_date' => 'Bill Date',
 ];

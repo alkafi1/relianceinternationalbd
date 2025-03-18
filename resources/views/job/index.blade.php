@@ -30,8 +30,8 @@
                     searchable: true
                 },
                 {
-                    data: 'job_no', // Corresponds to the 'status' field in your data
-                    name: 'job_no',
+                    data: 'bill_no', // Corresponds to the 'status' field in your data
+                    name: 'bill_no',
                     className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
                     orderable: true,
                     searchable: true

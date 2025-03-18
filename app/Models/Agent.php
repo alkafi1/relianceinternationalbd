@@ -105,6 +105,31 @@ class Agent extends Authenticatable
                 $agent->agent_id = $newAgentId;
             }
         });
+
+        // Set `created_by` when creating
+        static::creating(function ($model) {
+            if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
+                $model->created_by_uid = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
+                $model->created_by_type = get_class($model);
+            }
+        });
+
+        // Set `updated_by` when updating
+        static::updating(function ($model) {
+            if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
+                $model->updated_by_uid = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
+                $model->updated_by_type = get_class($model);
+            }
+        });
+
+        // Set `deleted_by` when deleting
+        static::deleting(function ($model) {
+            if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
+                $model->deleted_by_uid = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
+                $model->deleted_by_type = get_class($model);
+                $model->save(); // Save the `deleted_by` field before deletion
+            }
+        });
     }
 
     /**
@@ -115,27 +140,7 @@ class Agent extends Authenticatable
         return $this->morphMany(Account::class, 'account_holder');
     }
 
-    /**
-     * Get the creator of the record (User or Agent).
-     */
-    public function createdBy()
-    {
-        return $this->morphTo(__FUNCTION__, 'created_by_type', 'created_by_uid');
-    }
+    
 
-    /**
-     * Get the updater of the record (User or Agent).
-     */
-    public function updatedBy()
-    {
-        return $this->morphTo(__FUNCTION__, 'updated_by_type', 'updated_by_uid');
-    }
-
-    /**
-     * Get the deleter of the record (User or Agent).
-     */
-    public function deletedBy()
-    {
-        return $this->morphTo(__FUNCTION__, 'deleted_by_type', 'deleted_by_uid');
-    }
+    
 }

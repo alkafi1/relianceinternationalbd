@@ -153,15 +153,17 @@ class Admincontroller extends Controller
                 ->addColumn('action', function ($data) {
                     $editUrl = route('admin.edit', $data->uid);
                     return '
-                        <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '">
-                            <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
-                        </a>
-                        <a href="' . $editUrl . '" class="text-primary me-2" data-id="' . $data->uid . '">
-                            <i class="fas fa-edit text-primary" style="font-size: 16px;"></i>
-                        </a>
+                        
                         <a href="javascript:void(0)" class="delete text-danger" data-id="' . $data->uid . '">
                             <i class="fas fa-trash text-danger" style="font-size: 16px;"></i>
                         </a>';
+
+                        // <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '">
+                        //     <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
+                        // </a>
+                        // <a href="' . $editUrl . '" class="text-primary me-2" data-id="' . $data->uid . '">
+                        //     <i class="fas fa-edit text-primary" style="font-size: 16px;"></i>
+                        // </a>
                 })
 
                 // Last Updated & Created At (Formatted, Sortable & Searchable)

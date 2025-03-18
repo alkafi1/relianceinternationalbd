@@ -22,12 +22,6 @@ class AgentRolePermissionSeeder extends Seeder
             'job.create',
             'job.store',
         ];
-        // foreach ($routes as $route) {
-        //     $permission = Permission::firstOrCreate([
-        //         'name' => $route,
-        //         'guard_name' => 'agent',
-        //     ]);
-        // }
         $role->givePermissionTo($routes);
 
         $this->command->info('Agent role and permission created successfully.');

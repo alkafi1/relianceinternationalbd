@@ -107,7 +107,7 @@
                         searchable: false,
                         render: function(data, type, row) {
                             // Determine if the role is admin
-                            let isAdmin = (row.name === 'super_admin');
+                            let isAdmin = (row.name === 'super-admin');
 
                             // Render edit button
                             let editButtonHtml = `<a href="javascript:void(0)" class="edit text-primary me-2" data-id="${row.id}">
