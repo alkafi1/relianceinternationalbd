@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Jobexpense;
-use App\Models\terminal;
+use App\Models\Terminal;
 use App\Models\TerminalExpense;
 use App\Models\User;
 use Carbon\Carbon;
