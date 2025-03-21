@@ -4,8 +4,8 @@
         id="account-data">
         <!--begin::Table head-->
         <thead>
-            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0" style="background: #690f0f;">
-                <th class="fw-bold text-dark" style="font-weight: 900">
+            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                <th class="text-start fw-bold text-dark" style="font-weight: 900">
                     {{ __('english.account_name') }}
                 </th>
                 <th class="min-w-50px fw-bold text-dark firstTheadColumn" style="font-weight: 900">
@@ -14,10 +14,10 @@
                 <th class="min-w-50px fw-bold text-dark firstTheadColumn" style="font-weight: 900">
                     {{ __('english.account_type') }}
                 </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class=" min-w-100px fw-bold text-dark " style="font-weight: 900">
                     {{ __('english.created_at') }}
                 </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class=" min-w-100px fw-bold text-dark " style="font-weight: 900">
                     {{ __('english.action') }}
                 </th>
                 

@@ -4,7 +4,7 @@
         id="terminal-data">
         <!--begin::Table head-->
         <thead>
-            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0" style="background: #690f0f;">
+            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                 <th class="fw-bold text-dark" style="font-weight: 900">
                     {{ __('english.terminal_id') }}
                 </th>

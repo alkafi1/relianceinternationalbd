@@ -4,8 +4,8 @@
         id="terminal-expense-data">
         <!--begin::Table head-->
         <thead>
-            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0" style="background: #690f0f;">
-                <th class="min-w-50px fw-bold text-dark firstTheadColumn" style="font-weight: 900">
+            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                <th class="min-w-50px fw-bold text-dark party" style="font-weight: 900">
                     {{ __('english.terminal_name') }}
                 </th>
                 <th class="min-w-30px fw-bold text-dark" style="font-weight: 900">
@@ -17,11 +17,11 @@
                 <th class="min-w-10px fw-bold text-dark" style="font-weight: 900">
                     {{ __('english.comission_rate') }}
                 </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class="party min-w-100px fw-bold text-dark party" style="font-weight: 900">
                     {{ __('english.minimum_comission') }}</th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class="party min-w-100px fw-bold text-dark party" style="font-weight: 900">
                     {{ __('english.status') }}</th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class="party min-w-100px fw-bold text-dark party" style="font-weight: 900">
                     {{ __('english.action') }}</th>
             </tr>
         </thead>

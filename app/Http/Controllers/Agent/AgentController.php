@@ -170,6 +170,12 @@ class AgentController extends Controller
             ->addColumn('agent_id', function ($data) {
                 return $data->agent_id ?? '';
             })
+            ->filterColumn('agent_id', function ($query, $keyword) {
+                $query->where('agent_id', 'LIKE', "%{$keyword}%");
+            })
+            ->orderColumn('agent_id', function ($query, $order) {
+                $query->orderBy('agent_id', $order);
+            })
             ->addColumn('agent_name', function ($data) {
                 return $data->first_name . ' ' . $data->last_name;
             })

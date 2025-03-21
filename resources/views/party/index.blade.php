@@ -2,6 +2,33 @@
 @section('breadcame', 'Party List')
 @section('content')
     <div class="row">
+        <div class="col-md-12">
+            <div class="card p-2">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="party-status-filter" class="form-label">Status</label>
+                            <select class="form-select form-select-solid" id="party-status-filter"
+                                data-placeholder="Select option">
+                                <option value="">All</option>
+                                <option value="approved">Approved</option>
+                                <option value="unapproved">Unapproved</option>
+                                <option value="deleted">Deleted</option>
+                                <option value="lock">Lock</option>
+                                <option value="suspended">Suspended</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-start mb-3">
+                    <button type="button" id="reset-filter" class="btn btn-icon btn-light-primary me-3">
+                        <i class="fas fa-undo-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
         <div class="col-md-12 event-list-col">
             <div class="card">
                 <div class="card-body">
@@ -43,7 +70,7 @@
                     orderable: true,
                     searchable: true
                 },
-                
+
                 {
                     data: 'address', // Corresponds to the 'full_address' field in your data
                     name: 'address',
@@ -89,9 +116,15 @@
                 },
             ];
 
-            // Initialize DataTable
-            initializeDataTable('party-data', "{{ route('party.datatable') }}", columns);
-
+            const tableId = 'party-data';
+            const ajaxUrl = '{{ route('party.datatable') }}';
+            const filters = {
+                status: 'party-status-filter', // Key: 'status', Value: ID of the status filter element
+            };
+            initializeDataTable(tableId, columns, ajaxUrl, filters);
+            $('#reset-filter').on('click', function() {
+                $('#party-status-filter').val('').trigger('change');
+            });
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior
 

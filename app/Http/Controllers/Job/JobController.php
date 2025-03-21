@@ -40,13 +40,23 @@ class JobController extends Controller
 
     public function index()
     {
-        return view('job.index');
+        // Fetch approved agents
+        $agents = Agent::fetchByStatus('status', AgentStatus::APPROVED()->value);
+
+        // Fetch active terminals
+        $terminals = Terminal::fetchByStatus('status', TerminalStatusEnum::ACTIVE()->value);
+
+        // Fetch approved parties
+        $parties = Party::fetchByStatus('status', PartyStatusEnum::APPROVED()->value);
+        return view('job.index',[
+            'agents' => $agents,
+            'terminals' => $terminals,
+            'parties' => $parties
+        ]);
     }
 
     public function datatable(Request $request)
     {
-
-
         if (auth('agent')->check()) {
             $query = RelianceJob::with([
                 'billRegister',
@@ -65,63 +75,93 @@ class JobController extends Controller
         $query->latest();
 
         if ($request->ajax()) {
+            if ($request->has('status') && !empty($request->status)) {
+                $query->where('status', $request->status);
+            }
+            if ($request->has('terminal') && !empty($request->terminal)) {
+                $query->where('terminal_id', $request->terminal);
+            }
+            if ($request->has('agent') && !empty($request->agent)) {
+                $query->where('agent_id', $request->agent);
+            }
+            if ($request->has('party') && !empty($request->party)) {
+                $query->where('party_id', $request->party);
+            }
+            if ($request->has('start_date') && !empty($request->start_date)) {
+                $query->whereDate('created_at', '>=', $request->start_date);
+            }
+            if ($request->has('end_date') && !empty($request->end_date)) {
+                $query->whereDate('created_at', '<=', $request->end_date);
+            }
+
             return DataTables::of($query)
-                ->addColumn('job_no', fn($data) => $data->job_no ?? '')
-                ->filterColumn('job_no', fn($query, $keyword) => $query->where('job_no', 'LIKE', "%{$keyword}%"))
-                ->orderColumn('job_no', fn($query, $order) => $query->orderBy('job_no', $order))
-
-                ->addColumn('bill_no', fn($data) => $data->billRegister->bill_no ?? '')
-                ->filterColumn(
-                    'bill_no',
-                    fn($query, $keyword) =>
-                    $query->whereHas('billRegister', fn($q) => $q->where('bill_no', 'LIKE', "%{$keyword}%"))
-                )
-                ->orderColumn('bill_no', fn($query, $order) => $query->orderBy('billRegister.bill_no', $order))
-
-                ->addColumn('buyer_name', fn($data) => $data->buyer_name ?? '')
-                ->filterColumn('buyer_name', fn($query, $keyword) => $query->where('buyer_name', 'LIKE', "%{$keyword}%"))
-                ->orderColumn('buyer_name', fn($query, $order) => $query->orderBy('buyer_name', $order))
-
-                ->addColumn('terminal', fn($data) => $data->terminal?->terminal_name ?? '')
-                ->filterColumn(
-                    'terminal',
-                    fn($query, $keyword) =>
-                    $query->whereHas('terminal', fn($q) => $q->where('terminal_name', 'LIKE', "%{$keyword}%"))
-                )
-                ->orderColumn('terminal', fn($query, $order) => $query->orderBy('terminal_name', $order))
-
-                ->addColumn('party_name', fn($data) => $data->party?->party_name ?? '')
-                ->filterColumn(
-                    'party_name',
-                    fn($query, $keyword) =>
-                    $query->whereHas('party', fn($q) => $q->where('party_name', 'LIKE', "%{$keyword}%"))
-                )
-                ->orderColumn('party_name', fn($query, $order) => $query->orderBy('party_name', $order))
-
-                ->addColumn('agent', fn($data) => $data->agent?->display_name ?? '')
-                ->filterColumn(
-                    'agent',
-                    fn($query, $keyword) =>
-                    $query->whereHas('agent', fn($q) => $q->where('display_name', 'LIKE', "%{$keyword}%"))
-                )
-                ->orderColumn('agent', fn($query, $order) => $query->orderBy('display_name', $order))
-
-                ->addColumn('invoice_no', fn($data) => $data->invoice_no ?? '')
-                ->filterColumn('invoice_no', fn($query, $keyword) => $query->where('invoice_no', 'LIKE', "%{$keyword}%"))
-                ->orderColumn('invoice_no', fn($query, $order) => $query->orderBy('invoice_no', $order))
-
-                ->addColumn('value_usd', fn($data) => number_format($data->value_usd, 2))
-                ->filterColumn('value_usd', fn($query, $keyword) => $query->where('value_usd', 'LIKE', "%{$keyword}%"))
-                ->orderColumn('value_usd', fn($query, $order) => $query->orderBy('value_usd', $order))
-
-                ->addColumn('usd_rate', fn($data) => number_format($data->usd_rate, 2))
-                ->filterColumn('usd_rate', fn($query, $keyword) => $query->where('usd_rate', 'LIKE', "%{$keyword}%"))
-                ->orderColumn('usd_rate', fn($query, $order) => $query->orderBy('usd_rate', $order))
-
-                ->addColumn('job_type', fn($data) => ucfirst($data->job_type))
-                ->filterColumn('job_type', fn($query, $keyword) => $query->where('job_type', 'LIKE', "%{$keyword}%"))
-                ->orderColumn('job_type', fn($query, $order) => $query->orderBy('job_type', $order))
-
+                ->addColumn('job_no', function ($data) {
+                    return $data->job_no ?? '';
+                })
+                ->orderColumn('job_no', function ($query, $order) {
+                    return $query->orderBy('job_no', $order);
+                })
+        
+                ->addColumn('bill_no', function ($data) {
+                    return $data->billRegister->bill_no ?? '';
+                })
+                ->orderColumn('bill_no', function ($query, $order) {
+                    return $query->orderBy('billRegister.bill_no', $order);
+                })
+        
+                ->addColumn('buyer_name', function ($data) {
+                    return $data->buyer_name ?? '';
+                })
+                ->orderColumn('buyer_name', function ($query, $order) {
+                    return $query->orderBy('buyer_name', $order);
+                })
+        
+                ->addColumn('terminal', function ($data) {
+                    return $data->terminal?->terminal_name ?? '';
+                })
+                ->orderColumn('terminal', function ($query, $order) {
+                    return $query->orderBy('terminal_name', $order);
+                })
+        
+                ->addColumn('party_name', function ($data) {
+                    return $data->party?->party_name ?? '';
+                })
+                ->orderColumn('party_name', function ($query, $order) {
+                    return $query->orderBy('party_name', $order);
+                })
+        
+                ->addColumn('agent', function ($data) {
+                    return $data->agent?->display_name ?? '';
+                })
+        
+                ->addColumn('invoice_no', function ($data) {
+                    return $data->invoice_no ?? '';
+                })
+                ->orderColumn('invoice_no', function ($query, $order) {
+                    return $query->orderBy('invoice_no', $order);
+                })
+        
+                ->addColumn('value_usd', function ($data) {
+                    return number_format($data->value_usd, 2);
+                })
+                ->orderColumn('value_usd', function ($query, $order) {
+                    return $query->orderBy('value_usd', $order);
+                })
+        
+                ->addColumn('usd_rate', function ($data) {
+                    return number_format($data->usd_rate, 2);
+                })
+                ->orderColumn('usd_rate', function ($query, $order) {
+                    return $query->orderBy('usd_rate', $order);
+                })
+        
+                ->addColumn('job_type', function ($data) {
+                    return ucfirst($data->job_type);
+                })
+                ->orderColumn('job_type', function ($query, $order) {
+                    return $query->orderBy('job_type', $order);
+                })
+        
                 ->addColumn('status', function ($data) {
                     $statusColors = [
                         'COMPLETED' => 'success',
@@ -132,56 +172,47 @@ class JobController extends Controller
                     $statusColor = $statusColors[strtoupper($data->status)] ?? 'secondary';
                     return '<span class="badge badge-light-' . $statusColor . '">' . ucfirst(strtolower($data->status)) . '</span>';
                 })
-                ->filterColumn('status', function ($query, $keyword) {
-                    $statusMap = [
-                        'approved' => 'APPROVED',
-                        'pending' => 'PENDING',
-                        'cancelled' => 'CANCELLED',
-                        'completed' => 'COMPLETED',
-                    ];
-                    if (isset($statusMap[strtolower($keyword)])) {
-                        $query->where('status', $statusMap[strtolower($keyword)]);
-                    }
+                ->orderColumn('status', function ($query, $order) {
+                    return $query->orderBy('status', $order);
                 })
-                ->orderColumn('status', fn($query, $order) => $query->orderBy('status', $order))
-
+        
                 ->addColumn('action', function ($data) {
                     $guard = auth()->guard('agent')->check() ? 'agent' : 'web';
                     $editUrl = route('job.edit', ['job' => $data->uid]);
                     $actions = [
                         'view' => '<a href="javascript:void(0)" class="dropdown-item view" data-id="' . $data->id . '">
-                                    <i class="fas fa-eye text-info"></i> View
-                                </a>',
+                                <i class="fas fa-eye text-info"></i> View
+                            </a>',
                         'edit' => $guard === 'web' ? '<a href="' . $editUrl . '" class="dropdown-item">
-                                    <i class="fas fa-edit text-primary"></i> Edit
-                                </a>' : '',
+                                <i class="fas fa-edit text-primary"></i> Edit
+                            </a>' : '',
                         'delete' => '<a href="javascript:void(0)" class="dropdown-item delete text-danger" data-id="' . $data->id . '">
-                                    <i class="fas fa-trash text-danger"></i> Delete
-                                </a>',
+                                <i class="fas fa-trash text-danger"></i> Delete
+                            </a>',
                     ];
                     return '
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuButton' . $data->id . '" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton' . $data->id . '">
-                                ' . implode('', $actions) . '
-                            </ul>
-                        </div>';
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuButton' . $data->id . '" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton' . $data->id . '">
+                            ' . implode('', $actions) . '
+                        </ul>
+                    </div>';
                 })
-
-                ->editColumn('created_at', fn($data) => $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '')
-                ->filterColumn(
-                    'created_at',
-                    fn($query, $keyword) =>
-                    $query->whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') LIKE ?", ["%{$keyword}%"])
-                )
-                ->orderColumn('created_at', fn($query, $order) => $query->orderBy('created_at', $order))
-
+        
+                ->editColumn('created_at', function ($data) {
+                    return $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '';
+                })
+                ->orderColumn('created_at', function ($query, $order) {
+                    return $query->orderBy('created_at', $order);
+                })
+        
                 ->rawColumns(['action', 'status'])
                 ->toJson();
         }
     }
+
 
 
     public function create(Request $request)

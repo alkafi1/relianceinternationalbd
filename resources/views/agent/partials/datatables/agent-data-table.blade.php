@@ -1,27 +1,18 @@
 <div class="table-responsive table-container">
-    <div class="d-flex align-items-center mb-5">
-        <div class="me-3">
-            <select class="form-select form-select-solid" id="agent-status-filter" data-placeholder="Select option">
-                <option value="">All</option>
-                <option value="approved">Approved</option>
-                <option value="unapproved">Unapproved</option>
-                <option value="deleted">Deleted</option>
-                <option value="lock">Lock</option>
-                <option value="suspended">Suspended</option>
-            </select>
-        </div>
-    </div>
     
     <!--begin::Table-->
-    <table class="table relance-datatable align-middle table-bordered fs-6 gy-5 m-auto display responsive"
+    <table class="table align-middle table-bordered fs-6 gy-5 m-auto display responsive"
         id="agent-data">
         <!--begin::Table head-->
         <thead>
-            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0" style="background: #690f0f;">
-                <th class="fw-bold text-dark" style="font-weight: 900">
+            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                <th class=" min-w-100px fw-bold text-dark " style="font-weight: 900">
+                    {{ __('english.action') }}
+                </th>
+                <th class="text-center fw-bold text-dark" style="font-weight: 900">
                     {{ __('english.agent_id') }}
                 </th>
-                <th class="min-w-50px fw-bold text-dark firstTheadColumn" style="font-weight: 900">
+                <th class="min-w-50px fw-bold text-dark" style="font-weight: 900">
                     {{ __('english.agent_name') }}
                 </th>
                 <th class="min-w-30px fw-bold text-dark" style="font-weight: 900">
@@ -33,22 +24,20 @@
                 <th class="min-w-50px fw-bold text-dark" style="font-weight: 900">
                     {{ __('english.email') }}
                 </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class=" min-w-100px fw-bold text-dark" style="font-weight: 900">
                     {{ __('english.age') }}
                 </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class=" min-w-100px fw-bold text-dark " style="font-weight: 900">
                     {{ __('english.full_address') }}
                 </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class=" min-w-100px fw-bold text-dark " style="font-weight: 900">
                     {{ __('english.status') }}
                 </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
-                    {{ __('english.action') }}
-                </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                
+                <th class=" min-w-100px fw-bold text-dark " style="font-weight: 900">
                     {{ __('english.last_updated') }}
                 </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class=" min-w-100px fw-bold text-dark" style="font-weight: 900">
                     {{ __('english.created_at') }}
                 </th>
             </tr>

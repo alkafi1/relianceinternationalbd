@@ -101,7 +101,12 @@ class TerminalController extends Controller
     {
         if ($request->ajax()) {
             $query = Terminal::query();
-
+            if ($request->has('status') && !empty($request->status)) {
+                $query->where('status', $request->status);
+            }
+            if ($request->has('type') && !empty($request->type)) {
+                $query->where('terminal_type', $request->type);
+            }
             return DataTables::of($query)
                 // terminal ID (Sortable & Searchable)
                 ->addColumn('terminal_id', function ($data) {
@@ -218,7 +223,12 @@ class TerminalController extends Controller
     {
         if ($request->ajax()) {
             $query = TerminalExpense::with('terminal');
-
+            if ($request->has('status') && !empty($request->status)) {
+                $query->where('status', $request->status);
+            }
+            if ($request->has('type') && !empty($request->type)) {
+                $query->where('job_type', $request->type);
+            }
             return DataTables::of($query)
                 // Terminal Name (Sortable & Searchable)
                 ->addColumn('terminal_name', function ($data) {

@@ -88,6 +88,9 @@ class Admincontroller extends Controller
 
         if ($request->ajax()) {
             $query = User::query();
+            if ($request->has('status') && !empty($request->status)) {
+                $query->where('status', $request->status);
+            }
             // Apply filtering based on request parameters
             return DataTables::of($query)
                 // Full Name (Concatenated, needs custom sorting & filtering)

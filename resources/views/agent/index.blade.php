@@ -2,6 +2,33 @@
 @section('breadcame', 'Agent List')
 @section('content')
     <div class="row">
+        <div class="col-md-12">
+            <div class="card p-2">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="agent-status-filter" class="form-label">Status</label>
+                            <select class="form-select form-select-solid" id="agent-status-filter"
+                                data-placeholder="Select option">
+                                <option value="">All</option>
+                                <option value="approved">Approved</option>
+                                <option value="unapproved">Unapproved</option>
+                                <option value="deleted">Deleted</option>
+                                <option value="lock">Lock</option>
+                                <option value="suspended">Suspended</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-start mb-3">
+                    <button type="button" id="reset-filter" class="btn btn-icon btn-light-primary me-3">
+                        <i class="fas fa-undo-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
         <div class="col-md-12 event-list-col">
             <div class="card">
                 <div class="card-body">
@@ -16,9 +43,16 @@
         <script>
             // Define columns
             const columns = [{
+                    data: 'action', // Corresponds to the 'status' field in your data
+                    name: 'action',
+                    className: 'text-center min-w-100px fw-bold text-dark ',
+                    orderable: true,
+                    searchable: true,
+                },
+                {
                     data: 'agent_id', // Corresponds to the 'agent_id' field in your data
                     name: 'agent_id', // Name for server-side processing
-                    className: 'fw-bold text-dark', // Add classes for styling
+                    className: ' fw-bold text-dark', // Add classes for styling
                     orderable: true, // Allow sorting
                     searchable: true // Allow searching
                 },
@@ -53,28 +87,28 @@
                 {
                     data: 'age', // Corresponds to the 'age' field in your data
                     name: 'age',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark ',
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: 'full_address', // Corresponds to the 'full_address' field in your data
                     name: 'full_address',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark ',
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: 'status', // Corresponds to the 'status' field in your data
                     name: 'status',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark ',
                     orderable: true,
                     searchable: true,
                 },
                 {
                     data: 'last_updated', // Corresponds to the 'last_updated' field in your data
                     name: 'last_updated',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark ',
                     orderable: true,
                     searchable: true,
                     render: function(data, type, row) {
@@ -85,7 +119,7 @@
                 {
                     data: 'created_at', // Corresponds to the 'created_at' field in your data
                     name: 'created_at',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark ',
                     orderable: true,
                     searchable: true,
                     render: function(data, type, row) {
@@ -93,104 +127,18 @@
                         return new Date(data).toLocaleDateString();
                     }
                 },
-
-                {
-                    data: 'action', // Corresponds to the 'status' field in your data
-                    name: 'action',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
-                    orderable: true,
-                    searchable: true,
-                },
             ];
-            const tableId = 'agent-data';
-            // Initialize DataTable
-            var table = $(`#${tableId}`).DataTable({
-                processing: true,
-                serverSide: true,
-                responsive: false,
-                ajax: {
-                    url: '{{ route('agent.datatable') }}',
-                    type: 'GET',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: function(d) {
-                        d.status = $('#agent-status-filter').val(); // Get the status filter value
-                    }
-                },
-                order: [
-                    [4, "desc"]
-                ], // Default sorting by Created At (descending)
-                columnDefs: [{
-                        targets: [5],
-                        orderable: false
-                    }, // Disable sorting on Action column
-                    {
-                        targets: '_all',
-                        searchable: true,
-                        orderable: true
-                    } // Enable sorting & searching for all columns
-                ],
-                columns: columns, // Use the columns array passed to the function
-                lengthMenu: [
-                    [5, 10, 30, 50, -1],
-                    [5, 10, 30, 50, "All"]
-                ],
-                pageLength: 10,
-                dom: "<'row'<'col-sm-4'l><'col-sm-4 d-flex justify-content-center'B><'col-sm-4'f>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                buttons: [{
-                        extend: 'colvis', // Show/hide columns
-                        text: '<i class="fas fa-columns"></i>',
-                        columns: ':not(:first-child)' // Exclude first column from hiding
-                    },
-                    {
-                        extend: 'copy',
-                        text: '<i class="fas fa-copy"></i>',
-                        title: 'Data Export',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
-                    },
-                    {
-                        extend: 'excel',
-                        text: '<i class="fas fa-file-excel"></i>',
-                        title: tableId + ' Export',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
-                    },
-                    {
-                        extend: 'pdf',
-                        text: '<i class="fas fa-file-pdf"></i>',
-                        title: tableId + ' Export',
-                        exportOptions: {
-                            modifier: {
-                                search: 'applied',
-                                order: 'applied'
-                            }
-                        },
-                        customize: function(doc) {
-                            doc.defaultStyle.fontSize = 10;
-                            doc.styles.tableHeader.fontSize = 12;
-                            doc.styles.title.fontSize = 14;
-                        }
-                    }
-                ],
-                language: {
-                    search: '<div class="input-group">' +
-                        '<span class="input-group-text">' +
-                        '<i class="fas fa-search"></i>' +
-                        '</span>' +
-                        '_INPUT_' +
-                        '</div>'
-                }
-            });
-            $('#agent-status-filter').on('change', function() {
-                $('#agent-data').DataTable().ajax.reload(null, false);
-            });
+            const agentTableId = 'agent-data';
+            const agentAjaxUrl = '{{ route('agent.datatable') }}';
+            const agentFilters = {
+                status: 'agent-status-filter', // Key: 'status', Value: ID of the status filter element
+            };
 
+            initializeDataTable(agentTableId, columns, agentAjaxUrl, agentFilters);
+
+            $('#reset-filter').on('click', function() {
+                $('#agent-status-filter').val('').trigger('change');
+            });
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior
 
