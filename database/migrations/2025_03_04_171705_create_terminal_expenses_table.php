@@ -25,7 +25,7 @@ return new class extends Migration
             $table->integer('comission_rate')->nullable();
             $table->integer('minimum_comission')->nullable();
             $table->enum('status', ['active', 'deactive'])->default('active');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

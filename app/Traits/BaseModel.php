@@ -3,10 +3,12 @@
 namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 trait BaseModel
 {
+    use SoftDeletes;
     /**
      * The primary key for the model.
      *

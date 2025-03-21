@@ -254,8 +254,9 @@ class Admincontroller extends Controller
      * @param \App\Models\admin $admin The admin instance to be destroyed
      * @return bool|null True if the admin was successfully deleted, false if the deletion failed, or null if the admin doesn't exist
      */
-    public function destroy(User $user)
+    public function destroy(User $user, $uid)
     {
+        $user = User::find($uid);
         return User::destroyModel($user);
     }
 

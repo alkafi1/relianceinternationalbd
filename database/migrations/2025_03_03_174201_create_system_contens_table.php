@@ -18,6 +18,7 @@ return new class extends Migration
             $table->longText('content')->nullable(); // Long text field for content
             $table->string('media')->nullable(); // Media associated with the user
             $table->string('url')->nullable(); // URL associated with the user
+            $table->softDeletes();
             $table->timestamps();
         });
     }

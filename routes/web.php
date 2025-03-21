@@ -33,7 +33,6 @@ Route::prefix('admin')->group(function () {
             Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
             // Route::get('/{admin}', [AdminController::class, 'show'])->name('admin.show');
             Route::get('/{admin}/edit', [AdminController::class, 'edit'])->name('admin.edit');
-            Route::put('/{admin}/update', [AdminController::class, 'update'])->name('admin.update');
             Route::put('/{admin}', [AdminController::class, 'update'])->name('admin.update');
             Route::delete('/{admin}', [AdminController::class, 'destroy'])->name('admin.destroy');
             Route::post('/status/update', [AdminController::class, 'statusUpdate'])->name('admin.status.update');
@@ -50,7 +49,6 @@ Route::prefix('admin')->group(function () {
             Route::post('/store', [AgentController::class, 'store'])->name('agent.store');
             // Route::get('/{agent}', [AgentController::class, 'show'])->name('agent.show');
             Route::get('/{agent}/edit', [AgentController::class, 'edit'])->name('agent.edit');
-            Route::PUT('/{agent}/update', [AgentController::class, 'update'])->name('agent.update');
             Route::put('/{agent}', [AgentController::class, 'update'])->name('agent.update');
             Route::delete('/{agent}', [AgentController::class, 'destroy'])->name('agent.destroy');
             Route::post('/status/update', [AgentController::class, 'statusUpdate'])->name('agent.status.update');

@@ -13,7 +13,7 @@ function initializeDataTable(tableId, columns, ajaxUrl, filters = {}) {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            data: function(d) {
+            data: function (d) {
                 // Add filter data dynamically
                 Object.keys(filters).forEach(filterKey => {
                     const filterId = filters[filterKey];
@@ -23,14 +23,14 @@ function initializeDataTable(tableId, columns, ajaxUrl, filters = {}) {
         },
         order: [], // Default sorting (can be overridden)
         columnDefs: [{
-                targets: [5], // Disable sorting on Action column (adjust as needed)
-                orderable: false
-            },
-            {
-                targets: '_all', // Enable sorting & searching for all columns
-                searchable: true,
-                orderable: true
-            }
+            targets: [5], // Disable sorting on Action column (adjust as needed)
+            orderable: false
+        },
+        {
+            targets: '_all', // Enable sorting & searching for all columns
+            searchable: true,
+            orderable: true
+        }
         ],
         columns: columns, // Use the columns array passed to the function
         lengthMenu: [
@@ -41,15 +41,15 @@ function initializeDataTable(tableId, columns, ajaxUrl, filters = {}) {
         dom: "<'row'<'col-sm-4'l><'col-sm-4 d-flex justify-content-center'B><'col-sm-4'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        buttons: [{
+        buttons: [
+            {
                 extend: 'colvis', // Show/hide columns
                 text: '<i class="fas fa-columns"></i>',
-                columns: ':not(:first-child)' // Exclude first column from hiding
             },
             {
                 extend: 'copy',
                 text: '<i class="fas fa-copy"></i>',
-                title: 'Data Export',
+                title: tableId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
                 exportOptions: {
                     columns: ':visible'
                 }
@@ -57,7 +57,7 @@ function initializeDataTable(tableId, columns, ajaxUrl, filters = {}) {
             {
                 extend: 'excel',
                 text: '<i class="fas fa-file-excel"></i>',
-                title: tableId + ' Export',
+                title: tableId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
                 exportOptions: {
                     columns: ':visible'
                 }
@@ -65,19 +65,32 @@ function initializeDataTable(tableId, columns, ajaxUrl, filters = {}) {
             {
                 extend: 'pdf',
                 text: '<i class="fas fa-file-pdf"></i>',
-                title: tableId + ' Export',
+                title: tableId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
                 exportOptions: {
+                    columns: ':visible' // Ensure only visible columns are exported
+                },
+                orientation: 'landscape', // Use landscape for more space
+                pageSize: 'A4', // Use A3 for more width (or 'legal')
+                customize: function (doc) {
+                    doc.pageOrientation = 'landscape'; // Set PDF to landscape mode
+                    doc.pageMargins = [0, 0, 0, 0]; // Remove margins
+                    doc.defaultStyle.fontSize = 8; // Reduce font size
+                    doc.styles.tableHeader.fontSize = 8; // Adjust header font size
+                    doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split(''); // Dynamic column width
+                }
+            },
+            {
+                extend: 'print',
+                text: '<i class="fas fa-print"></i>',
+                title: tableId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+                exportOptions: {
+                    columns: ':visible',
                     modifier: {
                         search: 'applied',
                         order: 'applied'
                     }
-                },
-                customize: function(doc) {
-                    doc.defaultStyle.fontSize = 10;
-                    doc.styles.tableHeader.fontSize = 12;
-                    doc.styles.title.fontSize = 14;
                 }
-            }
+            },
         ],
         scrollX: true, // Enable horizontal scrolling
         language: {
@@ -93,7 +106,7 @@ function initializeDataTable(tableId, columns, ajaxUrl, filters = {}) {
     // Add change event listeners for filters
     Object.keys(filters).forEach(filterKey => {
         const filterId = filters[filterKey];
-        $(`#${filterId}`).on('change', function() {
+        $(`#${filterId}`).on('change', function () {
             $(`#${tableId}`).DataTable().ajax.reload(null, false); // Reload table without resetting paging
         });
     });

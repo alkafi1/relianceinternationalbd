@@ -40,7 +40,7 @@ return new class extends Migration
 
             // Status (enum with default value)
             $table->enum('status', AgentStatus::getValues())->default(AgentStatus::APPROVED()->value);
-
+            $table->softDeletes();
             // Timestamps
             $table->timestamps();
         });

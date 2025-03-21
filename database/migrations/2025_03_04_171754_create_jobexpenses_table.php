@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('job_expend_field', 256)->nullable();
             $table->integer('amount')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }
