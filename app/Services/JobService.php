@@ -39,8 +39,8 @@ class  JobService
                 'status' => $data['status'],
                 'voucher_amount' => $data['voucher_amount'],
                 'job_no' => $data['job_no'],
-                'created_by_type' => auth()->guard('web')->check() ? 'App\Models\User' : 'App\Models\Agent',
-                'created_by_uid' => auth()->user()->uid ?? auth()->guard('agent')->user()->uid,
+                // 'created_by_type' => auth()->guard('web')->check() ? 'App\Models\User' : 'App\Models\Agent',
+                // 'created_by_uid' => auth()->user()->uid ?? auth()->guard('agent')->user()->uid,
             ]);
 
             // Perform additional operations if needed
@@ -113,8 +113,8 @@ class  JobService
             'status' => $data['status'],
             'voucher_amount' => $data['voucher_amount'],
             'job_no' => $job->status == JobStatusEnum::INITIALIZED_BY_AGENT()->value ? $this->generateJobNo($data) : $data['job_no'],
-            'updated_by_type' => auth()->guard('web')->check() ? 'App\Models\User' : 'App\Models\Agent',
-            'updated_by_uid' => auth()->user()->uid ?? auth()->guard('agent')->user()->uid,
+            // 'updated_by_type' => auth()->guard('web')->check() ? 'App\Models\User' : 'App\Models\Agent',
+            // 'updated_by_uid' => auth()->user()->uid ?? auth()->guard('agent')->user()->uid,
             'comment' => $data['comment'],
             'job_complete_date' => $data['job_date'],
         ]);

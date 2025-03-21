@@ -131,7 +131,9 @@ class PartyController extends Controller
         // Check if the request is an AJAX request
         if ($request->ajax()) {
             $query = Party::query();
-
+            if ($request->has('status') && !empty($request->status)) {
+                $query->where('status', $request->status);
+            }
             // Apply custom sorting and filtering to the query
             return DataTables::of($query)
                 // Agent ID (Sortable & Searchable)

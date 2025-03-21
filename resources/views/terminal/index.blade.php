@@ -2,6 +2,42 @@
 @section('breadcame', 'Terminal List')
 @section('content')
     <div class="row">
+        <div class="col-md-12">
+            <div class="card p-2">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label mb-2" for="terminal-status-filter">Status</label>
+                            <select class="form-select form-select-solid" id="terminal-status-filter"
+                                data-placeholder="Select option">
+                                <option value="">All</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Deactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label mb-2" for="terminal-type-filter">Terminal Type</label>
+                            <select class="form-select form-select-solid" id="terminal-type-filter"
+                                data-placeholder="Select option">
+                                <option value="">All</option>
+                                <option value="both">Both</option>
+                                <option value="import">Import</option>
+                                <option value="export">Export</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-start mb-3">
+                    <button type="button" id="reset-filter" class="btn btn-icon btn-light-primary me-3">
+                        <i class="fas fa-undo-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
         <div class="col-md-12 event-list-col">
             <div class="card">
                 <div class="card-body">
@@ -51,36 +87,44 @@
                 {
                     data: 'address', // Corresponds to the 'age' field in your data
                     name: 'address',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: 'min-w-100px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: 'status', // Corresponds to the 'full_address' field in your data
                     name: 'status',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: 'min-w-100px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: 'created_at', // Corresponds to the 'status' field in your data
                     name: 'created_at',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: 'min-w-100px fw-bold text-dark',
                     orderable: true,
                     searchable: true,
                 },
                 {
                     data: 'action', // Corresponds to the 'last_updated' field in your data
                     name: 'action',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: 'min-w-100px fw-bold text-dark',
                     orderable: true,
                     searchable: true,
                 },
 
             ];
-            // Initialize DataTable
-            initializeDataTable('terminal-data', "{{ route('terminal.datatable') }}", columns);
-
+            const tableId = 'terminal-data';
+            const ajaxUrl = '{{ route('terminal.datatable') }}';
+            const filters = {
+                status: 'terminal-status-filter', // Key: 'status', Value: ID of the status filter element
+                type: 'terminal-type-filter'
+            };
+            initializeDataTable(tableId, columns, ajaxUrl, filters);
+            $('#reset-filter').on('click', function() {
+                $('#terminal-status-filter, #terminal-type-filter').val('')
+                    .trigger('change');
+            });
             $(document).on('click', '.status', function(e) {
                 e.preventDefault(); // Prevent default link behavior
                 const url = $(this).data('url');

@@ -76,8 +76,12 @@
                 
             ];
 
-            // Initialize DataTable
-            initializeDataTable('bill-register-data', "{{ route('bill.register.datatable') }}", columns);
+            const tableId = 'bill-register-data';
+            const ajaxUrl = '{{ route('bill.register.datatable') }}';
+            const filters = {
+                status: 'admin-status-filter', // Key: 'status', Value: ID of the status filter element
+            };
+            initializeDataTable(tableId, columns, ajaxUrl, filters);
 
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior

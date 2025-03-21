@@ -1,10 +1,11 @@
 <div class="table-responsive table-container">
+    
     <!--begin::Table-->
     <table class="table relance-datatable align-middle table-bordered fs-6 gy-5 m-auto display responsive"
         id="party-data">
         <!--begin::Table head-->
         <thead>
-            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0" style="background: #690f0f;">
+            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                 <th class="fw-bold text-dark" style="font-weight: 900">
                     {{ __('english.party_id') }}
                 </th>
@@ -33,7 +34,7 @@
                     {{ __('english.created_at') }}
                 </th>
             </tr>
-            
+
         </thead>
         <tbody>
 

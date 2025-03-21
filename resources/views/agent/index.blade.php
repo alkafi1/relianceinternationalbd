@@ -2,6 +2,33 @@
 @section('breadcame', 'Agent List')
 @section('content')
     <div class="row">
+        <div class="col-md-12">
+            <div class="card p-2">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="agent-status-filter" class="form-label">Status</label>
+                            <select class="form-select form-select-solid" id="agent-status-filter"
+                                data-placeholder="Select option">
+                                <option value="">All</option>
+                                <option value="approved">Approved</option>
+                                <option value="unapproved">Unapproved</option>
+                                <option value="deleted">Deleted</option>
+                                <option value="lock">Lock</option>
+                                <option value="suspended">Suspended</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-start mb-3">
+                    <button type="button" id="reset-filter" class="btn btn-icon btn-light-primary me-3">
+                        <i class="fas fa-undo-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
         <div class="col-md-12 event-list-col">
             <div class="card">
                 <div class="card-body">
@@ -10,15 +37,22 @@
             </div>
         </div>
     </div>
-   @include('agent.partials.modal.status-modal')
+    @include('agent.partials.modal.status-modal')
 
     @push('custom-js')
         <script>
             // Define columns
             const columns = [{
+                    data: 'action', // Corresponds to the 'status' field in your data
+                    name: 'action',
+                    className: 'text-center min-w-100px fw-bold text-dark ',
+                    orderable: true,
+                    searchable: true,
+                },
+                {
                     data: 'agent_id', // Corresponds to the 'agent_id' field in your data
                     name: 'agent_id', // Name for server-side processing
-                    className: 'fw-bold text-dark', // Add classes for styling
+                    className: ' fw-bold text-dark', // Add classes for styling
                     orderable: true, // Allow sorting
                     searchable: true // Allow searching
                 },
@@ -53,28 +87,28 @@
                 {
                     data: 'age', // Corresponds to the 'age' field in your data
                     name: 'age',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark ',
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: 'full_address', // Corresponds to the 'full_address' field in your data
                     name: 'full_address',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark ',
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: 'status', // Corresponds to the 'status' field in your data
                     name: 'status',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark ',
                     orderable: true,
                     searchable: true,
                 },
                 {
                     data: 'last_updated', // Corresponds to the 'last_updated' field in your data
                     name: 'last_updated',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark ',
                     orderable: true,
                     searchable: true,
                     render: function(data, type, row) {
@@ -85,7 +119,7 @@
                 {
                     data: 'created_at', // Corresponds to the 'created_at' field in your data
                     name: 'created_at',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark ',
                     orderable: true,
                     searchable: true,
                     render: function(data, type, row) {
@@ -93,18 +127,18 @@
                         return new Date(data).toLocaleDateString();
                     }
                 },
-
-                {
-                    data: 'action', // Corresponds to the 'status' field in your data
-                    name: 'action',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
-                    orderable: true,
-                    searchable: true,
-                },
             ];
-            // Initialize DataTable
-            initializeDataTable('agent-data', "{{ route('agent.datatable') }}", columns);
+            const agentTableId = 'agent-data';
+            const agentAjaxUrl = '{{ route('agent.datatable') }}';
+            const agentFilters = {
+                status: 'agent-status-filter', // Key: 'status', Value: ID of the status filter element
+            };
 
+            initializeDataTable(agentTableId, columns, agentAjaxUrl, agentFilters);
+
+            $('#reset-filter').on('click', function() {
+                $('#agent-status-filter').val('').trigger('change');
+            });
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior
 

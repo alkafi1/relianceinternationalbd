@@ -8,8 +8,7 @@
     <meta name="description" content="Reliance International BD" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <meta name="keywords"
-        content="Reliance International BD" />
+    <meta name="keywords" content="Reliance International BD" />
     <meta charset="utf-8" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
@@ -31,6 +30,8 @@
     <link href="{{ asset('public/admin/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('public/admin/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
         type="text/css" />
+        {{-- <link href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" rel="stylesheet"
+        type="text/css" /> --}}
     <link href="{{ asset('public/admin/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
 
     <!--end::Global Stylesheets Bundle-->
@@ -139,6 +140,7 @@
 
     {{-- dattabase --}}
     <script src="{{ asset('public/admin/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+    {{-- <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script> --}}
     @stack('custom-js')
     <!-- Initialize Toastr -->
     {{-- {!! Toastr::message() !!} --}}

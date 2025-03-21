@@ -14,7 +14,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 class Admincontroller extends Controller
 {
-    
+
     /**
      * The UserService instance.
      *
@@ -88,20 +88,29 @@ class Admincontroller extends Controller
 
         if ($request->ajax()) {
             $query = User::query();
-
+            if ($request->has('status') && !empty($request->status)) {
+                $query->where('status', $request->status);
+            }
+            // Apply filtering based on request parameters
             return DataTables::of($query)
                 // Full Name (Concatenated, needs custom sorting & filtering)
                 ->addColumn('display_name', function ($data) {
                     return $data->displayName();
                 })
-                ->filterColumn('full_name', function ($query, $keyword) {
+                ->filterColumn('display_name', function ($query, $keyword) {
                     $query->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$keyword}%"]);
                 })
-                ->orderColumn('full_name', function ($query, $order) {
+                ->orderColumn('display_name', function ($query, $order) {
                     $query->orderByRaw("CONCAT(first_name, ' ', last_name) {$order}");
                 })
                 ->addColumn('email', function ($data) {
                     return $data->email ?? '';
+                })
+                ->filterColumn('email', function ($query, $keyword) {
+                    $query->where('email', 'LIKE', "%{$keyword}%");
+                })
+                ->orderColumn('email', function ($query, $order) {
+                    $query->orderBy('email', $order);
                 })
                 ->addColumn('status', function ($data) {
                     // Define status colors and labels
@@ -158,12 +167,12 @@ class Admincontroller extends Controller
                             <i class="fas fa-trash text-danger" style="font-size: 16px;"></i>
                         </a>';
 
-                        // <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '">
-                        //     <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
-                        // </a>
-                        // <a href="' . $editUrl . '" class="text-primary me-2" data-id="' . $data->uid . '">
-                        //     <i class="fas fa-edit text-primary" style="font-size: 16px;"></i>
-                        // </a>
+                    // <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '">
+                    //     <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
+                    // </a>
+                    // <a href="' . $editUrl . '" class="text-primary me-2" data-id="' . $data->uid . '">
+                    //     <i class="fas fa-edit text-primary" style="font-size: 16px;"></i>
+                    // </a>
                 })
 
                 // Last Updated & Created At (Formatted, Sortable & Searchable)

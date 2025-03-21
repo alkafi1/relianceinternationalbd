@@ -22,18 +22,36 @@ class AccountController extends Controller
 
             // Apply custom sorting and filtering to the query
             return DataTables::of($query)
-                ->addColumn('account_name', fn($data) => $data->account_name ?? '')
-                ->filterColumn('account_name', fn($query, $keyword) => $query->where('account_name', 'LIKE', "%{$keyword}%"))
-                ->orderColumn('account_name', fn($query, $order) => $query->orderBy('account_name', $order))
+                ->addColumn('account_name', function ($data) {
+                    return $data->account_name ?? '';
+                })
+                // ->filterColumn('account_name', function ($query, $keyword) {
+                //     return $query->where('account_name', 'LIKE', "%{$keyword}%");
+                // })
+                ->orderColumn('account_name', function ($query, $order) {
+                    return $query->orderBy('account_name', $order);
+                })
 
-                ->addColumn('current_balance', fn($data) => $data->current_balance ?? '')
-                ->filterColumn('current_balance', fn($query, $keyword) => $query->where('current_balance', 'LIKE', "%{$keyword}%"))
-                ->orderColumn('current_balance', fn($query, $order) => $query->orderBy('current_balance', $order))
+                ->addColumn('current_balance', function ($data) {
+                    return $data->current_balance ?? '';
+                })
+                // ->filterColumn('current_balance', function ($query, $keyword) {
+                //     return $query->where('current_balance', 'LIKE', "%{$keyword}%");
+                // })
+                ->orderColumn('current_balance', function ($query, $order) {
+                    return $query->orderBy('current_balance', $order);
+                })
 
-                ->addColumn('account_type', fn($data) => $data->account_type ?? '')
-                ->filterColumn('account_type', fn($query, $keyword) => $query->where('account_type', 'LIKE', "%{$keyword}%"))
-                ->orderColumn('account_type', fn($query, $order) => $query->orderBy('account_type', $order))
-                
+                ->addColumn('account_type', function ($data) {
+                    return $data->account_type ?? '';
+                })
+                // ->filterColumn('account_type', function ($query, $keyword) {
+                //     return $query->where('account_type', 'LIKE', "%{$keyword}%");
+                // })
+                ->orderColumn('account_type', function ($query, $order) {
+                    return $query->orderBy('account_type', $order);
+                })
+
                 // Action Buttons (Not Sortable or Searchable)
                 ->addColumn('action', function ($data) {
                     $editUrl = route('party.edit', $data->uid);
@@ -51,14 +69,14 @@ class AccountController extends Controller
                 ->editColumn('created_at', function ($data) {
                     return $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '';
                 })
-                ->filterColumn('created_at', function ($query, $keyword) {
-                    $query->whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') LIKE ?", ["%{$keyword}%"]);
-                })
+                // ->filterColumn('created_at', function ($query, $keyword) {
+                //     $query->whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') LIKE ?", ["%{$keyword}%"]);
+                // })
                 ->orderColumn('created_at', function ($query, $order) {
                     $query->orderBy('created_at', $order);
                 })
                 // Allow raw HTML in action and status columns
-                ->rawColumns(['action',])
+                ->rawColumns(['action'])
                 ->toJson();
         }
     }

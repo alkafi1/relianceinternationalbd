@@ -57,4 +57,9 @@ return [
     'due_balance' => 'Due Balance',
     'remarks' => 'Remarks',
     'bill_date' => 'Bill Date',
+    'agent_name' => 'Agent Name',
+    'updated_at' => 'Updated At',
+    'account_name' => 'Account Name',
+    'current_balance' => 'Current Balance',
+    'account_type' => 'Account Type',
 ];
