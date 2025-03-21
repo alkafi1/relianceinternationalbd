@@ -102,12 +102,94 @@
                     searchable: true,
                 },
             ];
-            // Define extra parameters to send
-            const extraParams = {
-                status: 'approved',
-            };
+            const tableId = 'agent-data';
             // Initialize DataTable
-            initializeDataTable('agent-data', "{{ route('agent.datatable') }}", columns, extraParams);
+            var table = $(`#${tableId}`).DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: false,
+                ajax: {
+                    url: '{{ route('agent.datatable') }}',
+                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: function(d) {
+                        d.status = $('#agent-status-filter').val(); // Get the status filter value
+                    }
+                },
+                order: [
+                    [4, "desc"]
+                ], // Default sorting by Created At (descending)
+                columnDefs: [{
+                        targets: [5],
+                        orderable: false
+                    }, // Disable sorting on Action column
+                    {
+                        targets: '_all',
+                        searchable: true,
+                        orderable: true
+                    } // Enable sorting & searching for all columns
+                ],
+                columns: columns, // Use the columns array passed to the function
+                lengthMenu: [
+                    [5, 10, 30, 50, -1],
+                    [5, 10, 30, 50, "All"]
+                ],
+                pageLength: 10,
+                dom: "<'row'<'col-sm-4'l><'col-sm-4 d-flex justify-content-center'B><'col-sm-4'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                buttons: [{
+                        extend: 'colvis', // Show/hide columns
+                        text: '<i class="fas fa-columns"></i>',
+                        columns: ':not(:first-child)' // Exclude first column from hiding
+                    },
+                    {
+                        extend: 'copy',
+                        text: '<i class="fas fa-copy"></i>',
+                        title: 'Data Export',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="fas fa-file-excel"></i>',
+                        title: tableId + ' Export',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="fas fa-file-pdf"></i>',
+                        title: tableId + ' Export',
+                        exportOptions: {
+                            modifier: {
+                                search: 'applied',
+                                order: 'applied'
+                            }
+                        },
+                        customize: function(doc) {
+                            doc.defaultStyle.fontSize = 10;
+                            doc.styles.tableHeader.fontSize = 12;
+                            doc.styles.title.fontSize = 14;
+                        }
+                    }
+                ],
+                language: {
+                    search: '<div class="input-group">' +
+                        '<span class="input-group-text">' +
+                        '<i class="fas fa-search"></i>' +
+                        '</span>' +
+                        '_INPUT_' +
+                        '</div>'
+                }
+            });
+            $('#agent-status-filter').on('change', function() {
+                $('#agent-data').DataTable().ajax.reload(null, false);
+            });
 
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior

@@ -25,7 +25,14 @@ class TerminalStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'terminal_name' => 'required|string|max:255|unique:terminals,terminal_name,except,uid',
+            'terminal_name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('terminals', 'terminal_name')->where(function ($query) {
+                    return $query->where('terminal_type', $this->input('terminal_type'));
+                }),
+            ],
             'terminal_short_form' => 'required|string|max:50',
             'description' => 'nullable|string|max:500',
             'terminal_type' => [

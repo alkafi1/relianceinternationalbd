@@ -1,4 +1,17 @@
 <div class="table-responsive table-container">
+    <div class="d-flex align-items-center mb-5">
+        <div class="me-3">
+            <select class="form-select form-select-solid" id="agent-status-filter" data-placeholder="Select option">
+                <option value="">All</option>
+                <option value="approved">Approved</option>
+                <option value="unapproved">Unapproved</option>
+                <option value="deleted">Deleted</option>
+                <option value="lock">Lock</option>
+                <option value="suspended">Suspended</option>
+            </select>
+        </div>
+    </div>
+    
     <!--begin::Table-->
     <table class="table relance-datatable align-middle table-bordered fs-6 gy-5 m-auto display responsive"
         id="agent-data">
