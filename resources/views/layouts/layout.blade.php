@@ -8,8 +8,7 @@
     <meta name="description" content="Reliance International BD" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <meta name="keywords"
-        content="Reliance International BD" />
+    <meta name="keywords" content="Reliance International BD" />
     <meta charset="utf-8" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
@@ -32,6 +31,13 @@
     <link href="{{ asset('public/admin/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
         type="text/css" />
     <link href="{{ asset('public/admin/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+
+
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"
+        rel="stylesheet" /> --}}
+    {{-- <link href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css" rel="stylesheet" /> --}}
+
+
 
     <!--end::Global Stylesheets Bundle-->
 </head>

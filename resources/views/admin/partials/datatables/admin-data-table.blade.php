@@ -4,24 +4,24 @@
         id="admin-data">
         <!--begin::Table head-->
         <thead>
-            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0" style="background: #690f0f;">
-                <th class="min-w-50px fw-bold text-dark firstTheadColumn" style="font-weight: 900">
+            <tr class="text-start fw-bolder fs-7 text-uppercase gs-0" style="background: #690f0f;">
+                <th class="min-w-50px fw-bold text-dark" >
                     {{ __('english.admin_name') }}
                 </th>
-                <th class="min-w-50px fw-bold text-dark" style="font-weight: 900">
+                <th class="min-w-50px fw-bold text-dark" >
                     {{ __('english.email') }}
                 </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class=" min-w-50px fw-bold text-dark" >
                     {{ __('english.status') }}
                 </th>
                 
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class=" min-w-50px fw-bold text-dark" >
                     {{ __('english.last_updated') }}
                 </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class=" min-w-50px fw-bold text-dark" >
                     {{ __('english.created_at') }}
                 </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class=" min-w-50px fw-bold text-dark" >
                     {{ __('english.action') }}
                 </th>
             </tr>
@@ -29,7 +29,9 @@
         <tbody>
 
         </tbody>
+
         <!--end::Table head-->
     </table>
     <!--end::Table-->
 </div>
+

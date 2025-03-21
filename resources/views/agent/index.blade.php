@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-   @include('agent.partials.modal.status-modal')
+    @include('agent.partials.modal.status-modal')
 
     @push('custom-js')
         <script>
@@ -102,8 +102,12 @@
                     searchable: true,
                 },
             ];
+            // Define extra parameters to send
+            const extraParams = {
+                status: 'approved',
+            };
             // Initialize DataTable
-            initializeDataTable('agent-data', "{{ route('agent.datatable') }}", columns);
+            initializeDataTable('agent-data', "{{ route('agent.datatable') }}", columns, extraParams);
 
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior

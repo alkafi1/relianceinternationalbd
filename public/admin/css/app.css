@@ -12,7 +12,7 @@
 }
 
 div.dataTables_wrapper div.dataTables_processing {
-  color: #827175 !important;
+  color: #7d63da !important;
   border: 1px solid;
   animation: wave 1s infinite;
 }
@@ -81,80 +81,91 @@ div.dataTables_wrapper div.dataTables_processing {
   border-left-width: 1px !important;
   border-bottom-width: 1px !important;
 }
-.relance-datatable tbody tr:last-child td,
+/* .relance-datatable tbody tr:last-child td,
 .relance-datatable tbody tr:last-child th,
 .relance-datatable tfoot tr:last-child td,
 .relance-datatable tfoot tr:last-child th {
   border-bottom: 1px solid rgba(222, 226, 230, 0.2) !important;
   border-bottom-width: 1px !important;
-}
+} */
 
-.paginate_button {
-  padding: 0.5rem 0.75rem;
-  margin: 0 0.25rem;
-  font-size: 1rem;
-  line-height: 1.25;
-  color: #1E1E2D;
-  background-color: #fff;
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
-  cursor: pointer;
-}
-
-.paginate_button:hover {
-  background-color: #1E1E2D;
-  color: #fff;
-}
-
-.paginate_button.current {
-  background-color: #1E1E2D;
-  color: #fff;
-}
-
-.dataTables_filter input {
-  border: 1px solid #e4e6ef;
-}
-
-.dataTables_filter .input-group {
-  flex-wrap: nowrap !important;
-}
-
-.dataTables_filter input[type=search] {
-  width: 100% !important;
-}
-
-/* Custom CSS for pagination */
+/* Modern Pagination Styling */
 .pagination {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 5px;
   margin-top: 20px;
 }
-.pagination svg {
-  width: 20px;
+
+.pagination ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
+
+/* Page Items */
+.pagination li.page-item {
+  margin: 0;
+}
+
+.pagination a.page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 35px;
+  height: 35px;
+  padding: 5px 10px;
+  background-color: #f8f9fa;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+  border-radius: 0;
+}
+
+/* Active Page */
+.pagination li.active a.page-link {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+}
+
+/* Hover Effect */
+.pagination a.page-link:hover {
+  background-color: #2435c9;
+  color: #fff;
+}
+
+/* Previous and Next Buttons */
+.pagination .page-item:first-child a.page-link,
+.pagination .page-item:last-child a.page-link {
+  font-weight: bold;
+  background-color: #eee;
+}
+
+.pagination .page-item:first-child a.page-link:hover,
+.pagination .page-item:last-child a.page-link:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Hide Unnecessary Navigation */
 .pagination nav div.flex-1.sm\:hidden {
   display: none;
 }
-.pagination ul.pagination {
-  background-color: transparent;
+
+/* SVG Icon Size */
+.pagination svg {
+  width: 18px;
 }
-.pagination li.page-item {
-  margin: 0 5px;
-  list-style: none;
-  display: inline;
-}
-.pagination a.page-link {
-  background-color: #4CAF50;
-  color: white;
-  border: 1px solid #4CAF50;
-  padding: 5px 10px;
-  text-decoration: none;
-  border-radius: 3px;
-  transition: background-color 0.3s;
-}
-.pagination a.page-link:hover {
-  background-color: #45a049;
-}
+
 
 table tbody tr:last-child td {
   border-bottom: 1px solid rgba(222, 226, 230, 0.2) !important;

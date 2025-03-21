@@ -43,13 +43,13 @@
                     orderable: true,
                     searchable: true
                 },
-                {
-                    data: 'party_name', // Corresponds to the 'party_id' field in your data
-                    name: 'party_name', // Name for server-side processing
-                    className: 'fw-bold text-dark', // Add classes for styling
-                    orderable: true,
-                    searchable: true
-                },
+                // {
+                //     data: 'party_name', // Corresponds to the 'party_id' field in your data
+                //     name: 'party_name', // Name for server-side processing
+                //     className: 'fw-bold text-dark', // Add classes for styling
+                //     orderable: true,
+                //     searchable: true
+                // },
                 {
                     data: 'agent', // Corresponds to the 'email' field in your data
                     name: 'agent',

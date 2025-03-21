@@ -3,6 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 event-list-col">
+
             <div class="card">
                 <div class="card-body">
                     @include('admin.partials.datatables.admin-data-table')
@@ -15,8 +16,7 @@
     @push('custom-js')
         <script>
             // Define columns
-            const columns = [
-                {
+            const columns = [{
                     data: 'display_name', // Corresponds to the 'admin_name' field in your data
                     name: 'display_name',
                     className: 'min-w-50px fw-bold text-dark firstTheadColumn',
@@ -162,6 +162,13 @@
                             alert('An error occurred while submitting the form.');
                         }
                     });
+                });
+            });
+
+            $('#toggle-filters-container').on('click', function() {
+                $('#filter-section').slideToggle(300); // Slide up/down animation
+                $('#toggle-filters').fadeOut(150, function() { // Fade out the icon before switching
+                    $(this).toggleClass('fa-filter fa-times').fadeIn(150); // Switch icon with fade effect
                 });
             });
         </script>
