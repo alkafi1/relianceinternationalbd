@@ -39,7 +39,8 @@ return new class extends Migration
 
             // Remember token for "remember me" functionality
             $table->rememberToken();
-
+            
+            $table->softDeletes();
             // Timestamps for created_at and updated_at
             $table->timestamps();
         });

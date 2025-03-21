@@ -102,6 +102,7 @@ class AgentController extends Controller
     {
         // Validate the request
         $validatedData = $request->validated();
+
         // $agent = Agent::find($agent);
         $agent->update($validatedData);
 

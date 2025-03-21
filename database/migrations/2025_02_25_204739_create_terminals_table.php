@@ -37,7 +37,7 @@ return new class extends Migration
 
             // Status of the terminal (0=Delete, 1=Active, 2=Deactive), default value is 1 (Active)
             $table->enum('status', TerminalStatusEnum::getValues())->default(TerminalStatusEnum::ACTIVE()->value);
-
+            $table->softDeletes();
             // Automatically adds 'created_at' and 'updated_at' timestamps for tracking
             $table->timestamps();
         });

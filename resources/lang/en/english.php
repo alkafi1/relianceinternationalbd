@@ -62,4 +62,6 @@ return [
     'account_name' => 'Account Name',
     'current_balance' => 'Current Balance',
     'account_type' => 'Account Type',
+    'Initialized_by_agent' => 'Initialized By Agent',
+    'Initialized_by_agent' => 'Initialized By Admin',
 ];

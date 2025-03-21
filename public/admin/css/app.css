@@ -1,3 +1,30 @@
+@media print {
+  @page {
+      size: landscape; /* Set landscape orientation */
+  }
+
+  body {
+      writing-mode: horizontal-tb; /* Ensure text is horizontal */
+  }
+
+  table {
+      width: 100% !important; /* Ensure table takes full width */
+      font-size: 10pt; /* Adjust font size for better readability */
+  }
+
+  /* Add custom header and footer */
+  .print-header {
+      text-align: center;
+      font-size: 16pt;
+      margin-bottom: 20px;
+  }
+
+  .print-footer {
+      text-align: center;
+      font-size: 8pt;
+      margin-top: 20px;
+  }
+}
 .cke_notifications_area {
   display: none !important;
 }

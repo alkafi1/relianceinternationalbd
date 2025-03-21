@@ -4,12 +4,13 @@ namespace App\Models;
 
 use App\Traits\CommonFillableTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class BaseModel extends Model
 {
 
-    use CommonFillableTrait;
+    use CommonFillableTrait, SoftDeletes;
 
     /**
      * The primary key for the model.
@@ -46,30 +47,30 @@ class BaseModel extends Model
             }
         });
 
-        // // Set `created_by` when creating
-        // static::creating(function ($model) {
-        //     if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
-        //         $model->created_by_uid = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
-        //         $model->created_by_type = get_class($model);
-        //     }
-        // });
+        // Set `created_by` when creating
+        static::creating(function ($model) {
+            if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
+                $model->created_by_uid = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
+                $model->created_by_type = get_class($model);
+            }
+        });
 
-        // // Set `updated_by` when updating
-        // static::updating(function ($model) {
-        //     if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
-        //         $model->updated_by_uid = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
-        //         $model->updated_by_type = get_class($model);
-        //     }
-        // });
+        // Set `updated_by` when updating
+        static::updating(function ($model) {
+            if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
+                $model->updated_by_uid = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
+                $model->updated_by_type = get_class($model);
+            }
+        });
 
-        // // Set `deleted_by` when deleting
-        // static::deleting(function ($model) {
-        //     if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
-        //         $model->deleted_by_uid = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
-        //         $model->deleted_by_type = get_class($model);
-        //         $model->save(); // Save the `deleted_by` field before deletion
-        //     }
-        // });
+        // Set `deleted_by` when deleting
+        static::deleting(function ($model) {
+            if (auth()->check() || auth('agent')->check() || auth('web')->check()) {
+                $model->deleted_by_uid = auth()->user()->uid ?? auth('agent')->user()->uid ?? auth('web')->user()->uid;
+                $model->deleted_by_type = get_class($model);
+                $model->save(); // Save the `deleted_by` field before deletion
+            }
+        });
     }
 
     /**

@@ -26,13 +26,16 @@ return new class extends Migration
         foreach ($tables as $table) {
             Schema::table($table, function (Blueprint $table) {
                 $table->string('created_by_type', 50)->nullable()->after('updated_at');
-                $table->string('created_by_uid', 50)->nullable()->after('created_by_type');
+                $table->string('created_by_uid', 50)->nullable()->after('created_by_type')
+                    ->constrained('users')->nullOnDelete();
 
                 $table->string('updated_by_type', 50)->nullable()->after('created_by_uid');
-                $table->string('updated_by_uid', 50)->nullable()->after('updated_by_type');
+                $table->string('updated_by_uid', 50)->nullable()->after('updated_by_type')
+                    ->constrained('users')->nullOnDelete();
 
                 $table->string('deleted_by_type', 50)->nullable()->after('updated_by_uid');
-                $table->string('deleted_by_uid', 50)->nullable()->after('deleted_by_type');
+                $table->string('deleted_by_uid', 50)->nullable()->after('deleted_by_type')
+                    ->constrained('users')->nullOnDelete();
             });
         }
     }

@@ -23,6 +23,22 @@ return new class extends Migration
             $table->decimal('advanced_received', 10, 2);
             $table->decimal('due', 10, 2);
             $table->decimal('grand_total', 10, 2);
+            $table->softDeletes();
+            
+            $table->string('created_by_type', 50)->nullable();
+            $table->string('created_by_uid', 50)->nullable();
+
+            $table->foreign('created_by_uid')->references('uid')->on('users')->onDelete('set null');
+
+            $table->string('updated_by_type', 50)->nullable();
+            $table->string('updated_by_uid', 50)->nullable();
+
+            $table->foreign('updated_by_uid')->references('uid')->on('users')->onDelete('set null');
+
+            $table->string('deleted_by_type', 50)->nullable();
+            $table->string('deleted_by_uid', 50)->nullable();
+
+            $table->foreign('deleted_by_uid')->references('uid')->on('users')->onDelete('set null');
             $table->timestamps();
 
         });

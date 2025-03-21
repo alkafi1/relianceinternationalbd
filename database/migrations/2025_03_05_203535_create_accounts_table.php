@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('account_name', 256)->nullable();
             $table->enum('account_type', AccountTypeEnum::getValues())->nullable();
             $table->float('current_balance')->default(0.00);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

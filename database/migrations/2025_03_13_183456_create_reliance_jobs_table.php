@@ -44,6 +44,7 @@ return new class extends Migration
             $table->enum('status', [JobStatusEnum::getValues()]); // Status
             $table->decimal('voucher_amount', 10, 2); // Voucher Amount
             $table->string('job_no'); // Job No
+            $table->softDeletes();
             $table->timestamps(); // Created At and Updated At timestamps
         });
     }

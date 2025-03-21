@@ -21,8 +21,24 @@ return new class extends Migration
             $table->string('job_expend_field'); // Expense Type
             $table->decimal('amount', 10, 2); // Amount
 
-            
+            $table->softDeletes();
             $table->timestamps();
+            $table->string('created_by_type', 50)->nullable();
+            $table->string('created_by_uid', 50)->nullable();
+
+            $table->foreign('created_by_uid')->references('uid')->on('users')->onDelete('set null');
+
+            $table->string('updated_by_type', 50)->nullable();
+            $table->string('updated_by_uid', 50)->nullable();
+
+            $table->foreign('updated_by_uid')->references('uid')->on('users')->onDelete('set null');
+
+            $table->string('deleted_by_type', 50)->nullable();
+            $table->string('deleted_by_uid', 50)->nullable();
+
+            $table->foreign('deleted_by_uid')->references('uid')->on('users')->onDelete('set null');
+            
+            
         });
     }
 

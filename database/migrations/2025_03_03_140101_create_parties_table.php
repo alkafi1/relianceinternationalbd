@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('phone', 50)->nullable(); // Phone number (optional)
             $table->string('address', 256); // Member's address
             $table->enum('status', PartyStatusEnum::getValues())->default(PartyStatusEnum::APPROVED()->value);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
