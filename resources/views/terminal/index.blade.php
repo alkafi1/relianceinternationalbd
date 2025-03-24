@@ -46,34 +46,23 @@
             </div>
         </div>
     </div>
+    @include('terminal.modal.edit-modal')
+    @include('terminal.modal.show-modal')
     @push('custom-js')
         <script>
             // Define columns
-            const columns = [{
-                    data: 'terminal_id', // Corresponds to the 'terminal_id' field in your data
-                    name: 'terminal_id', // Name for server-side processing
-                    className: 'fw-bold text-dark', // Add classes for styling
-                    orderable: true, // Allow sorting
-                    searchable: true // Allow searching
+            const columns = [
+                {
+                    data: 'serial', // Corresponds to the 'terminal_name' field in your data
+                    name: 'serial',
+                    className: 'text-center min-w-50px fw-bold text-dark firstTheadColumn',
+                    orderable: true,
+                    searchable: true
                 },
                 {
                     data: 'terminal_name', // Corresponds to the 'terminal_name' field in your data
                     name: 'terminal_name',
                     className: 'min-w-50px fw-bold text-dark firstTheadColumn',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'terminal_short_form', // Corresponds to the "today's_job" field in your data
-                    name: 'terminal_short_form',
-                    className: 'min-w-150px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'description', // Corresponds to the 'phone' field in your data
-                    name: 'description',
-                    className: 'min-w-50px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
@@ -92,22 +81,38 @@
                     searchable: true
                 },
                 {
+                    data: 'description', // Corresponds to the 'phone' field in your data
+                    name: 'description',
+                    className: 'min-w-50px fw-bold text-dark',
+                    orderable: true,
+                    searchable: true
+                },
+                
+                {
                     data: 'status', // Corresponds to the 'full_address' field in your data
                     name: 'status',
                     className: 'min-w-100px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
+                
                 {
-                    data: 'created_at', // Corresponds to the 'status' field in your data
-                    name: 'created_at',
+                    data: 'action', // Corresponds to the 'last_updated' field in your data
+                    name: 'action',
                     className: 'min-w-100px fw-bold text-dark',
                     orderable: true,
                     searchable: true,
                 },
                 {
-                    data: 'action', // Corresponds to the 'last_updated' field in your data
-                    name: 'action',
+                    data: 'last_updated', // Corresponds to the 'status' field in your data
+                    name: 'last_updated',
+                    className: 'min-w-100px fw-bold text-dark',
+                    orderable: true,
+                    searchable: true,
+                },
+                {
+                    data: 'created_at', // Corresponds to the 'status' field in your data
+                    name: 'created_at',
                     className: 'min-w-100px fw-bold text-dark',
                     orderable: true,
                     searchable: true,
@@ -184,6 +189,55 @@
                     }
                 });
             }
+
+            $(document).on('click', '.edit', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+
+                const url = $(this).data('url');
+                // Show SweetAlert confirmation dialog
+                
+                $.ajax({
+                    url: url,
+                    type: 'GET', // or 'GET' depending on your server endpoint
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }, // You can send additional data if needed
+                    success: function(response) {
+                        $('#exampleModal').modal('show');
+                        $('.modal-body').html(response.html);
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle AJAX error
+                        toastr.error('An error occurred.');
+                        // Swal.fire('Error!', 'An error occurred.', 'error');
+                    }
+                });
+            });
+
+            // 
+            $(document).on('click', '.detils', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+
+                const url = $(this).data('url');
+                // Show SweetAlert confirmation dialog
+                
+                $.ajax({
+                    url: url,
+                    type: 'GET', // or 'GET' depending on your server endpoint
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }, // You can send additional data if needed
+                    success: function(response) {
+                        $('#exampleModalShow').modal('show');
+                        $('.modal-body').html(response.html);
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle AJAX error
+                        toastr.error('An error occurred.');
+                        // Swal.fire('Error!', 'An error occurred.', 'error');
+                    }
+                });
+            });
         </script>
     @endpush
 @endsection

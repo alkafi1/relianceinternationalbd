@@ -1,9 +1,20 @@
 @extends('layouts.layout')
-@section('breadcame', 'Terminal Expense Create')
+@section('breadcame', 'Reliance International Terminal Expense Fields')
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
+                <div class="card-header border-0 pt-5">
+                    <h2 class="card-title align-items-start flex-column">
+                        <span class="card-label fw-bold fs-3 mb-1">Add Expense Fields</span>
+                    </h2>
+                    <div class="card-toolbar">
+                        <a href="{{ route('terminal.expense.index') }}" class="btn btn-sm btn-light-primary">
+                            <i class="fas fa-list"></i> Expense List
+                        </a>
+                    </div>
+                </div>
+                <hr>
                 <div class="card-body">
                     <form action="{{ route('terminal.expense.store') }}" id="terminalExpenseForm" method="POST">
                         @csrf <!-- Add CSRF token for security -->
@@ -12,7 +23,7 @@
                             <!-- Title -->
                             <div class="col-md-12">
                                 <div class="form-group mt-3">
-                                    <label for="title" class="required">Title</label>
+                                    <label for="title" class="required">Expense Fields Title</label>
                                     <input type="text" id="title" name="title" class="form-control mt-3" required>
                                 </div>
                             </div>
@@ -50,8 +61,8 @@
                             <!-- Comission Rate -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="comission_rate">Comission Rate</label>
-                                    <input type="number" id="comission_rate" name="comission_rate"
+                                    <label for="comission_rate">Commission Rate Rate</label>
+                                    <input type="number" step="0.01" id="comission_rate" name="comission_rate"
                                         class="form-control mt-3">
                                 </div>
                             </div>
@@ -59,7 +70,7 @@
                             <!-- Minimum Comission -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="minimum_comission">Minimum Comission</label>
+                                    <label for="minimum_comission">Minimum Commission Rate</label>
                                     <input type="number" id="minimum_comission" name="minimum_comission"
                                         class="form-control mt-3">
                                 </div>
@@ -79,16 +90,16 @@
                             </div>
                         </div>
 
-                        <!-- Dynamic Job Expenditure Fields -->
+                        <!-- Dynamic Job Job Expense Fieldss -->
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group mt-3">
-                                    <label for="job_expend_field" class="required">Job Expenditure</label>
+                                    <label for="job_expend_field" class="required">Job Expense Fields</label>
                                     <div id="job_expenditure_fields">
                                         <div class="row mb-3">
                                             <div class="col-md-5">
                                                 <input type="text" name="job_expend_field[]" class="form-control"
-                                                    placeholder="Expenditure Field" required>
+                                                    placeholder="Job Expense Fields" required>
                                             </div>
                                             <div class="col-md-5">
                                                 <input type="number" name="amount[]" class="form-control"
@@ -173,7 +184,7 @@
                 const newField = `
                 <div class="row mb-3">
                     <div class="col-md-5">
-                        <input type="text" name="job_expend_field[]" class="form-control" placeholder="Expenditure Field" required>
+                        <input type="text" name="job_expend_field[]" class="form-control" placeholder="Job Expense Fields" required>
                     </div>
                     <div class="col-md-5">
                         <input type="number" name="amount[]" class="form-control" placeholder="Amount" required>

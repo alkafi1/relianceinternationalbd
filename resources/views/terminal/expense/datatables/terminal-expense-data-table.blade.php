@@ -5,23 +5,26 @@
         <!--begin::Table head-->
         <thead>
             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                <th class="text-center min-w-50px fw-bold text-dark party" style="font-weight: 900">
+                    {{ __('english.serial') }}
+                </th>
+                <th class="min-w-30px fw-bold text-dark" style="font-weight: 900">
+                    {{ __("english.expense_field_title") }}
+                </th>
                 <th class="min-w-50px fw-bold text-dark party" style="font-weight: 900">
                     {{ __('english.terminal_name') }}
                 </th>
-                <th class="min-w-30px fw-bold text-dark" style="font-weight: 900">
-                    {{ __("english.title") }}
-                </th>
-                <th class="min-w-150px fw-bold text-dark" style="font-weight: 900">
+                <th class="min-w-50px fw-bold text-dark" style="font-weight: 900">
                     {{ __('english.job_type') }}
                 </th>
                 <th class="min-w-10px fw-bold text-dark" style="font-weight: 900">
-                    {{ __('english.comission_rate') }}
+                    {{ __('english.commission_rate') }}
                 </th>
-                <th class="party min-w-100px fw-bold text-dark party" style="font-weight: 900">
-                    {{ __('english.minimum_comission') }}</th>
+                <th class="party min-w-50px fw-bold text-dark party" style="font-weight: 900">
+                    {{ __('english.minimum_commission') }}</th>
                 <th class="party min-w-100px fw-bold text-dark party" style="font-weight: 900">
                     {{ __('english.status') }}</th>
-                <th class="party min-w-100px fw-bold text-dark party" style="font-weight: 900">
+                <th class="party min-w-150px fw-bold text-dark party" style="font-weight: 900">
                     {{ __('english.action') }}</th>
             </tr>
         </thead>
