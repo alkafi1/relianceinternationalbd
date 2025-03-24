@@ -507,10 +507,7 @@ class TerminalController extends Controller
         $terminalExpense = TerminalExpense::find($uid);
         // Store the terminal
         $terminalExpense = $this->terminalService->expenseUpdate($validatedData, $terminalExpense);
-        // return redirect()->route('terminal.expense.index')->with([
-        //     'success' => 'Terminal expense update successfully.',
-        // ]);
-        dd(1);
+        
         // Return a success response
         return response()->json([
             'success' => true,
