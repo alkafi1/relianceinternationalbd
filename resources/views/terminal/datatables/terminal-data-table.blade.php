@@ -5,29 +5,29 @@
         <!--begin::Table head-->
         <thead>
             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                <th class="fw-bold text-dark" style="font-weight: 900">
-                    {{ __('english.terminal_id') }}
+                <th class=" text-center fw-bold text-dark" style="font-weight: 900">
+                    {{ __('english.serial') }}
                 </th>
                 <th class="min-w-50px fw-bold text-dark firstTheadColumn" style="font-weight: 900">
                     {{ __('english.terminal_name') }}
                 </th>
-                <th class="min-w-30px fw-bold text-dark" style="font-weight: 900">
-                    {{ __("english.terminal_short_form") }}
-                </th>
-                <th class="min-w-150px fw-bold text-dark" style="font-weight: 900">
-                    {{ __('english.description') }}
-                </th>
                 <th class="min-w-50px fw-bold text-dark" style="font-weight: 900">
                     {{ __('english.terminal_type') }}
                 </th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class="min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
                     {{ __('english.address') }}</th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class="min-w-150px fw-bold text-dark" style="font-weight: 900">
+                    {{ __('english.about') }}
+                </th>
+                <th class="min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
                     {{ __('english.status') }}</th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
-                    {{ __('english.created_at') }}</th>
-                <th class="text-end min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                <th class="min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
                     {{ __('english.action') }}</th>
+                
+                <th class="min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                    {{ __('english.last_update') }}</th>
+                <th class="min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
+                    {{ __('english.created_at') }}</th>
 
             </tr>
         </thead>

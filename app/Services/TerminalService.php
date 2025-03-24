@@ -38,7 +38,6 @@ class  TerminalService
 
     public function expenseStore(array $validatedData): ?array
     {
-        // dd($validatedData);
         // Use a database transaction to ensure data integrity
         $terminalExpense = DB::transaction(function () use ($validatedData) {
             // Check if a terminal expense record already exists, if not, create it
@@ -83,6 +82,77 @@ class  TerminalService
                     'status' => $validatedData['status'],
                 ]
             );
+        }
+    }
+
+
+    public function expenseUpdate(array $validatedData, TerminalExpense $terminalExpense): ?array
+    {
+        // Use a database transaction to ensure data integrity
+        $terminalExpense = DB::transaction(function () use ($validatedData, $terminalExpense) {
+           
+            // Update the existing terminal expense record
+            $terminalExpense->update([
+                'terminal_id' => $validatedData['terminal_id'],
+                'title' => $validatedData['title'],
+                'job_type' => $validatedData['job_type'],
+                'comission_rate' => $validatedData['comission_rate'],
+                'minimum_comission' => $validatedData['minimum_comission'],
+                'status' => $validatedData['status'],
+            ]);
+
+            // Update the job expense records associated with the terminal expense
+            $this->updateJobExpenses($terminalExpense->uid, $validatedData);
+
+            return $terminalExpense;
+        });
+
+        // Return the updated terminal expense data
+        return [
+            'terminalExpense' => $terminalExpense,
+        ];
+    }
+
+
+    protected function updateJobExpenses($terminalExpenseId, array $validatedData): void
+    {
+        // Get all existing job expenses for this terminalExpenseId
+        $existingJobExpenses = JobExpense::where('terminal_expense_id', $terminalExpenseId)->get();
+
+        // Extract current job expenditure fields from the request
+        $updatedFields = $validatedData['job_expend_field'];
+
+        // Delete old records that are not in the updated request
+        foreach ($existingJobExpenses as $expense) {
+            if (!in_array($expense->job_expend_field, $updatedFields)) {
+                $expense->delete();
+            }
+        }
+
+        // Loop through the updated data
+        foreach ($updatedFields as $index => $field) {
+            // Find if the job expense already exists
+            $jobExpense = JobExpense::where('terminal_expense_id', $terminalExpenseId)
+                ->where('job_expend_field', $field)
+                ->first();
+
+            if ($jobExpense) {
+                // Update existing record
+                $jobExpense->update([
+                    'terminal_id' => $validatedData['terminal_id'],
+                    'amount' => $validatedData['amount'][$index],
+                    'status' => $validatedData['status'],
+                ]);
+            } else {
+                // Create new record if not found
+                JobExpense::create([
+                    'terminal_expense_id' => $terminalExpenseId,
+                    'job_expend_field' => $field,
+                    'terminal_id' => $validatedData['terminal_id'],
+                    'amount' => $validatedData['amount'][$index],
+                    'status' => $validatedData['status'],
+                ]);
+            }
         }
     }
 }

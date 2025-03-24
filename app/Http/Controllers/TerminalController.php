@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Enums\TerminalStatusEnum;
 use App\Enums\TerminalTypeEnum;
 use App\Http\Requests\Terminal\TerminalExpenseStoreRequest;
+use App\Http\Requests\Terminal\TerminalExpenseUpdateRequest;
 use App\Http\Requests\Terminal\TerminalStoreRequest;
+use App\Http\Requests\Terminal\TerminalUpdateRequest;
 use App\Http\Resources\Termina\Expesne\TerminalExpenseShowResource;
 use App\Models\Jobexpense;
 use App\Models\Terminal;
@@ -68,6 +70,65 @@ class TerminalController extends Controller
     }
 
     /**
+     * Show the form for editing the specified agent.
+     *
+     * @param \App\Models\Agent $agent The agent instance to be edited
+     * @return \Illuminate\View\View
+     */
+    public function edit($uid)
+    {
+        $terminal = Terminal::where('uid', $uid)->first();
+        $html = view('terminal.edit-form', compact('terminal'))->render();
+        return response()->json([
+            'success' => true,
+            'html' => $html,
+        ], 200);
+    }
+
+    /**
+     * Update the specified agent in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Agent $agent
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePost(TerminalUpdateRequest $request, $uid)
+    {
+        // Validate the request
+        $validatedData = $request->validated();
+
+        $terminal = Terminal::find($uid);
+        $terminal->update($validatedData);
+        // Return a success response
+        return response()->json([
+            'success' => true,
+            'message' => 'Terminal updated successfully.',
+            'data' => $terminal,
+        ], 201);
+    }
+
+    /**
+     * Show the details of the specified terminal.
+     *
+     * This method retrieves a terminal by its unique identifier (UID),
+     * renders its details using a Blade view, and returns the rendered HTML
+     * along with a success status in a JSON response.
+     *
+     * @param string $uid The unique identifier of the terminal to be displayed.
+     * @return \Illuminate\Http\JsonResponse A JSON response containing the success status and rendered HTML.
+     */
+
+    public function showTerminal($uid)
+    {
+        $terminal = Terminal::where('uid', $uid)->first();
+        $html = view('terminal.show', compact('terminal'))->render();
+        return response()->json([
+            'success' => true,
+            'html' => $html,
+        ], 200);
+    }
+
+    /**
      * Toggle the status of a terminal.
      *
      * @param \App\Models\Terminal $terminal
@@ -97,6 +158,12 @@ class TerminalController extends Controller
         return Terminal::destroyModel($terminal);
     }
 
+    /**
+     * Retrieve a list of terminals, filtered by the specified status and/or type, and return the data in a JSON response.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function datatable(Request $request)
     {
         if ($request->ajax()) {
@@ -108,6 +175,11 @@ class TerminalController extends Controller
                 $query->where('terminal_type', $request->type);
             }
             return DataTables::of($query)
+                // Serial Number Column
+                ->addColumn('serial', function ($data) {
+                    static $index = 0;
+                    return ++$index;
+                })
                 // terminal ID (Sortable & Searchable)
                 ->addColumn('terminal_id', function ($data) {
                     return $data->terminal_id ?? '';
@@ -145,6 +217,7 @@ class TerminalController extends Controller
                 ->addColumn('status', function ($data) {
                     $statusUrl = route('terminal.status', $data->uid);
 
+
                     return '<span class="status badge badge-light-' .
                         ($data->status == TerminalStatusEnum::ACTIVE()->value ? 'success' : 'danger') . '"
                                 title="Status: ' .
@@ -168,11 +241,13 @@ class TerminalController extends Controller
                 ->addColumn('action', function ($data) {
 
                     $deleteUrl = route('terminal.destroy', $data->uid);
+                    $editUrl = route('terminal.edit', $data->uid);
+                    $showUrl = route('terminal.show', $data->uid);
                     return '
-                        <a href="javascript:void(0)" class="show text-info me-2" data-id="' . $data->uid . '">
+                        <a href="javascript:void(0)" class="detils text-info me-2" data-id="' . $data->uid . '"  data-url="' . $showUrl . '">
                             <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
                         </a>
-                        <a href="javascript:void(0)" class="edit text-primary me-2" data-id="' . $data->uid . '">
+                        <a href="javascript:void(0)" class="edit text-primary me-2" data-id="' . $data->uid . '"  data-url="' . $editUrl . '">
                             <i class="fas fa-edit text-primary" style="font-size: 16px;"></i>
                         </a>
                         <a href="javascript:void(0)" class="delete text-danger" data-id="' . $data->uid . '" data-url="' . $deleteUrl . '">
@@ -202,7 +277,7 @@ class TerminalController extends Controller
                 })
 
                 // Allow raw HTML in action and status columns
-                ->rawColumns(['action', 'status', 'terminal_type'])
+                ->rawColumns(['action', 'status', 'terminal_type', 'serial'])
                 ->toJson();
         }
     }
@@ -222,7 +297,7 @@ class TerminalController extends Controller
     public function datatableTerminalExpense(Request $request)
     {
         if ($request->ajax()) {
-            $query = TerminalExpense::with('terminal');
+            $query = TerminalExpense::latest()->with('terminal');
             if ($request->has('status') && !empty($request->status)) {
                 $query->where('status', $request->status);
             }
@@ -230,6 +305,11 @@ class TerminalController extends Controller
                 $query->where('job_type', $request->type);
             }
             return DataTables::of($query)
+                // Serial Number Column
+                ->addColumn('serial', function ($data) {
+                    static $index = 0;
+                    return ++$index;
+                })
                 // Terminal Name (Sortable & Searchable)
                 ->addColumn('terminal_name', function ($data) {
                     return $data->terminal->terminal_name ?? ''; // Assuming a relationship with the Terminal model
@@ -302,9 +382,13 @@ class TerminalController extends Controller
                     $deleteUrl = route('terminal.expense.destroy', $data->uid);
 
                     $showUrl = route('terminal.expense.show', $data->uid);
+                    $editUrl = route('terminal.expense.edit', $data->uid);
                     return '
                     <a href="javascript:void(0)" class="details text-info me-2" data-id="' . $data->uid . '" data-url="' . $showUrl . '">
                         <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
+                    </a>
+                    <a href="javascript:void(0)" class="edit text-primary me-2" data-id="' . $data->uid . '" data-url="' . $editUrl . '">
+                        <i class="fas fa-edit text-primary" style="font-size: 16px;"></i>
                     </a>
                     <a href="javascript:void(0)" class="delete text-danger" data-id="' . $data->uid . '" data-url="' . $deleteUrl . '">
                         <i class="fas fa-trash text-danger" style="font-size: 16px;"></i>
@@ -402,6 +486,37 @@ class TerminalController extends Controller
             'data' => $terminalExpense,
             'html' => $html
         ], 200);
+    }
+
+    public function editExpense($uid)
+    {
+        $terminalExpense = TerminalExpense::with('jobExpense')->where('uid', $uid)->first();
+        $terminals = Terminal::where('status', TerminalStatusEnum::ACTIVE()->value)->get();
+        $html = view('terminal.expense.edit-form', compact('terminalExpense', 'terminals'))->render();
+        return response()->json([
+            'success' => false,
+            'html' => $html,
+        ], 200);
+    }
+
+    public function updateExpense(TerminalExpenseUpdateRequest $request, $uid)
+    {
+        // Validate the request
+        $validatedData = $request->validated();
+
+        $terminalExpense = TerminalExpense::find($uid);
+        // Store the terminal
+        $terminalExpense = $this->terminalService->expenseUpdate($validatedData, $terminalExpense);
+        // return redirect()->route('terminal.expense.index')->with([
+        //     'success' => 'Terminal expense update successfully.',
+        // ]);
+        dd(1);
+        // Return a success response
+        return response()->json([
+            'success' => true,
+            'message' => 'Terminal expense update successfully.',
+            'data' => $terminalExpense,
+        ], 201);
     }
 
     // public function datatableTerminalExpenseJObField(Request $request, $terminalExpense)

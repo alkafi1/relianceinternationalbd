@@ -67,10 +67,11 @@ Route::prefix('admin')->group(function () {
             Route::post('/store', [TerminalController::class, 'store'])->name('terminal.store');
             Route::put('/status/{terminal}', [TerminalController::class, 'updateStatus'])->name('terminal.status');
             Route::delete('/{terminal}', [TerminalController::class, 'destroy'])->name('terminal.destroy');
+            Route::get('/{terminal}/show', [TerminalController::class, 'showTerminal'])->name('terminal.show');
 
             Route::get('/{terminal}/edit', [TerminalController::class, 'edit'])->name('terminal.edit');
-            Route::put('/{terminal}/update', [TerminalController::class, 'update'])->name('terminal.update');
-
+            Route::post('/{terminal}/update/post', [TerminalController::class, 'updatePost'])->name('terminal.update.post');
+            
             Route::get('/datatable/terminal', [TerminalController::class, 'datatable'])->name('terminal.datatable');
 
             // expense
@@ -80,6 +81,10 @@ Route::prefix('admin')->group(function () {
                 Route::post('/store', [TerminalController::class, 'expenseStore'])->name('terminal.expense.store');
                 Route::put('/status/{terminalExpense}', [TerminalController::class, 'updateStatusExpense'])->name('terminal.expense.status');
                 Route::put('/show/{terminalExpense}', [TerminalController::class, 'show'])->name('terminal.expense.show');
+
+                Route::get('/edit/{terminalExpense}', [TerminalController::class, 'editExpense'])->name('terminal.expense.edit');
+                
+                Route::post('/update/{terminalExpense}/post', [TerminalController::class, 'updateExpense'])->name('terminal.expense.update');
                 Route::delete('/{terminalExpense}', [TerminalController::class, 'destroyExpense'])->name('terminal.expense.destroy');
                 Route::get('/datatable/terminal', [TerminalController::class, 'datatableTerminalExpense'])->name('terminal.expense.datatable');
             });

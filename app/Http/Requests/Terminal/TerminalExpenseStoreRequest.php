@@ -25,7 +25,7 @@ class TerminalExpenseStoreRequest extends FormRequest
             'title' => 'required|string|max:256',
             'terminal_id' => 'required|exists:terminals,uid',
             'job_type' => 'required|in:import,export,both',
-            'comission_rate' => 'required|integer',
+            'comission_rate' => 'required',
             'minimum_comission' => 'nullable|integer',
             'status' => 'required|in:active,deactive',
             'job_expend_field' => 'required|array', // Validate job_expend_field array

@@ -91,6 +91,12 @@ function initializeDataTable(tableId, columns, ajaxUrl, filters = {}) {
                     }
                 }
             },
+            {
+                text: '<i class="fas fa-sync-alt"></i>',
+                action: function (e, dt, node, config) {
+                    dt.ajax.reload(null, false); // Reload table without resetting paging
+                }
+            },
         ],
         scrollX: true, // Enable horizontal scrolling
         language: {

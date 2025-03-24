@@ -85,9 +85,12 @@ class Admincontroller extends Controller
      */
     public function datatable(Request $request)
     {
-
+        
         if ($request->ajax()) {
-            $query = User::query();
+            $query = User::whereDoesntHave('roles', function($query) {
+                $query->where('name', 'super-admin');
+            });
+
             if ($request->has('status') && !empty($request->status)) {
                 $query->where('status', $request->status);
             }
