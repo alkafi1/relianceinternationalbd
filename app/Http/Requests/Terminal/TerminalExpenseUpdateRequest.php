@@ -20,7 +20,7 @@ class TerminalExpenseUpdateRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {dd($this->request->all());
+    {
         return [
             'title' => 'required|string|max:256',
             'terminal_id' => 'required|exists:terminals,uid',

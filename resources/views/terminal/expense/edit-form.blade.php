@@ -123,7 +123,6 @@
     $(document).ready(function() {
 
         $('.update').on('click', function(e) {
-            alert('hello');
             e.preventDefault();
             $('#spinner-update').removeClass('d-none');
             $(this).prop('disabled', true);
