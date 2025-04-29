@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('breadcame', 'Party List')
+@section('breadcame', 'Reliance International Parties')
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -31,28 +31,47 @@
     <div class="row mt-3">
         <div class="col-md-12 event-list-col">
             <div class="card">
+                <div class="card-header border-0 pt-5">
+                    <h2 class="card-title align-items-start flex-column">
+                        <span class="card-label fw-bold fs-3 mb-1">Party List</span>
+                    </h2>
+                    <div class="card-toolbar">
+                        <a href="{{ route('party.create') }}" class="btn btn-sm btn-light-primary">
+                            <i class="fas fa-plus-circle"></i> Add Party
+                        </a>
+                    </div>
+                </div>
                 <div class="card-body">
                     @include('party.partials.datatables.party-data-table')
                 </div>
             </div>
         </div>
     </div>
-    @include('party.partials.modal.status-modal')
+    {{-- @include('party.partials.modal.status-modal') --}}
+    @include('party.partials.modal.modal')
 
     @push('custom-js')
         <script>
             // Define columns
             const columns = [{
-                    data: 'party_id', // Corresponds to the 'party_id' field in your data
-                    name: 'party_id', // Name for server-side processing
-                    className: 'fw-bold text-dark', // Add classes for styling
+                    data: 'serial', // Corresponds to the 'serial' field in your data
+                    name: 'serial', // Name for server-side processing
+                    className: 'text-center fw-bold text-dark', // Add classes for styling
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: 'party_name', // Corresponds to the 'party_name' field in your data
                     name: 'party_name',
-                    className: 'min-w-50px fw-bold text-dark firstTheadColumn',
+                    className: 'min-w-80px fw-bold text-dark firstTheadColumn',
+                    orderable: true,
+                    searchable: true
+                },
+
+                {
+                    data: 'phone', // Corresponds to the 'phone' field in your data
+                    name: 'phone',
+                    className: 'min-w-50px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
@@ -63,32 +82,32 @@
                     orderable: true,
                     searchable: true
                 },
-                {
-                    data: 'phone', // Corresponds to the 'phone' field in your data
-                    name: 'phone',
-                    className: 'min-w-150px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
 
                 {
                     data: 'address', // Corresponds to the 'full_address' field in your data
                     name: 'address',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark lastTheadColumn',
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: 'status', // Corresponds to the 'status' field in your data
                     name: 'status',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
                 {
+                    data: 'action', // Corresponds to the 'action' field in your data
+                    name: 'action',
+                    className: 'min-w-100px fw-bold text-dark lastTheadColumn',
+                    orderable: false, // Action columns are usually not orderable
+                    searchable: false, // Action columns are usually not searchable
+                },
+                {
                     data: 'last_updated', // Corresponds to the 'last_updated' field in your data
                     name: 'last_updated',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark',
                     orderable: true,
                     searchable: true,
                     render: function(data, type, row) {
@@ -99,7 +118,7 @@
                 {
                     data: 'created_at', // Corresponds to the 'created_at' field in your data
                     name: 'created_at',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
+                    className: ' min-w-100px fw-bold text-dark lastTheadColumn',
                     orderable: true,
                     searchable: true,
                     render: function(data, type, row) {
@@ -107,13 +126,7 @@
                         return new Date(data).toLocaleDateString();
                     }
                 },
-                {
-                    data: 'action', // Corresponds to the 'action' field in your data
-                    name: 'action',
-                    className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
-                    orderable: false, // Action columns are usually not orderable
-                    searchable: false, // Action columns are usually not searchable
-                },
+
             ];
 
             const tableId = 'party-data';
@@ -185,40 +198,57 @@
                     }
                 });
             }
-            $(document).ready(function() {
-                // Handle form submission
-                $('#partyStatusUpdateForm').on('submit', function(e) {
-                    e.preventDefault(); // Prevent the default form submission
-                    // Show loading spinner
-                    $('#spinner').removeClass('d-none');
-                    // Create a FormData object to handle file uploads
-                    const formData = new FormData(this);
-                    // Send the AJAX request
-                    $.ajax({
-                        url: '{{ route('party.status.update') }}', // URL to submit the form data
-                        type: 'POST',
-                        data: formData,
-                        processData: false, // Prevent jQuery from processing the data
-                        contentType: false, // Prevent jQuery from setting the content type
-                        success: function(response) {
-                            // Hide loading spinner
-                            $('#spinner').addClass('d-none');
-                            if (response.success) {
-                                toastr.success(response.message);
-                                $('#exampleModal').modal('hide');
-                                $('#partyStatusUpdateForm')[0].reset();
-                                $('#party-data').DataTable().ajax.reload(null, false);
-                            } else {
-                                toastr.error(response.message);
-                            }
-                        },
-                        error: function(xhr) {
-                            $('#spinner').addClass('d-none');
-                            alert('An error occurred while submitting the form.');
-                        }
-                    });
-                });
+
+            // status update form 
+            
+
+            // Send AJAX request For View
+            $(document).on('click', '.view', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+                const url = $(this).data('url');
+                // Send AJAX request
+                sendModalAjaxReq(url, 'GET');
             });
+
+            // Send AJAX request For Edit
+            $(document).on('click', '.edit', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+                const url = $(this).data('url');
+                // Send AJAX request
+                sendModalAjaxReq(url, 'GET');
+            });
+
+            // Send AJAX request For Delete
+            $(document).on('click', '.status', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+                const url = $(this).data('url');
+                // Send AJAX request
+                sendModalAjaxReq(url, 'GET');
+            });
+
+            // Send AJAX request
+            function sendModalAjaxReq(url, type) {
+                $.ajax({
+                    url: url,
+                    type: type, // or 'GET' depending on your server endpoint
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }, // You can send additional data if needed
+                    success: function(response) {
+                        $('#exampleModal').modal('show');
+                        $('.reliance-modal').html(response.html);
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle AJAX error
+                        // toastr.error(response.message);
+                        var errors = xhr.responseJSON.errors;
+                        // Iterate through each error and display it
+                        $.each(errors, function(key, value) {
+                            toastr.error(value); // Displaying each error message
+                        });
+                    }
+                });
+            }
         </script>
     @endpush
 @endsection

@@ -1,9 +1,19 @@
 @extends('layouts.layout')
-@section('breadcame', 'Parties')
+@section('breadcame', 'Reliance International Add Parties')
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
+                <div class="card-header border-0 pt-5">
+                    <h2 class="card-title align-items-start flex-column">
+                        <span class="card-label fw-bold fs-3 mb-1">Add Party</span>
+                    </h2>
+                    <div class="card-toolbar">
+                        <a href="{{ route('party.index') }}" class="btn btn-sm btn-light-primary">
+                            <i class="fas fa-list"></i> Party List
+                        </a>
+                    </div>
+                </div>
                 <div class="card-body">
                     <form action="{{ route('party.store') }}" id="partyForm" method="POST" enctype="multipart/form-data">
                         @csrf <!-- Add CSRF token for security -->
@@ -75,7 +85,6 @@
                     </form>
 
                 </div>
-
             </div>
         </div>
     </div>

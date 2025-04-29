@@ -268,7 +268,6 @@ class JobController extends Controller
 
     public function edit(RelianceJob $job)
     {
-
         // Fetch approved agents
         $agents = Agent::fetchByStatus('status', AgentStatus::APPROVED()->value);
 
