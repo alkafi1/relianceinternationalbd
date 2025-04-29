@@ -96,12 +96,12 @@ Route::prefix('admin')->group(function () {
             Route::get('/index', [PartyController::class, 'index'])->name('party.index');
             Route::get('/create', [PartyController::class, 'create'])->name('party.create');
             Route::post('/store', [PartyController::class, 'store'])->name('party.store');
-            // Route::get('/{party}', [PartyController::class, 'show'])->name('party.show');
+            Route::get('show/{party}/modal', [PartyController::class, 'show'])->name('party.show');
             Route::get('/{party}/edit', [PartyController::class, 'edit'])->name('party.edit');
             Route::put('/{party}/update', [PartyController::class, 'update'])->name('party.update');
-            Route::delete('/{party}', [PartyController::class, 'destroy'])->name('party.destroy');
+            Route::get('/{party}/status', [PartyController::class, 'getStatusByUid'])->name('party.status');
             Route::post('/status/update', [PartyController::class, 'statusUpdate'])->name('party.status.update');
-            Route::put('/status/{party}', [PartyController::class, 'getStatusByUid'])->name('party.status');
+            Route::delete('/{party}', [PartyController::class, 'destroy'])->name('party.destroy');
 
             // datatable
             Route::get('/datatable', [PartyController::class, 'datatable'])->name('party.datatable');

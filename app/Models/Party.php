@@ -19,6 +19,10 @@ class Party extends BaseModel
         'phone',
         'address',
         'status',
+        'updated_at',
+        'created_at',
+        'deleted_at',
+        
     ];
 
 

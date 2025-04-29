@@ -72,10 +72,38 @@ class PartyController extends Controller
         // Handle the validated data, e.g., save it to the database
     }
 
+    /**
+     * Show the specified party.
+     *
+     * @param \App\Models\Party $party
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Party $party)
+    {
+        // Generate HTML using a Blade view
+        $html = view('party.show', [
+            'party' => $party,
+        ])->render();
+
+        return response()->json([
+            'success' => true,
+            'html' => $html
+        ], 200);
+    }
+
     public function edit(Party $party)
     {
-        $party = new PartyEditResource($party);
-        return view('party.edit', compact('party'));
+        // Generate HTML using a Blade view
+        $html = view('party.edit', [
+            'party' => $party,
+        ])->render();
+
+        // Return the HTML as a JSON response
+        return response()->json([
+            'success' => true,
+            'html' => $html
+        ], 200);
     }
 
     public function update(PartyUpdateRequest $request, Party $party)
@@ -85,9 +113,10 @@ class PartyController extends Controller
 
         $party->update($validatedData);
 
-        return redirect()->route('party.index')->with([
-            'success' => 'Party updated successfully.',
-        ]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Party updated successfully'
+        ], 200);
     }
 
     /**
@@ -136,6 +165,14 @@ class PartyController extends Controller
             }
             // Apply custom sorting and filtering to the query
             return DataTables::of($query)
+                // Serial Number Column
+                ->addColumn('serial', function ($data) {
+                    static $index = 0;
+                    return ++$index;
+                })
+                ->orderColumn('serial', function ($query, $order) {
+                    $query->orderBy('uid', $order);
+                })
                 // Agent ID (Sortable & Searchable)
                 ->addColumn('party_id', function ($data) {
                     return $data->party_id ?? '';
@@ -154,10 +191,19 @@ class PartyController extends Controller
                 ->addColumn('phone', function ($data) {
                     return $data->phone ?? '';
                 })
+                ->orderColumn('phone', function ($query, $order) {
+                    $query->orderBy('phone', $order);
+                })
                 ->addColumn('email', function ($data) {
                     return $data->email ?? '';
                 })
+                ->orderColumn('email', function ($query, $order) {
+                    $query->orderBy('email', $order);
+                })
                 ->addColumn('address', function ($data) {
+                    return $data->address ?? '';
+                })
+                ->orderColumn('address', function ($data) {
                     return $data->address ?? '';
                 })
                 ->addColumn('status', function ($data) {
@@ -173,9 +219,8 @@ class PartyController extends Controller
                     // Get the status label and color
                     $statusLabel = strtolower($data->status); // Ensure lowercase for consistency
                     $statusColor = $statusColors[strtoupper($data->status)] ?? 'secondary'; // Default to 'secondary' if status is not found
-
-                    // Return the formatted status badge
-                    return '<span class="status badge badge-light-' . $statusColor . '" 
+                    $statusUrl = route('party.status.update', $data->uid);                  // Return the formatted status badge
+                    return '<span data-url="' . $statusUrl . '" class="status badge badge-light-' . $statusColor . '" 
                             title="Status: ' . ucfirst($statusLabel) . '" data-id="' . $data->uid . '">' .
                         ucfirst($statusLabel) . '</span>';
                 })
@@ -203,11 +248,12 @@ class PartyController extends Controller
                 // Action Buttons (Not Sortable or Searchable)
                 ->addColumn('action', function ($data) {
                     $editUrl = route('party.edit', $data->uid);
+                    $showtUrl = route('party.show', $data->uid);
                     return '
-                        <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '">
+                        <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '" data-url="' . $showtUrl . '">
                             <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
                         </a>
-                        <a href="' . $editUrl . '" class="text-primary me-2" data-id="' . $data->uid . '">
+                        <a href="javascript:void(0)" class="edit text-primary me-2" data-id="' . $data->uid . '" data-url="' . $editUrl . '">
                             <i class="fas fa-edit text-primary" style="font-size: 16px;"></i>
                         </a>
                         <a href="javascript:void(0)" class="delete text-danger" data-id="' . $data->uid . '">
@@ -247,8 +293,18 @@ class PartyController extends Controller
      * @return mixed The status of the specified party.
      */
 
-    public function getStatusByUid($party)
+    public function getStatusByUid(Party $party)
     {
-        return Party::getStatus($party);
+        dd($party);
+         // Generate HTML using a Blade view
+         $html = view('party.status', [
+            'party' => $party,
+        ])->render();
+
+        // Return the HTML as a JSON response
+        return response()->json([
+            'success' => true,
+            'html' => $html
+        ], 200);
     }
 }

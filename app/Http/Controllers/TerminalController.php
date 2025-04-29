@@ -472,15 +472,13 @@ class TerminalController extends Controller
 
     public function show(TerminalExpense $terminalExpense)
     {
-        // $terminalExpense = new TerminalExpenseShowResource($terminalExpense->load('jobExpense', 'terminal'));
-        $terminalExpense->load('jobExpense', 'terminal');
+        $terminalExpense->load('jobExpense', 'terminal'); // Eager load related data
         // Generate HTML using a Blade view
         $html = view('terminal.expense.partials.terminal_expense_details', [
             'terminalExpense' => $terminalExpense,
         ])->render();
 
-        // dd($html);
-        // $terminalExpense->load('jobExpense');
+        // Return the HTML as a JSON response
         return response()->json([
             'success' => true,
             'data' => $terminalExpense,

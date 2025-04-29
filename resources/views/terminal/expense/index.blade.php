@@ -214,7 +214,7 @@
                     },
                     error: function(xhr, status, error) {
                         // Handle AJAX error
-                        // toastr.success(response.message);
+                        toastr.error(response.message);
                     }
                 });
             }
@@ -233,7 +233,7 @@
                     }, // You can send additional data if needed
                     success: function(response) {
                         $('#exampleModalEdit').modal('show');
-                        $('.modal-body-edit').html(response.html);
+                        $('.edit-modal-body').html(response.html);
                     },
                     error: function(xhr, status, error) {
                         // Handle AJAX error
