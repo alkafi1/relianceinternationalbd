@@ -25,7 +25,7 @@
                     {{ __('english.action') }}</th>
                 
                 <th class="min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
-                    {{ __('english.last_update') }}</th>
+                    {{ __('english.last_updated') }}</th>
                 <th class="min-w-100px fw-bold text-dark lastTheadColumn" style="font-weight: 900">
                     {{ __('english.created_at') }}</th>
 

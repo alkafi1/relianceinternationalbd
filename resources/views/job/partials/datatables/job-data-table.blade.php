@@ -5,7 +5,7 @@
         id="job-data">
         <!--begin::Table head-->
         <thead class="px-2">
-            <tr class="">
+            <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
                 <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.action') }}</th>
                 <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.job_no') }}</th>
                 <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.bill_no') }}</th>

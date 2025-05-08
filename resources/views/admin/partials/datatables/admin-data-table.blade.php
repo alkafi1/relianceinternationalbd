@@ -5,8 +5,8 @@
         id="admin-data">
         <!--begin::Table head-->
         <thead class="px-2">
-            <tr class="">
-                <th class="text-center min-w-50px fw-bold text-dark" >
+            <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
+                <th class="text-center min-w-50px fw-bold text-uppercase text-dark" >
                     {{ __('english.admin_name') }}
                 </th>
                 <th class="min-w-50px fw-bold text-dark" >

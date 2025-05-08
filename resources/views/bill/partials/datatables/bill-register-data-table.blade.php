@@ -19,7 +19,7 @@
         id="bill-register-data">
         <!--begin::Table head-->
         <thead class="px-2">
-            <tr class="">
+            <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
                 <th class="fw-bold text-dark" style="font-weight: 900">
                     {{ __('english.bill_date') }}
                 </th>
