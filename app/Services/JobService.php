@@ -3,12 +3,14 @@
 namespace App\Services;
 
 use App\Enums\JobStatusEnum;
+use App\Models\Agent;
 use App\Models\BillRegister;
 use App\Models\Job;
 use App\Models\RelianceJob;
 use App\Models\RelianceJobExpense;
 use App\Models\RelianceJobExpenseSummury;
 use App\Models\Terminal;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\DB;
 
 class  JobService
@@ -35,12 +37,10 @@ class  JobService
                 'quantity' => $data['quantity'],
                 'ctns_pieces' => $data['ctns_pieces'],
                 'weight' => $data['weight'],
-                'agent_id' => $data['agent_id'],       // Ensure this is a valid UUID
-                'status' => $data['status'],
+                'agent_id' => auth()->guard('agent')->user()->uid ?? $data['agent_id'],       // Ensure this is a valid UUID
+                'status' => JobStatusEnum::INITIALIZED_BY_AGENT()->value,
                 'voucher_amount' => $data['voucher_amount'],
                 'job_no' => $data['job_no'],
-                // 'created_by_type' => auth()->guard('web')->check() ? 'App\Models\User' : 'App\Models\Agent',
-                // 'created_by_uid' => auth()->user()->uid ?? auth()->guard('agent')->user()->uid,
             ]);
 
             // Perform additional operations if needed
@@ -66,14 +66,14 @@ class  JobService
     public function updateJob($uid, $data)
     {
 
+        DB::beginTransaction(); // Start transaction
 
         try {
-            DB::beginTransaction(); // Start transaction
-            $job = RelianceJob::where('uid', $uid)->firstOrFail();
+            $job = RelianceJob::where('uid', $uid)->firstOrFail(); // Retrieve the job
 
             // Update the job
             if ($job->status == JobStatusEnum::INITIALIZED_BY_AGENT()->value) {
-                $this->updateJobExpenses($job, $data);
+                $this->updateJobExpenses($job, $data); // Update job expenses
                 $this->updateExpenseSummary($job, $data);
                 $this->updateBillRegister($job, $data);
             }

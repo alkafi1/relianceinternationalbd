@@ -12,6 +12,7 @@ use App\Models\Job;
 use App\Models\Party;
 use App\Models\Terminal;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class StoreJobRequest extends FormRequest
@@ -72,7 +73,7 @@ class StoreJobRequest extends FormRequest
             'ctns_pieces' => 'required|numeric',
             'weight' => 'nullable|numeric',
             'agent_id' => [
-                'required',
+                Auth::guard('agent')->check() ? 'nullable' : 'required',
                 'string',
                 'max:255',
                 'exists:agents,uid', // 'exists:table,column'
@@ -80,7 +81,8 @@ class StoreJobRequest extends FormRequest
                     $query->where('status', AgentStatus::APPROVED()->value);
                 }),
             ],
-            'status' => ['required', 'string', 'max:255', Rule::in(JobStatusEnum::getValues())],
+            
+            'status' => [Auth::guard('agent')->check() ? 'nullable' : 'required', 'string', 'max:255', Rule::in(JobStatusEnum::getValues())],
             'voucher_amount' => 'required|numeric',
             'job_no' => 'required|numeric',
         ];

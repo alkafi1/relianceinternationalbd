@@ -146,7 +146,7 @@
                                     </select>
                                 </div>
                             </div>
-                        
+
                             <!-- Air Import Checkbox -->
                             <div class="col-md-6 d-none" id="air_import_container">
                                 <div class="form-group mt-16">
@@ -155,21 +155,23 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row d-none" id="bl_numbers_container">
                             <!-- Master Air Way Bill / BL Number -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="master_bl_number">Master Air Way Bill / BL Number</label>
-                                    <input type="text" id="master_bl_number" name="master_bl_number" class="form-control mt-3">
+                                    <input type="text" id="master_bl_number" name="master_bl_number"
+                                        class="form-control mt-3">
                                 </div>
                             </div>
-                        
+
                             <!-- House Air Way Bill -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="house_bl_number">House Air Way Bill</label>
-                                    <input type="text" id="house_bl_number" name="house_bl_number" class="form-control mt-3">
+                                    <input type="text" id="house_bl_number" name="house_bl_number"
+                                        class="form-control mt-3">
                                 </div>
                             </div>
                         </div>
@@ -200,35 +202,35 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <!-- Truck Agent -->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="agent_id" class="required"> Agent</label>
-                                    <select id="agent_id" name="agent_id" class="form-control mt-3" required>
-                                        <option value="">Select Agent</option>
-                                        @forelse ($agents as $agent)
-                                            <option value="{{ $agent->uid }}">{{ $agent->display_name }}</option>
-                                        @empty
-                                            <option value="">No agents found</option>
-                                        @endforelse
-                                    </select>
+                        @if (!Auth::guard('agent')->check())
+                            <div class="row">
+                                <!-- Truck Agent -->
+                                <div class="col-md-6">
+                                    <div class="form-group mt-3">
+                                        <label for="agent_id" class="required"> Agent</label>
+                                        <select id="agent_id" name="agent_id" class="form-control mt-3" required>
+                                            <option value="">Select Agent</option>
+                                            @forelse ($agents as $agent)
+                                                <option value="{{ $agent->uid }}">{{ $agent->display_name }}</option>
+                                            @empty
+                                                <option value="">No agents found</option>
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Status -->
+                                <div class="col-md-6">
+                                    <div class="form-group mt-3">
+                                        <label for="status" class="required">Status</label>
+                                        <select id="status" name="status" class="form-control mt-3" required>
+                                            <option value="initialized_by_agent">Initialized By Agent</option>
+                                            <option value="initialized_by_admin" disabled>Initialized By Admin</option>
+                                            <option value="completed" disabled>Completed</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-
-                            <!-- Status -->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="status" class="required">Status</label>
-                                    <select id="status" name="status" class="form-control mt-3" required>
-                                        <option value="initialized_by_agent">Initialized By Agent</option>
-                                        <option value="initialized_by_admin" disabled>Initialized By Admin</option>
-                                        <option value="completed" disabled>Completed</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        @endif
 
                         <div class="row">
                             <!-- Voucher Amount -->
@@ -333,7 +335,7 @@
                                 const $this = $(`[name="${field}"]`);
                                 $this.addClass('is-invalid');
                                 toastr.error(errors[
-                                field]); // Display field-specific error messages
+                                    field]); // Display field-specific error messages
                             }
                             setTimeout(() => {
                                 $("[name]").removeClass('is-invalid');
@@ -355,5 +357,4 @@
             });
         });
     </script>
-
 @endpush

@@ -22,8 +22,8 @@ return new class extends Migration
 
             $table->string('title', 256);
             $table->enum('job_type', TerminalTypeEnum::getValues())->default(TerminalTypeEnum::IMPORT()->value);
-            $table->integer('comission_rate')->nullable();
-            $table->integer('minimum_comission')->nullable();
+            $table->float('comission_rate')->nullable();
+            $table->float('minimum_comission')->nullable();
             $table->enum('status', ['active', 'deactive'])->default('active');
             $table->softDeletes();
             $table->timestamps();
