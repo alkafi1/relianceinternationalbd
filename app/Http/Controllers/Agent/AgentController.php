@@ -266,7 +266,7 @@ class AgentController extends Controller
             throw new \Exception('District not found.');
         }
         // Initialize the options
-        $options = '<option value="">Select District</option>';
+        $options = '<option value="">--Select District--</option>';
         // Build the options
         foreach ($districts as $district) {
             $options .= '<option value="' . $district->id . '">' . $district->name . '</option>';
@@ -281,15 +281,16 @@ class AgentController extends Controller
     public function getThanas(Request $request)
     {
         // Get the districts related to the division
-        $thanas = Thana::where('district_id', $request->distr)->get();
+        $thanas = Thana::where('district_id', $request->district_id)->get();
+        
         if ($thanas->count() == 0) {
             throw new \Exception('Thana not found.');
         }
         // Initialize the options
-        $options = '<option value="">Select Thana</option>';
+        $options = '<option value="">--Select Thana--</option>';
         // Build the options
         foreach ($thanas as $thana) {
-            $options .= '<option value="' . $thanas->id . '">' . $thana->name . '</option>';
+            $options .= '<option value="' . $thana->id . '">' . $thana->name . '</option>';
         }
         // Return the districts
         return response()->json([

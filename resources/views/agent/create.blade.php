@@ -79,7 +79,7 @@
                             <!-- Town ID -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="division_id" class="required">Division ID</label>
+                                    <label for="division_id" class="required">Division</label>
                                     <select id="division_id" name="division_id" class="form-control mt-3"
                                         onchange="getDistricts(this.value)">
                                         <option value="">--Select Division--</option>
@@ -95,8 +95,10 @@
                             <!-- City ID -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="district_id" class="required">District ID</label>
-                                    <select id="district_id" name="district_id" class="form-control mt-3">
+                                    <label for="district_id" class="required">District</label>
+
+                                    <select id="district_id" name="district_id" class="form-control mt-3" onchange="getThanas(this.value)">
+                                        <option value="">--Select Disrtict First--</option>
                                     </select>
                                 </div>
                             </div>
@@ -107,7 +109,9 @@
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="thana_id">Thana ID</label>
-                                    <input type="number" id="thana_id" name="thana_id" class="form-control mt-3">
+                                    <select id="thana_id" name="thana_id" class="form-control mt-3">
+                                        <option value="">--Select District First--</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -216,6 +220,19 @@
                 },
                 success: function(response) {
                     $('#district_id').html(response.option);
+                }
+            });
+        }
+        function getThanas(district_id) {
+            $.ajax({
+                url: '{{ route('get.thanas') }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    district_id: district_id
+                },
+                success: function(response) {
+                    $('#thana_id').html(response.option);
                 }
             });
         }
