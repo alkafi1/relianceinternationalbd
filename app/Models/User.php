@@ -74,4 +74,9 @@ class User extends Authenticatable
     {
         return $this->morphMany(Account::class, 'account_holder');
     }
+
+    public function getRouteKeyName()
+    {
+        return 'uid';
+    }
 }

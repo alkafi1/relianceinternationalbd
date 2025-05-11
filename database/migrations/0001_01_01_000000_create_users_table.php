@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('last_name');
 
             // User's email (unique)
-            $table->string('email')->unique();
+            $table->string('email');
 
             // Timestamp for email verification (nullable)
             $table->timestamp('email_verified_at')->nullable();

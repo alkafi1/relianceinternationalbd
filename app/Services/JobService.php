@@ -35,7 +35,7 @@ class  JobService
                 'master_bl_number' => $data['master_bl_number'],
                 'house_bl_number' => $data['house_bl_number'],
                 'quantity' => $data['quantity'],
-                'ctns_pieces' => $data['ctns_pieces'],
+                'ctns_pieces' => $data['ctns_pieces'] ?? null,
                 'weight' => $data['weight'],
                 'agent_id' => auth()->guard('agent')->user()->uid ?? $data['agent_id'],       // Ensure this is a valid UUID
                 'status' => JobStatusEnum::INITIALIZED_BY_AGENT()->value,

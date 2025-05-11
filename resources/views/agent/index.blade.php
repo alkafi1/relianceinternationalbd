@@ -38,7 +38,7 @@
         </div>
     </div>
     @include('agent.partials.modal.status-modal')
-
+    @include('agent.partials.modal.modal')
     @push('custom-js')
         <script>
             // Define columns
@@ -128,17 +128,22 @@
                     }
                 },
             ];
+
             const agentTableId = 'agent-data';
             const agentAjaxUrl = '{{ route('agent.datatable') }}';
             const agentFilters = {
                 status: 'agent-status-filter', // Key: 'status', Value: ID of the status filter element
             };
 
+            // Initialize DataTable
             initializeDataTable(agentTableId, columns, agentAjaxUrl, agentFilters);
 
+            // Reset Filter
             $('#reset-filter').on('click', function() {
                 $('#agent-status-filter').val('').trigger('change');
             });
+
+            // Delete
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior
 
@@ -162,12 +167,14 @@
                     }
                 });
             });
+
+            // Update status
             $(document).on('click', '.status', function(e) {
                 e.preventDefault(); // Prevent default link behavior
 
                 var uid = $(this).attr('data-id'); // Get the URL from the href attribute
                 var status = $(this).attr('data-status');
-                $('#exampleModal').modal('show');
+                $('#exampleModalStatus').modal('show');
                 var url = `{{ route('agent.status', ':agent') }}`.replace(':agent', uid);
                 sendAjaxReq(uid, status, url, 'PUT');
             });
@@ -199,6 +206,48 @@
                     }
                 });
             }
+
+            // Send AJAX request For Edit
+            $(document).on('click', '.edit', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+                const url = $(this).data('url');
+                // Send AJAX request
+                sendModalAjaxReq(url, 'GET');
+            });
+
+            // Send AJAX request For View
+            $(document).on('click', '.view', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+                const url = $(this).data('url');
+                // Send AJAX request
+                sendModalAjaxReq(url, 'GET');
+            });
+
+            // Send AJAX request
+            function sendModalAjaxReq(url, type) {
+                $.ajax({
+                    url: url,
+                    type: type, // or 'GET' depending on your server endpoint
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }, // You can send additional data if needed
+                    success: function(response) {
+                        $('#exampleModal').modal('show');
+                        $('.reliance-modal').html(response.html);
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle AJAX error
+                        // toastr.error(response.message);
+                        var errors = xhr.responseJSON.errors;
+                        // Iterate through each error and display it
+                        $.each(errors, function(key, value) {
+                            toastr.error(value); // Displaying each error message
+                        });
+                    }
+                });
+            }
+
+            // Handle form submission
             $(document).ready(function() {
                 // Handle form submission
                 $('#agentStatusUpdateForm').on('submit', function(e) {

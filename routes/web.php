@@ -47,7 +47,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/index', [AgentController::class, 'index'])->name('agent.index');
             Route::get('/create', [AgentController::class, 'create'])->name('agent.create');
             Route::post('/store', [AgentController::class, 'store'])->name('agent.store');
-            // Route::get('/{agent}', [AgentController::class, 'show'])->name('agent.show');
+            Route::get('/show/{agent}', [AgentController::class, 'show'])->name('agent.show');
             Route::get('/{agent}/edit', [AgentController::class, 'edit'])->name('agent.edit');
             Route::put('/{agent}', [AgentController::class, 'update'])->name('agent.update');
             Route::delete('/{agent}', [AgentController::class, 'destroy'])->name('agent.destroy');
@@ -68,7 +68,6 @@ Route::prefix('admin')->group(function () {
             Route::put('/status/{terminal}', [TerminalController::class, 'updateStatus'])->name('terminal.status');
             Route::delete('/{terminal}', [TerminalController::class, 'destroy'])->name('terminal.destroy');
             Route::get('/{terminal}/show', [TerminalController::class, 'showTerminal'])->name('terminal.show');
-
             Route::get('/{terminal}/edit', [TerminalController::class, 'edit'])->name('terminal.edit');
             Route::post('/{terminal}/update/post', [TerminalController::class, 'updatePost'])->name('terminal.update.post');
             

@@ -77,6 +77,21 @@ class AgentController extends Controller
         // Handle the validated data, e.g., save it to the database
     }
 
+    public function show(Agent $agent)
+    {
+        $agent->load('division', 'district', 'thana', 'created_by');
+
+        // Generate HTML using a Blade view
+        $html = view('agent.show', [
+            'agent' => $agent,
+        ])->render();
+
+        return response()->json([
+            'success' => true,
+            'html' => $html
+        ], 200);
+    }
+
 
     /**
      * Show the form for editing the specified agent.
@@ -222,10 +237,11 @@ class AgentController extends Controller
                 })
                 ->addColumn('action', function ($data) {
                     $editUrl = route('agent.edit', $data->uid);
+                    $showUrl = route('agent.show', $data->uid);
                     return '
-                    <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '">
-                        <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
-                    </a>
+                     <a href="javascript:void(0)" class="view text-info me-2" data-id="' . $data->uid . '" data-url="' . $showUrl . '">
+                            <i class="fas fa-eye text-info" style="font-size: 16px;"></i>
+                        </a>
                     <a href="' . $editUrl . '" class="text-primary me-2" data-id="' . $data->uid . '">
                         <i class="fas fa-edit text-primary" style="font-size: 16px;"></i>
                     </a>
@@ -282,7 +298,7 @@ class AgentController extends Controller
     {
         // Get the districts related to the division
         $thanas = Thana::where('district_id', $request->district_id)->get();
-        
+
         if ($thanas->count() == 0) {
             throw new \Exception('Thana not found.');
         }

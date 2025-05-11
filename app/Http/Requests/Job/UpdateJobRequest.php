@@ -69,7 +69,7 @@ class UpdateJobRequest extends FormRequest
             'master_bl_number' => 'nullable|string|max:255',
             'house_bl_number' => 'nullable|string|max:255',
             'quantity' => 'required|numeric',
-            'ctns_pieces' => 'required|numeric',
+            'ctns_pieces' => 'nullable|numeric',
             'weight' => 'nullable|numeric',
             'agent_id' => [
                 'nullable',

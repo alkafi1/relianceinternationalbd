@@ -29,7 +29,7 @@ class AgentStoreRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'age' => ['nullable', 'integer', 'min:1', 'max:120'],
-            'email' => ['required', 'email', 'unique:agents,email'],
+            'email' => ['required', 'email', Rule::unique('agents')->whereNull('deleted_at'),],
             'phone' => ['required', 'string', 'max:20'],
             'password' => ['required', 'string', 'min:8'],
             'address' => ['nullable', 'string', 'max:500'],

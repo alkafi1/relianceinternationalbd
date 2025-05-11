@@ -6,11 +6,11 @@
     <div class="modal-body">
         <div class="row mb-3">
             <label class="col-sm-4 fw-bold">{{ __('english.serial') }}:</label>
-            <div class="col-sm-8 text-muted">{{ $party->uid }}</div>
+            <div class="col-sm-8 text-muted">{{ $party->party_id }}</div>
         </div>
         <div class="row mb-3">
             <label class="col-sm-4 fw-bold">{{ __('english.party_name') }}:</label>
-            <div class="col-sm-8 text-muted">{{ $party->party_name }}/div>
+            <div class="col-sm-8 text-muted">{{ $party->party_name }}
             </div>
             <div class="row mb-3">
                 <label class="col-sm-4 fw-bold">{{ __('english.phone') }}:</label>
@@ -28,7 +28,7 @@
                 <label class="col-sm-4 fw-bold">{{ __('english.status') }}:</label>
                 <div class="col-sm-8">
                     <span
-                        class="badge {{ $party->status == 'approved' ? 'bg-success' : ($party->status == 'unapproved' ? 'bg-warning' : ($party->status == 'deleted' ? 'bg-danger' : 'bg-secondary')) }}">
+                        class="badge {{ $party->status == 'approved' ? 'bg-success' : ($party->status == 'unapproved' ? 'bg-warning' : ($party->status == 'deleted' ? 'bg-danger' : 'bg-danger')) }}">
                         {{ ucfirst($party->status) }}
                     </span>
                 </div>
@@ -46,3 +46,7 @@
         </div>
 
     </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </div>
+</div>

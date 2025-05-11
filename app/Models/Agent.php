@@ -140,7 +140,23 @@ class Agent extends Authenticatable
         return $this->morphMany(Account::class, 'account_holder');
     }
 
-    
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
+    }
 
-    
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function thana()
+    {
+        return $this->belongsTo(Thana::class);
+    }
+
+    public function created_by()
+    {
+        return $this->morphTo(__FUNCTION__, 'created_by_type', 'created_by_uid');
+    }
 }
