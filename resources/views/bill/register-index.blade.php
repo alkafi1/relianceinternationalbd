@@ -15,8 +15,7 @@
     @push('custom-js')
         <script>
             // Define columns
-            const columns = [
-                {
+            const columns = [{
                     data: 'created_at', // Corresponds to the 'status' field in your data
                     name: 'created_at',
                     className: 'text-end min-w-100px fw-bold text-dark lastTheadColumn',
@@ -73,7 +72,7 @@
                     searchable: true
                 },
 
-                
+
             ];
 
             const tableId = 'bill-register-data';
@@ -81,7 +80,7 @@
             const filters = {
                 status: 'admin-status-filter', // Key: 'status', Value: ID of the status filter element
             };
-            initializeDataTable(tableId, columns, ajaxUrl, filters);
+            initializeDataTable(tableId, columns, ajaxUrl, filters, true);
 
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior

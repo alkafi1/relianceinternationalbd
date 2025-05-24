@@ -136,7 +136,7 @@
             };
 
             // Initialize DataTable
-            initializeDataTable(agentTableId, columns, agentAjaxUrl, agentFilters);
+            initializeDataTable(agentTableId, columns, agentAjaxUrl, agentFilters, true);
 
             // Reset Filter
             $('#reset-filter').on('click', function() {

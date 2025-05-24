@@ -99,7 +99,7 @@
             const filters = {
                 status: 'admin-status-filter', // Key: 'status', Value: ID of the status filter element
             };
-            initializeDataTable(tableId, columns, ajaxUrl, filters);
+            const table = initializeDataTable(tableId, columns, ajaxUrl, filters, true);
 
             $('#reset-filter').on('click', function() {
                 $('#admin-status-filter').val('').trigger('change');

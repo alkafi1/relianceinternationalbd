@@ -88,6 +88,26 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <!-- Job Type -->
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="job_type" class="required">Job Type</label>
+                                    <select id="job_type" name="job_type" class="form-control mt-3" required>
+                                        <option value="">Select Job Type</option>
+                                        <option value="export">Export</option>
+                                        <option value="import">Import</option>
+                                        <option value="both">Both</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Sales Contact-->
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="sales_contact" class="">Sales Contact</label>
+                                    <input type="text" id="sales_contact" name="sales_contact" class="form-control mt-3">
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -106,13 +126,7 @@
                                     <input type="text" id="be_no" name="be_no" class="form-control mt-3" required>
                                 </div>
                             </div>
-                            <!-- Sales Contact-->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="sales_contact" class="">Sales Contact</label>
-                                    <input type="text" id="sales_contact" name="sales_contact" class="form-control mt-3">
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <div class="row">
@@ -135,17 +149,7 @@
                         </div>
 
                         <div class="row">
-                            <!-- Job Type -->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="job_type" class="required">Job Type</label>
-                                    <select id="job_type" name="job_type" class="form-control mt-3" required>
-                                        <option value="">Select Job Type</option>
-                                        <option value="export">Export</option>
-                                        <option value="import">Import</option>
-                                    </select>
-                                </div>
-                            </div>
+                            
 
                             <!-- Air Import Checkbox -->
                             <div class="col-md-6 d-none" id="air_import_container">
@@ -354,6 +358,21 @@
 
             $("#air_import").change(function() {
                 $("#bl_numbers_container").toggleClass("d-none", !this.checked);
+            });
+
+             // get job tpeterminal_id
+            $('#terminal_id').change(function() {
+                let terminalId = $(this).val();
+                let url = '{{ route('terminal.expense.getTerminalJobType', ':id') }}';
+                url = url.replace(':id', terminalId); // Replace the placeholder with actual ID
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        $('#job_type').val(response.data);
+                    }
+                });
             });
         });
     </script>

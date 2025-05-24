@@ -14,6 +14,7 @@ use App\Models\Terminal;
 use App\Models\TerminalExpense;
 use App\Services\TerminalService;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\FuncCall;
 use Yajra\DataTables\Facades\DataTables;
 
 class TerminalController extends Controller
@@ -412,7 +413,9 @@ class TerminalController extends Controller
 
     public function expenseCreate()
     {
-        $terminals = Terminal::where('status', TerminalStatusEnum::ACTIVE()->value)->get();
+        $terminals = Terminal::where('status', TerminalStatusEnum::ACTIVE()->value)
+            ->whereDoesntHave('terminalExpense')
+            ->get();
         return view('terminal.expense.create', compact('terminals'));
     }
 
@@ -505,13 +508,21 @@ class TerminalController extends Controller
         $terminalExpense = TerminalExpense::find($uid);
         // Store the terminal
         $terminalExpense = $this->terminalService->expenseUpdate($validatedData, $terminalExpense);
-        
+
         // Return a success response
         return response()->json([
             'success' => true,
             'message' => 'Terminal expense update successfully.',
             'data' => $terminalExpense,
         ], 201);
+    }
+
+    public function getTerminalJobType(Terminal $terminal)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => $terminal->terminal_type,
+        ], 200);
     }
 
     // public function datatableTerminalExpenseJObField(Request $request, $terminalExpense)

@@ -48,7 +48,7 @@ class JobController extends Controller
 
         // Fetch approved parties
         $parties = Party::fetchByStatus('status', PartyStatusEnum::APPROVED()->value);
-        return view('job.index',[
+        return view('job.index', [
             'agents' => $agents,
             'terminals' => $terminals,
             'parties' => $parties
@@ -62,19 +62,22 @@ class JobController extends Controller
                 'billRegister',
                 'terminal',
                 'party',
-                'agent'
+                'agent',
+                'relianceJobExpenseSummury'
             ])->where('agent_id', auth('agent')->user()->uid);
         } else {
             $query = RelianceJob::with([
                 'billRegister',
                 'terminal',
                 'party',
-                'agent'
+                'agent',
+                'relianceJobExpenseSummury'
             ]);
         }
         $query->latest();
 
         if ($request->ajax()) {
+
             if ($request->has('status') && !empty($request->status)) {
                 $query->where('status', $request->status);
             }
@@ -95,73 +98,106 @@ class JobController extends Controller
             }
 
             return DataTables::of($query)
+                // Serial Number Column
+                ->addColumn('serial', function ($data) {
+                    static $index = 0;
+                    return ++$index;
+                })
+                ->orderColumn('serial', function ($query, $order) {
+                    $query->orderBy('uid', $order);
+                })
                 ->addColumn('job_no', function ($data) {
                     return $data->job_no ?? '';
                 })
                 ->orderColumn('job_no', function ($query, $order) {
                     return $query->orderBy('job_no', $order);
                 })
-        
+
                 ->addColumn('bill_no', function ($data) {
                     return $data->billRegister->bill_no ?? '';
                 })
                 ->orderColumn('bill_no', function ($query, $order) {
                     return $query->orderBy('billRegister.bill_no', $order);
                 })
-        
+
+                ->addColumn('total_job_expense', function ($data) {
+                    return $data->relianceJobExpenseSummury->total_expenses ?? '';
+                })
+                ->orderColumn('total_job_expense', function ($query, $order) {
+                    return $query->orderBy('relianceJobExpenseSummury.total_expenses', $order);
+                })
+                ->addColumn('commissoin', function ($data) {
+                    return $data->relianceJobExpenseSummury->agency_commission ?? '';
+                })
+                ->orderColumn('commissoin', function ($query, $order) {
+                    return $query->orderBy('relianceJobExpenseSummury.commissoin', $order);
+                })
+                ->addColumn('advanced_received', function ($data) {
+                    return $data->relianceJobExpenseSummury->agency_commission ?? '';
+                })
+                ->orderColumn('advanced_received', function ($query, $order) {
+                    return $query->orderBy('relianceJobExpenseSummury.advanced_received', $order);
+                })
+                ->addColumn('total_bill_amount', function ($data) {
+                    return $data->relianceJobExpenseSummury->grand_total ?? '';
+                })
+                ->orderColumn('total_bill_amount', function ($query, $order) {
+                    return $query->orderBy('relianceJobExpenseSummury.grand_total', $order);
+                })
+
                 ->addColumn('buyer_name', function ($data) {
                     return $data->buyer_name ?? '';
                 })
                 ->orderColumn('buyer_name', function ($query, $order) {
                     return $query->orderBy('buyer_name', $order);
                 })
-        
+
                 ->addColumn('terminal', function ($data) {
                     return $data->terminal?->terminal_name ?? '';
                 })
                 ->orderColumn('terminal', function ($query, $order) {
                     return $query->orderBy('terminal_name', $order);
                 })
-        
+
                 ->addColumn('party_name', function ($data) {
                     return $data->party?->party_name ?? '';
                 })
                 ->orderColumn('party_name', function ($query, $order) {
                     return $query->orderBy('party_name', $order);
                 })
-        
+
                 ->addColumn('agent', function ($data) {
                     return $data->agent?->display_name ?? '';
                 })
-        
+
                 ->addColumn('invoice_no', function ($data) {
                     return $data->invoice_no ?? '';
                 })
                 ->orderColumn('invoice_no', function ($query, $order) {
                     return $query->orderBy('invoice_no', $order);
                 })
-        
+
                 ->addColumn('value_usd', function ($data) {
                     return number_format($data->value_usd, 2);
                 })
                 ->orderColumn('value_usd', function ($query, $order) {
                     return $query->orderBy('value_usd', $order);
                 })
-        
+
                 ->addColumn('usd_rate', function ($data) {
                     return number_format($data->usd_rate, 2);
                 })
                 ->orderColumn('usd_rate', function ($query, $order) {
                     return $query->orderBy('usd_rate', $order);
                 })
-        
+
                 ->addColumn('job_type', function ($data) {
                     return ucfirst($data->job_type);
                 })
                 ->orderColumn('job_type', function ($query, $order) {
                     return $query->orderBy('job_type', $order);
                 })
-        
+
                 ->addColumn('status', function ($data) {
                     $statusColors = [
                         'COMPLETED' => 'success',
@@ -175,39 +211,42 @@ class JobController extends Controller
                 ->orderColumn('status', function ($query, $order) {
                     return $query->orderBy('status', $order);
                 })
-        
+
                 ->addColumn('action', function ($data) {
                     $guard = auth()->guard('agent')->check() ? 'agent' : 'web';
                     $editUrl = route('job.edit', ['job' => $data->uid]);
-                    $actions = [
-                        'view' => '<a href="javascript:void(0)" class="dropdown-item view" data-id="' . $data->id . '">
-                                <i class="fas fa-eye text-info"></i> View
-                            </a>',
-                        'edit' => $guard === 'web' ? '<a href="' . $editUrl . '" class="dropdown-item">
-                                <i class="fas fa-edit text-primary"></i> Edit
-                            </a>' : '',
-                        'delete' => '<a href="javascript:void(0)" class="dropdown-item delete text-danger" data-id="' . $data->id . '">
-                                <i class="fas fa-trash text-danger"></i> Delete
-                            </a>',
-                    ];
-                    return '
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuButton' . $data->id . '" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton' . $data->id . '">
-                            ' . implode('', $actions) . '
-                        </ul>
-                    </div>';
+
+                    $actions = [];
+
+                    // View icon button
+                    $actions[] = '<a href="javascript:void(0)" class=" me-2 view" data-id="' . $data->id . '" title="View">
+                    <i class="fas fa-eye text-info"></i>
+                        </a>';
+
+                    // Edit icon button (only if web)
+                    if ($guard === 'web') {
+                        $actions[] = '<a href="' . $editUrl . '" class="text-primary me-2" title="Edit">
+                                <i class="fas fa-edit text-primary"></i>
+                            </a>';
+                    }
+
+                    // Delete icon button
+                    $actions[] = '<a href="javascript:void(0)" class="text-danger delete" data-id="' . $data->id . '" title="Delete">
+                            <i class="fas fa-trash text-danger"></i>
+                        </a>';
+
+                    return '<div class="d-flex align-items-center gap-2 justify-content-center">' . implode('', $actions) . '</div>';
                 })
-        
+
+
+
                 ->editColumn('created_at', function ($data) {
                     return $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '';
                 })
                 ->orderColumn('created_at', function ($query, $order) {
                     return $query->orderBy('created_at', $order);
                 })
-        
+
                 ->rawColumns(['action', 'status'])
                 ->toJson();
         }
@@ -220,9 +259,9 @@ class JobController extends Controller
         // Fetch approved agents
         $agents = Agent::fetchByStatus('status', AgentStatus::APPROVED()->value);
 
-        // Fetch active terminals
-        $terminals = Terminal::fetchByStatus('status', TerminalStatusEnum::ACTIVE()->value);
-
+        $terminals = Terminal::where('status', TerminalStatusEnum::ACTIVE()->value)
+            ->whereHas('terminalExpense')
+            ->get();
         // Fetch approved parties
         $parties = Party::fetchByStatus('status', PartyStatusEnum::APPROVED()->value);
 
@@ -313,5 +352,11 @@ class JobController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    // job report
+    public function reportIndex()
+    {
+        return view('job.report.index');
     }
 }

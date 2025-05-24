@@ -201,6 +201,22 @@
             $(document).on('click', '.remove-field', function() {
                 $(this).closest('.row').remove();
             });
+
+            // get job tpeterminal_id
+            $('#terminal_id').change(function() {
+                let terminalId = $(this).val();
+                let url = '{{ route('terminal.expense.getTerminalJobType', ':id') }}';
+                url = url.replace(':id', terminalId); // Replace the placeholder with actual ID
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        $('#job_type').val(response.data);
+                    }
+                });
+            });
+
         });
     </script>
 @endpush

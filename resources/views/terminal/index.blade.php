@@ -51,8 +51,7 @@
     @push('custom-js')
         <script>
             // Define columns
-            const columns = [
-                {
+            const columns = [{
                     data: 'serial', // Corresponds to the 'terminal_name' field in your data
                     name: 'serial',
                     className: 'text-center min-w-50px fw-bold text-dark firstTheadColumn',
@@ -87,7 +86,7 @@
                     orderable: true,
                     searchable: true
                 },
-                
+
                 {
                     data: 'status', // Corresponds to the 'full_address' field in your data
                     name: 'status',
@@ -95,7 +94,7 @@
                     orderable: true,
                     searchable: true
                 },
-                
+
                 {
                     data: 'action', // Corresponds to the 'last_updated' field in your data
                     name: 'action',
@@ -125,7 +124,7 @@
                 status: 'terminal-status-filter', // Key: 'status', Value: ID of the status filter element
                 type: 'terminal-type-filter'
             };
-            initializeDataTable(tableId, columns, ajaxUrl, filters);
+            initializeDataTable(tableId, columns, ajaxUrl, filters, true);
             $('#reset-filter').on('click', function() {
                 $('#terminal-status-filter, #terminal-type-filter').val('')
                     .trigger('change');
@@ -195,7 +194,7 @@
 
                 const url = $(this).data('url');
                 // Show SweetAlert confirmation dialog
-                
+
                 $.ajax({
                     url: url,
                     type: 'GET', // or 'GET' depending on your server endpoint
@@ -220,7 +219,7 @@
 
                 const url = $(this).data('url');
                 // Show SweetAlert confirmation dialog
-                
+
                 $.ajax({
                     url: url,
                     type: 'GET', // or 'GET' depending on your server endpoint

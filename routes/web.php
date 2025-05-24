@@ -70,7 +70,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/{terminal}/show', [TerminalController::class, 'showTerminal'])->name('terminal.show');
             Route::get('/{terminal}/edit', [TerminalController::class, 'edit'])->name('terminal.edit');
             Route::post('/{terminal}/update/post', [TerminalController::class, 'updatePost'])->name('terminal.update.post');
-            
+
             Route::get('/datatable/terminal', [TerminalController::class, 'datatable'])->name('terminal.datatable');
 
             // expense
@@ -80,9 +80,9 @@ Route::prefix('admin')->group(function () {
                 Route::post('/store', [TerminalController::class, 'expenseStore'])->name('terminal.expense.store');
                 Route::put('/status/{terminalExpense}', [TerminalController::class, 'updateStatusExpense'])->name('terminal.expense.status');
                 Route::put('/show/{terminalExpense}', [TerminalController::class, 'show'])->name('terminal.expense.show');
-
+                Route::get('/getTerminalJobType/{terminal}', [TerminalController::class, 'getTerminalJobType'])->name('terminal.expense.getTerminalJobType');
                 Route::get('/edit/{terminalExpense}', [TerminalController::class, 'editExpense'])->name('terminal.expense.edit');
-                
+
                 Route::post('/update/{terminalExpense}/post', [TerminalController::class, 'updateExpense'])->name('terminal.expense.update');
                 Route::delete('/{terminalExpense}', [TerminalController::class, 'destroyExpense'])->name('terminal.expense.destroy');
                 Route::get('/datatable/terminal', [TerminalController::class, 'datatableTerminalExpense'])->name('terminal.expense.datatable');
@@ -166,6 +166,8 @@ Route::middleware('auth.agent_or_web')->group(function () {
 
         Route::get('/edit/{job}', [JobController::class, 'edit'])->name('job.edit');
         Route::post('/update/{job}', [JobController::class, 'update'])->name('job.update');
+
+        Route::get('/report', [JobController::class, 'reportIndex'])->name('job.report.index');
 
         Route::get('/datatable/job', [JobController::class, 'datatable'])->name('job.datatable');
     });

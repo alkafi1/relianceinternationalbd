@@ -62,15 +62,14 @@
     @push('custom-js')
         <script>
             // Define columns
-            const columns = [
-                {
+            const columns = [{
                     data: 'serial', // Corresponds to the 'terminal_name' field in your data
                     name: 'serial', // Name for server-side processing
                     className: 'text-center min-w-50px fw-bold text-dark', // Add classes for styling
                     orderable: true, // Allow sorting
                     searchable: true // Allow searching
                 },
-                
+
                 {
                     data: 'title', // Corresponds to the 'title' field in your data
                     name: 'title',
@@ -128,7 +127,7 @@
                 type: 'terminal-expense-type-filter',
             };
             // Initialize DataTable
-            initializeDataTable(tableId, columns, ajaxUrl, filters);
+            initializeDataTable(tableId, columns, ajaxUrl, filters,true);
             $('#reset-filter').on('click', function() {
                 $('#terminal-expense-status-filter, #terminal-expense-type-filter').val('')
                     .trigger('change');
@@ -224,7 +223,7 @@
 
                 const url = $(this).data('url');
                 // Show SweetAlert confirmation dialog
-                
+
                 $.ajax({
                     url: url,
                     type: 'GET', // or 'GET' depending on your server endpoint

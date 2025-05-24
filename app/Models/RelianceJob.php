@@ -66,12 +66,12 @@ class RelianceJob extends BaseModel
 
     public function relianceJobExpense()
     {
-        return $this->hasMany(RelianceJobExpense::class, 'job_id');
+        return $this->hasMany(RelianceJobExpense::class, 'job_id', 'uid');
     }
 
     public function relianceJobExpenseSummury()
     {
-        return $this->hasMany(RelianceJobExpenseSummury::class, 'job_id');
+        return $this->belongsTo(RelianceJobExpenseSummury::class, 'uid',  'job_id');
     }
 
     public function billRegister()

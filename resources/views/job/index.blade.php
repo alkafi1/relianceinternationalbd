@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('breadcame', 'Job List')
+@section('breadcame', 'Reliance International Job List')
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -96,6 +96,13 @@
         <script>
             // Define columns
             const columns = [{
+                    data: 'serial', // Corresponds to the 'status' field in your data
+                    name: 'serial',
+                    className: 'text-center min-w-100px fw-bold text-dark',
+                    orderable: true,
+                    searchable: true
+                },
+                {
                     data: 'action', // Corresponds to the 'status' field in your data
                     name: 'action',
                     className: 'text-center min-w-100px fw-bold text-dark',
@@ -124,9 +131,23 @@
                     searchable: true
                 },
                 {
-                    data: 'terminal', // Corresponds to the 'party_name' field in your data
-                    name: 'terminal',
-                    className: 'min-w-50px fw-bold text-dark ',
+                    data: 'be_no', // Corresponds to the 'status' field in your data
+                    name: 'be_no',
+                    className: 'min-w-100px fw-bold text-dark',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'status', // Corresponds to the 'status' field in your data
+                    name: 'status',
+                    className: 'min-w-100px fw-bold text-dark ',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'job_type', // Corresponds to the 'status' field in your data
+                    name: 'job_type',
+                    className: 'min-w-100px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
@@ -137,6 +158,7 @@
                     orderable: true,
                     searchable: true
                 },
+
                 {
                     data: 'agent', // Corresponds to the 'email' field in your data
                     name: 'agent',
@@ -145,18 +167,44 @@
                     searchable: true
                 },
                 {
-                    data: 'buyer_name', // Corresponds to the 'phone' field in your data
-                    name: 'buyer_name',
-                    className: 'min-w-150px fw-bold text-dark',
+                    data: 'terminal', // Corresponds to the 'party_name' field in your data
+                    name: 'terminal',
+                    className: 'min-w-50px fw-bold text-dark ',
                     orderable: true,
                     searchable: true
                 },
-
-
                 {
-                    data: 'status', // Corresponds to the 'status' field in your data
-                    name: 'status',
-                    className: 'min-w-100px fw-bold text-dark ',
+                    data: 'total_job_expense', // Corresponds to the 'party_name' field in your data
+                    name: 'total_job_expense',
+                    className: 'min-w-50px fw-bold text-dark ',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'commissoin', // Corresponds to the 'party_name' field in your data
+                    name: 'commissoin',
+                    className: 'min-w-50px fw-bold text-dark ',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'advanced_received', // Corresponds to the 'party_name' field in your data
+                    name: 'advanced_received',
+                    className: 'min-w-50px fw-bold text-dark ',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'total_bill_amount', // Corresponds to the 'party_name' field in your data
+                    name: 'total_bill_amount',
+                    className: 'min-w-50px fw-bold text-dark ',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'buyer_name', // Corresponds to the 'phone' field in your data
+                    name: 'buyer_name',
+                    className: 'min-w-150px fw-bold text-dark',
                     orderable: true,
                     searchable: true
                 },
@@ -189,13 +237,6 @@
                     searchable: true
                 },
                 {
-                    data: 'be_no', // Corresponds to the 'status' field in your data
-                    name: 'be_no',
-                    className: 'min-w-100px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
                     data: 'ud_no', // Corresponds to the 'status' field in your data
                     name: 'ud_no',
                     className: 'min-w-100px fw-bold text-dark',
@@ -205,13 +246,6 @@
                 {
                     data: 'ud_amendment_no', // Corresponds to the 'status' field in your data
                     name: 'ud_amendment_no',
-                    className: 'min-w-100px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'job_type', // Corresponds to the 'status' field in your data
-                    name: 'job_type',
                     className: 'min-w-100px fw-bold text-dark',
                     orderable: true,
                     searchable: true
@@ -291,12 +325,14 @@
                 terminal: 'terminal-filter',
                 party: 'party-filter',
                 agent: 'agent-filter',
-                start_date : 'start-date',
-                end_date : 'end-date'
+                start_date: 'start-date',
+                end_date: 'end-date'
             };
-            initializeDataTable(tableId, columns, ajaxUrl, filters);
+            const table = initializeDataTable(tableId, columns, ajaxUrl, filters, true);
             $('#reset-filter').on('click', function() {
-                $('#job-status-filter, #party-filter, #terminal-filter, #agent-filter, #start-date, #end-date').val('').trigger('change');
+                $('#job-status-filter, #party-filter, #terminal-filter, #agent-filter, #start-date, #end-date').val('')
+                    .trigger('change');
+
             });
             $(document).on('click', '.delete', function(e) {
                 e.preventDefault(); // Prevent default link behavior
@@ -359,6 +395,7 @@
                     }
                 });
             }
+
             $(document).ready(function() {
                 // Handle form submission
                 $('#partyStatusUpdateForm').on('submit', function(e) {

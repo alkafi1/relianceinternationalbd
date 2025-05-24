@@ -302,11 +302,11 @@
                 {{-- Jobs Start --}}
                 @if (
                     (auth('agent')->check() &&
-                        auth('agent')->user()->hasAnyPermission(['job.index', 'job.create'])) ||
+                        auth('agent')->user()->hasAnyPermission(['job.index', 'job.create', 'job.report.index'])) ||
                         (auth('web')->check() &&
-                            auth()->user()->hasAnyPermission(['job.index', 'job.create'])))
+                            auth()->user()->hasAnyPermission(['job.index', 'job.create', 'job.report.index'])))
                     <div data-kt-menu-trigger="click"
-                        class="menu-item menu-accordion {{ Route::currentRouteName() == 'party.create' || Route::currentRouteName() == 'party.index' ? 'hover show' : '' }}">
+                        class="menu-item menu-accordion {{ Route::currentRouteName() == 'party.create' || Route::currentRouteName() == 'party.index' || Route::currentRouteName() == 'job.report.index' ? 'hover show' : '' }}">
                         <span class="menu-link">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
@@ -322,7 +322,7 @@
                         </span>
 
                         <div
-                            class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'job.index' || Route::currentRouteName() == 'job.create' ? 'hover show' : '' }}">
+                            class="menu-sub menu-sub-accordion  {{ Route::currentRouteName() == 'job.index' || Route::currentRouteName() == 'job.create' || Route::currentRouteName() == 'job.report.index' ? 'hover show' : '' }}">
                             {{-- @can('member-list-view') --}}
                             <a class="menu-item menu-accordion" href="{{ route('job.index') }}">
                                 <span
@@ -348,9 +348,9 @@
                             </a>
                             {{-- @endcan --}}
                             {{-- @can('member-request-view') --}}
-                            <a class="menu-item menu-accordion" href="{{ route('job.create') }}">
+                            <a class="menu-item menu-accordion" href="{{ route('job.report.index') }}">
                                 <span
-                                    class="menu-link {{ Route::currentRouteName() == 'job.create' ? 'active' : '' }}">
+                                    class="menu-link {{ Route::currentRouteName() == 'job.report.index' ? 'active' : '' }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>

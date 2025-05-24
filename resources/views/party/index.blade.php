@@ -134,7 +134,7 @@
             const filters = {
                 status: 'party-status-filter', // Key: 'status', Value: ID of the status filter element
             };
-            initializeDataTable(tableId, columns, ajaxUrl, filters);
+            initializeDataTable(tableId, columns, ajaxUrl, filters, true);
             $('#reset-filter').on('click', function() {
                 $('#party-status-filter').val('').trigger('change');
             });
@@ -200,7 +200,7 @@
             }
 
             // status update form 
-            
+
 
             // Send AJAX request For View
             $(document).on('click', '.view', function(e) {
