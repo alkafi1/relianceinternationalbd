@@ -72,4 +72,5 @@ return [
     'total_received_amount' => 'Total Received Amount',
     'total_due_balance' => 'Total Due Balance',
     'total_current_balance' => 'Total Current Balance',
+    'role' => 'Role',
 ];

@@ -12,6 +12,9 @@
                 <th class="min-w-50px fw-bold text-dark" >
                     {{ __('english.email') }}
                 </th>
+                <th class="min-w-50px fw-bold text-dark" >
+                    {{ __('english.role') }}
+                </th>
                 <th class=" min-w-50px fw-bold text-dark" >
                     {{ __('english.status') }}
                 </th>

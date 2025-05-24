@@ -57,6 +57,13 @@
                     searchable: true
                 },
                 {
+                    data: 'role', // Corresponds to the 'email' field in your data
+                    name: 'role',
+                    className: 'min-w-50px fw-bold text-dark',
+                    orderable: true,
+                    searchable: true
+                },
+                {
                     data: 'status', // Corresponds to the 'status' field in your data
                     name: 'status',
                     className: ' min-w-100px fw-bold text-dark',

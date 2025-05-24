@@ -281,7 +281,6 @@
                                                 </div>
                                             </div>
                                         @endforelse
-
                                     </div>
                                     <button type="button" id="add_field" class="btn btn-success mt-3">
                                         <i class="fas fa-plus"></i> Add Field
@@ -297,7 +296,7 @@
                                         <h6>AGENCY COMMISSION</h6>
                                     </div>
                                     @php
-                                    
+
                                         $commission_by_rate =
                                             $job->value_usd *
                                                 $job->usd_rate *
@@ -321,7 +320,7 @@
                                     </div>
                                     <div class="col-md-6 mt-2 text-end">
                                         <input type="number" id="total_expenses" name="total_expenses"
-                                            value="{{ $job->terminal->terminalExpense->sum('amount') }}"
+                                            value="{{ $terminalExpense->sum('amount') ?? 0.0 }}"
                                             class="form-control  text-end" />
                                     </div>
 
@@ -346,8 +345,8 @@
                                     </div>
                                     <div class="col-md-6 mt-2 text-end">
                                         <input type="number" id="grand_total" name="grand_total"
-                                            value="{{ $job->terminal->terminalExpense->where('job_type', $job->job_type)->first()
-                                                ->minimum_comission + $job->terminal->terminalExpense->where('job_type', $job->job_type)->sum('amount') }}"
+                                            value="{{ $job->terminal->terminalExpense->where('job_type', $job->job_type)->first()->minimum_comission +
+                                                $job->terminal->terminalExpense->where('job_type', $job->job_type)->sum('amount') }}"
                                             class="form-control fw-bold text-end" readonly />
                                     </div>
                                 </div>
@@ -380,9 +379,8 @@
                                         <option value="initialized_by_agent"
                                             {{ $job->status == 'initialized_by_agent' ? 'selected' : '' }}>Initialized By
                                             Agent</option>
-                                        <option value="initialized_by_admin"
-                                            {{ $job->status == 'initialized_by_admin' ? 'selected' : '' }}>Initialized By
-                                            Admin</option>
+                                        <option value="processing" {{ $job->status == 'processing' ? 'selected' : '' }}>
+                                            Processing</option>
                                         <option value="completed" {{ $job->status == 'completed' ? 'selected' : '' }}>
                                             Completed</option>
                                     </select>
@@ -476,7 +474,7 @@
                         <input type="text" name="job_expend_field[]" class="form-control" placeholder="Expenditure Field" required>
                     </div>
                     <div class="col-md-5">
-                        <input type="number" name="amount[]" class="form-control" placeholder="Amount" required>
+                        <input type="number" name="amount[]" class="form-control text-end" placeholder="Amount" required>
                     </div>
                     <div class="col-md-2">
                         <button type="button" class="btn btn-danger remove-field">Remove</button>
@@ -496,10 +494,10 @@
                 let agencyCommission = parseFloat($('#agency_commission').val()) || 0;
                 let totalExpenses = parseFloat($('#total_expenses').val()) || 0;
                 let advancedReceived = parseFloat($('#advanced_received').val()) || 0;
+                let due = parseFloat($('#due').val()) || 0;
 
-                let grandTotal = (agencyCommission + totalExpenses) - advancedReceived;
+                let grandTotal = (agencyCommission + totalExpenses);
                 let dueAmount = grandTotal - advancedReceived;
-
                 $('#grand_total').val(grandTotal.toFixed(2));
                 $('#due').val(dueAmount.toFixed(2));
             }
@@ -511,6 +509,19 @@
 
             // Run on page load to set initial values
             calculateGrandTotal();
+
+            $(document).on('input', 'input[name="amount[]"]', function() {
+                calculateTotalExpense();
+            });
+
+            function calculateTotalExpense() {
+                let total = 0;
+                $('input[name="amount[]"]').each(function() {
+                    total += parseFloat($(this).val()) || 0;
+                });
+                $('#total_expenses').val(total.toFixed(2));
+            }
+
         });
     </script>
 @endpush

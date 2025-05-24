@@ -109,53 +109,13 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
-                            <!-- L/C No -->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="lc_no" class="">L/C No</label>
-                                    <input type="text" id="lc_no" name="lc_no" class="form-control mt-3">
-                                </div>
-                            </div>
-
-                            <!-- B/E No -->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="be_no" class="required">B/E No</label>
-                                    <input type="text" id="be_no" name="be_no" class="form-control mt-3" required>
-                                </div>
-                            </div>
-                            
-                        </div>
-
-                        <div class="row">
-                            <!-- U/D No -->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="ud_no" class="">U/D No</label>
-                                    <input type="text" id="ud_no" name="ud_no" class="form-control mt-3">
-                                </div>
-                            </div>
-
-                            <!-- U/D Amendment No -->
-                            <div class="col-md-6">
-                                <div class="form-group mt-3">
-                                    <label for="ud_amendment_no" class="">U/D Amendment No</label>
-                                    <input type="text" id="ud_amendment_no" name="ud_amendment_no"
-                                        class="form-control mt-3">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            
 
                             <!-- Air Import Checkbox -->
                             <div class="col-md-6 d-none" id="air_import_container">
-                                <div class="form-group mt-16">
+                                <div class="form-group mt-3">
                                     <input type="checkbox" id="air_import" name="air_import">
-                                    <label for="air_import">Air Import</label>
+                                    <label for="air_import">Air Import/ctg import/beanpole/adamjee/DEPZ</label>
                                 </div>
                             </div>
                         </div>
@@ -179,6 +139,47 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <!-- L/C No -->
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="lc_no" class="">L/C No</label>
+                                    <input type="text" id="lc_no" name="lc_no" class="form-control mt-3">
+                                </div>
+                            </div>
+
+                            <!-- B/E No -->
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="be_no" class="required">B/E No</label>
+                                    <input type="text" id="be_no" name="be_no" class="form-control mt-3"
+                                        required>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <!-- U/D No -->
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="ud_no" class="">U/D No</label>
+                                    <input type="text" id="ud_no" name="ud_no" class="form-control mt-3">
+                                </div>
+                            </div>
+
+                            <!-- U/D Amendment No -->
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="ud_amendment_no" class="">U/D Amendment No</label>
+                                    <input type="text" id="ud_amendment_no" name="ud_amendment_no"
+                                        class="form-control mt-3">
+                                </div>
+                            </div>
+                        </div>
+
+
 
                         <div class="row">
                             <!-- Quantity -->
@@ -228,7 +229,7 @@
                                         <label for="status" class="required">Status</label>
                                         <select id="status" name="status" class="form-control mt-3" required>
                                             <option value="initialized_by_agent">Initialized By Agent</option>
-                                            <option value="initialized_by_admin" disabled>Initialized By Admin</option>
+                                            <option value="processing" disabled>Processing</option>
                                             <option value="completed" disabled>Completed</option>
                                         </select>
                                     </div>
@@ -360,7 +361,7 @@
                 $("#bl_numbers_container").toggleClass("d-none", !this.checked);
             });
 
-             // get job tpeterminal_id
+            // get job tpeterminal_id
             $('#terminal_id').change(function() {
                 let terminalId = $(this).val();
                 let url = '{{ route('terminal.expense.getTerminalJobType', ':id') }}';
@@ -370,6 +371,11 @@
                     url: url,
                     type: 'GET',
                     success: function(response) {
+                        if (response.data == 'import') {
+                            $("#air_import_container").toggleClass("d-none", false);
+                            $("#bl_numbers_container").toggleClass("d-none", true);
+                            $("#air_import").prop("checked", false);
+                        }
                         $('#job_type').val(response.data);
                     }
                 });

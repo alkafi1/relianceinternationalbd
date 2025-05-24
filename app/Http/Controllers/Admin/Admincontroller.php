@@ -117,6 +117,17 @@ class Admincontroller extends Controller
                 ->orderColumn('email', function ($query, $order) {
                     $query->orderBy('email', $order);
                 })
+                ->addColumn('role', function ($data) {
+                    return $data->roles->pluck('name')->implode(', ') ?? '';
+                })
+                ->filterColumn('role', function ($query, $keyword) {
+                    $query->whereHas('roles', function ($query) use ($keyword) {
+                        $query->where('name', 'LIKE', "%{$keyword}%");
+                    });
+                })
+                ->orderColumn('role', function ($query, $order) {
+                    $query->orderByHas('roles', 'name', $order);
+                })
                 ->addColumn('status', function ($data) {
                     // Define status colors and labels
                     $statusColors = [
