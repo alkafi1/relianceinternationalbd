@@ -10,6 +10,7 @@ use App\Http\Resources\Admin\AdminEditResource;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 
 class Admincontroller extends Controller
@@ -49,8 +50,9 @@ class Admincontroller extends Controller
      */
     public function create()
     {
+        $roles = Role::where('name', '!=',  'super-admin')->get();
         // Display the view for creating a new admin.
-        return view('admin.create');
+        return view('admin.create', compact('roles'));
     }
 
     public function store(AdminStoreRequest $request)

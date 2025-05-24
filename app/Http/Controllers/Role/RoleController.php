@@ -65,7 +65,6 @@ class RoleController extends Controller
 
         // Retrieve Permission models based on the selected permission IDs
         $selectedPermissions = Permission::whereIn('id', $selectedPermissionIds)->get();
-
         // Extract permission names from Permission models
         $selectedPermissionNames = $selectedPermissions->pluck('name')->toArray();
 

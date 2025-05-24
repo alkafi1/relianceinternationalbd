@@ -59,8 +59,8 @@
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
                                     <label for="password_confirmation" class="required">Password Confirmation</label>
-                                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control mt-3"
-                                        required>
+                                    <input type="password" id="password_confirmation" name="password_confirmation"
+                                        class="form-control mt-3" required>
                                 </div>
                             </div>
                         </div>
@@ -79,7 +79,24 @@
                                     </select>
                                 </div>
                             </div>
+                            <!-- Role -->
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="status" class="required">Admin Role</label>
+                                    <select id="role" name="role" class="form-control mt-3" required>
+                                        <option value="">-- Select Role --</option>
+                                        @foreach ($roles as $role )
+                                            
+                                        <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                        @endforeach
+                                        
+                                    </select>
+                                </div>
+                            </div>
 
+
+                        </div>
+                        <div class="row">
                             <!-- Image -->
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
@@ -149,7 +166,8 @@
                         if (xhr.responseJSON && xhr.responseJSON.errors) {
                             var errors = xhr.responseJSON.errors;
                             for (var field in errors) {
-                                toastr.error(errors[field]); // Display field-specific error messages
+                                toastr.error(errors[
+                                field]); // Display field-specific error messages
                             }
                         }
                     }
