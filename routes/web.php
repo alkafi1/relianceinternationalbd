@@ -167,6 +167,8 @@ Route::middleware('auth.agent_or_web')->group(function () {
         Route::post('/update/{job}', [JobController::class, 'update'])->name('job.update');
         Route::delete('/delete/{job}', [JobController::class, 'delete'])->name('job.destroy');
 
+        Route::post('/audited-amount/{job}', [JobController::class, 'auditedAmount'])->name('job.audited_amount');
+
         Route::get('/report', [JobController::class, 'reportIndex'])->name('job.report.index');
 
         Route::get('/datatable/job', [JobController::class, 'datatable'])->name('job.datatable');

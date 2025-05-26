@@ -195,8 +195,8 @@
                     searchable: true
                 },
                 {
-                    data: 'vat', // Corresponds to the 'party_name' field in your data
-                    name: 'vat',
+                    data: 'audited_amount', // Corresponds to the 'party_name' field in your data
+                    name: 'audited_amount',
                     className: 'min-w-50px fw-bold text-dark ',
                     orderable: true,
                     searchable: true
@@ -292,6 +292,7 @@
                 });
             });
 
+            // Update status
             $(document).on('click', '.status', function(e) {
                 e.preventDefault(); // Prevent default link behavior
 
@@ -300,6 +301,53 @@
                 $('#exampleModal').modal('show');
                 var url = `{{ route('party.status', ':party') }}`.replace(':party', uid);
                 sendAjaxReq(uid, status, url, 'PUT');
+            });
+
+
+            $(document).on('click', '.audited_amount', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+
+                var job_id = $(this).attr('data-job_id');
+                var audited_amount = $(this).attr('data-audited_amount');
+                $('#job_id').val(job_id);
+                $('#audited_amount_modal').modal('show');
+            });
+
+            $(document).on('click', '#submit-audited-amount', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+
+                // Now create FormData with the updated form (after removal)
+                let formData = new FormData($('#audited_amount_form')[0]);
+                let job_id = $('#job_id').val();
+                $('#spinner-update').removeClass('d-none');
+                $('.update').prop('disabled', true);
+                let url = `{{ route('job.audited_amount', ['job' => ':job']) }}`.replace(':job', job_id)
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: formData,
+                    processData: false, // Prevent jQuery from processing the data
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        $('#audited_amount_modal').modal('hide');
+                        $('#audited_amount_form')[0].reset();
+                        $('#job-data').DataTable().ajax.reload(null, false);
+                        toastr.success(response.message);
+                    },
+                    error: function(xhr) {
+                        $('#spinner-update').addClass('d-none');
+                        $('.update').prop('disabled', false);
+                        toastr.error(xhr.responseJSON.message);
+                        var errors = xhr.responseJSON.errors;
+                        // Iterate through each error and display it
+                        $.each(errors, function(key, value) {
+                            toastr.error(value); // Displaying each error message
+                        });
+                    }
+                });
             });
 
             function sendAjaxReq(uid, status, url, type) {

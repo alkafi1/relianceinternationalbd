@@ -7,6 +7,7 @@ use App\Enums\JobStatusEnum;
 use App\Enums\PartyStatusEnum;
 use App\Enums\TerminalStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Job\AuditedAmountRequest;
 use App\Http\Requests\Job\StoreJobRequest;
 use App\Http\Requests\Job\UpdateJobRequest;
 use App\Models\Agent;
@@ -15,6 +16,8 @@ use App\Models\RelianceJob;
 use App\Models\Terminal;
 use App\Models\TerminalExpense;
 use App\Services\JobService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -139,11 +142,9 @@ class JobController extends Controller
                     return $query->orderBy('relianceJobExpenseSummury.advanced_received', $order);
                 })
                 ->addColumn('total_bill_amount', function ($data) {
-                    return $data->relianceJobExpenseSummury->grand_total ?? '0.00';
+                    return $data?->relianceJobExpenseSummury?->grand_total ?? '0.00';
                 })
-                ->orderColumn('total_bill_amount', function ($query, $order) {
-                    return $query->orderBy('relianceJobExpenseSummury.grand_total', $order);
-                })
+
 
                 ->addColumn('buyer_name', function ($data) {
                     return $data->buyer_name ?? '';
@@ -184,13 +185,23 @@ class JobController extends Controller
                     return $query->orderBy('job_type', $order);
                 })
                 ->addColumn('audited_amount', function ($data) {
-                    return $data->relianceJobExpenseSummury->audited_amount ?? '0.00';
+                    $amount = $data->relianceJobExpenseSummury->audited_amount ?? 0;
+
+                    if ($amount == 0) {
+                        return '<span class="audited_amount text-warning fw-bold" data-job_id="' . $data->uid . '">0.00 <i class="fas fa-exclamation-circle" title="Not Audited"></i></span>';
+                    }
+
+                    return number_format($amount, 2);
                 })
                 ->orderColumn('audited_amount', function ($query, $order) {
                     return $query->orderBy('relianceJobExpenseSummury.audited_amount', $order);
                 })
                 ->addColumn('actual_profit', function ($data) {
-                    return ($data->relianceJobExpenseSummury->grand_total  - $data->voucher_amount) ?? '0.00';
+                    if ($data?->relianceJobExpenseSummury?->grand_total !== null) {
+                        return $data->relianceJobExpenseSummury->grand_total - $data->voucher_amount - $data?->relianceJobExpenseSummury?->audited_amount;
+                    } else {
+                        return $data->voucher_amount;
+                    }
                 })
                 ->orderColumn('actual_profit', function ($query, $order) {
                     return $query->orderBy('relianceJobExpenseSummury.grand_total', $order);
@@ -247,7 +258,7 @@ class JobController extends Controller
                     return $query->orderBy('created_at', $order);
                 })
 
-                ->rawColumns(['action', 'status'])
+                ->rawColumns(['action', 'status', 'audited_amount'])
                 ->toJson();
         }
     }
@@ -305,7 +316,13 @@ class JobController extends Controller
         }
     }
 
-    public function edit(RelianceJob $job)
+    /**
+     * Display the specified job to edit.
+     *
+     * @param  \App\Models\RelianceJob  $job
+     * @return \Illuminate\Http\View
+     */
+    public function edit(RelianceJob $job): View
     {
         // Fetch approved agents
         $agents = Agent::fetchByStatus('status', AgentStatus::APPROVED()->value);
@@ -329,7 +346,14 @@ class JobController extends Controller
         return view('job.edit', compact('job', 'agents', 'terminals', 'parties', 'terminalExpense'));
     }
 
-    public function update(UpdateJobRequest $request, $id)
+    /**
+     * Updates a job in storage.
+     *
+     * @param  \App\Http\Requests\Job\UpdateJobRequest  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(UpdateJobRequest $request, $id): JsonResponse
     {
         try {
             // Get validated data from the request
@@ -354,7 +378,13 @@ class JobController extends Controller
         }
     }
 
-    public function delete(RelianceJob $job)
+    /**
+     * Deletes a job and its related expenses, summary, and bill register.
+     *
+     * @param \App\Models\RelianceJob $job The job to be deleted.
+     * @return \Illuminate\Http\JsonResponse A JSON response indicating success or failure.
+     */
+    public function delete(RelianceJob $job): JsonResponse
     {
         try {
             $job->relianceJobExpense()->delete();
@@ -373,6 +403,37 @@ class JobController extends Controller
             ], 500);
         }
     }
+
+
+    /**
+     * Updates the audited amount for a job.
+     *
+     * @param  \App\Http\Requests\Job\AuditedAmountRequest  $request
+     * @param  \App\Models\RelianceJob  $job
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function auditedAmount(AuditedAmountRequest $request, RelianceJob $job): JsonResponse
+    {
+        $summary = $job->relianceJobExpenseSummury;
+
+        if ($summary) {
+            $summary->update([
+                'audited_amount' => $request->audited_amount
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Audited amount updated successfully!',
+                'data' => $summary
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Job expense summary not found.',
+        ], 404);
+    }
+
 
     // job report
     public function reportIndex()

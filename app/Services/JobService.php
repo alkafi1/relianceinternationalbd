@@ -22,16 +22,16 @@ class  JobService
             // Create the job
             $job = $this->create($data);
 
-            // Get the terminal expenses
-            $terminalExpense = $job->terminal->terminalExpense->first();
+            // // Get the terminal expenses
+            // $terminalExpense = $job->terminal->terminalExpense->first();
 
-            // Get the job expenses
-            $jobExpenses = $terminalExpense->jobExpense;
+            // // Get the job expenses
+            // $jobExpenses = $terminalExpense->jobExpense;
 
-            // Create the job expenses
-            $this->createRelianceJobExpense($job, $jobExpenses);
-            // Create the expense summary
-            $this->crewateRelianceJobExpenseSummury($job, $terminalExpense, $jobExpenses);
+            // // Create the job expenses
+            // $this->createRelianceJobExpense($job, $jobExpenses);
+            // // Create the expense summary
+            // $this->crewateRelianceJobExpenseSummury($job, $terminalExpense, $jobExpenses);
 
             return $job;
         });
