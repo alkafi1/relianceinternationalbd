@@ -181,8 +181,22 @@
                     searchable: true
                 },
                 {
+                    data: 'vat', // Corresponds to the 'party_name' field in your data
+                    name: 'vat',
+                    className: 'min-w-50px fw-bold text-dark ',
+                    orderable: true,
+                    searchable: true
+                },
+                {
                     data: 'commissoin', // Corresponds to the 'party_name' field in your data
                     name: 'commissoin',
+                    className: 'min-w-50px fw-bold text-dark ',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'vat', // Corresponds to the 'party_name' field in your data
+                    name: 'vat',
                     className: 'min-w-50px fw-bold text-dark ',
                     orderable: true,
                     searchable: true
@@ -202,94 +216,15 @@
                     searchable: true
                 },
                 {
-                    data: 'buyer_name', // Corresponds to the 'phone' field in your data
-                    name: 'buyer_name',
-                    className: 'min-w-150px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'value_usd', // Corresponds to the 'status' field in your data
-                    name: 'value_usd',
-                    className: 'min-w-100px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'usd_rate', // Corresponds to the 'status' field in your data
-                    name: 'usd_rate',
-                    className: 'min-w-100px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'item', // Corresponds to the 'status' field in your data
-                    name: 'item',
-                    className: 'min-w-100px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'lc_no', // Corresponds to the 'status' field in your data
-                    name: 'lc_no',
-                    className: 'min-w-100px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'ud_no', // Corresponds to the 'status' field in your data
-                    name: 'ud_no',
-                    className: 'min-w-100px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'ud_amendment_no', // Corresponds to the 'status' field in your data
-                    name: 'ud_amendment_no',
-                    className: 'min-w-100px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'master_bl_number', // Corresponds to the 'status' field in your data
-                    name: 'master_bl_number',
-                    className: 'min-w-100px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'house_bl_number', // Corresponds to the 'status' field in your data
-                    name: 'house_bl_number',
-                    className: 'min-w-100px fw-bold text-dark',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'quantity', // Corresponds to the 'status' field in your data
-                    name: 'quantity',
-                    className: 'min-w-100px fw-bold text-dark ',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'ctns_pieces', // Corresponds to the 'status' field in your data
-                    name: 'ctns_pieces',
-                    className: 'min-w-100px fw-bold text-dark ',
-                    orderable: true,
-                    searchable: true
-                },
-
-                {
-                    data: 'weight', // Corresponds to the 'status' field in your data
-                    name: 'weight',
-                    className: 'min-w-100px fw-bold text-dark ',
-                    orderable: true,
-                    searchable: true
-                },
-
-                {
                     data: 'voucher_amount', // Corresponds to the 'status' field in your data
                     name: 'voucher_amount',
+                    className: 'min-w-100px fw-bold text-dark ',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'actual_profit', // Corresponds to the 'status' field in your data
+                    name: 'actual_profit',
                     className: 'min-w-100px fw-bold text-dark ',
                     orderable: true,
                     searchable: true
@@ -338,11 +273,12 @@
                 e.preventDefault(); // Prevent default link behavior
 
                 var uid = $(this).attr('data-id');
-                var url = `{{ route('party.destroy', ':party') }}`.replace(':party', uid);
+                var url = `{{ route('job.destroy', ':job') }}`.replace(':job', uid);
+                alert(uid);
                 // Show SweetAlert confirmation dialog
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: 'This action will delete this party!',
+                    text: 'This action will delete this Job!',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Yes, delete it!',
@@ -350,8 +286,6 @@
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Send AJAX request
-                        // sendAjaxRequest(url, row);
 
                         sendAjaxReq(uid, status = null, url, type = 'DELETE');
                     }
@@ -376,18 +310,9 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }, // You can send additional data if needed
                     success: function(response) {
-                        $('#party-data').DataTable().ajax.reload(null, false);
-                        if (response.success) {
-                            console.log(response);
-                            if (response.data && response.data.status) {
-                                $('#status').val(response.data.status);
-                                $('#uid').val(response.data.uid);
-                            } else {
-                                toastr.success(response.message);
-                            }
-                        } else {
-                            toastr.error(response.message);
-                        }
+                        $('#job-data').DataTable().ajax.reload(null, false);
+                        toastr.error(response.message);
+
                     },
                     error: function(xhr, status, error) {
                         // Handle AJAX error

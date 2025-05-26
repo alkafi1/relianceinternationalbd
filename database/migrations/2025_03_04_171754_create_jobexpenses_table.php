@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TerminalStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -25,7 +26,7 @@ return new class extends Migration
 
             $table->string('job_expend_field', 256)->nullable();
             $table->integer('amount')->nullable();
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->enum('status', [TerminalStatusEnum::ACTIVE()->value, TerminalStatusEnum::DEACTIVE()->value  ])->default('active');
             $table->softDeletes();
             $table->timestamps();
         });

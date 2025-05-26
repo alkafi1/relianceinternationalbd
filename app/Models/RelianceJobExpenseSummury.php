@@ -15,5 +15,6 @@ class RelianceJobExpenseSummury extends BaseModel
         'advanced_received',
         'due',
         'grand_total',
+        'audited_amount',
     ];
 }

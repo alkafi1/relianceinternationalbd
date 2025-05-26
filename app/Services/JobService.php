@@ -6,6 +6,7 @@ use App\Enums\JobStatusEnum;
 use App\Models\Agent;
 use App\Models\BillRegister;
 use App\Models\Job;
+use App\Models\Jobexpense;
 use App\Models\RelianceJob;
 use App\Models\RelianceJobExpense;
 use App\Models\RelianceJobExpenseSummury;
@@ -18,36 +19,86 @@ class  JobService
     public function storeJob($data)
     {
         return DB::transaction(function () use ($data) {
-            $job = RelianceJob::create([
-                'buyer_name' => $data['buyer_name'],
-                'invoice_no' => $data['invoice_no'],
-                'value_usd' => $data['value_usd'],
-                'usd_rate' => $data['usd_rate'],
-                'item' => $data['item'],
-                'terminal_id' => $data['terminal_id'], // Ensure this is a valid UUID
-                'party_id' => $data['party_id'],       // Ensure this is a valid UUID
-                'lc_no' => $data['lc_no'],
-                'be_no' => $data['be_no'],
-                'sales_contact' => $data['sales_contact'],
-                'ud_no' => $data['ud_no'],
-                'ud_amendment_no' => $data['ud_amendment_no'],
-                'job_type' => $data['job_type'],
-                'master_bl_number' => $data['master_bl_number'],
-                'house_bl_number' => $data['house_bl_number'],
-                'quantity' => $data['quantity'],
-                'ctns_pieces' => $data['ctns_pieces'] ?? null,
-                'weight' => $data['weight'],
-                'agent_id' => auth()->guard('agent')->user()->uid ?? $data['agent_id'],       // Ensure this is a valid UUID
-                'status' => JobStatusEnum::INITIALIZED_BY_AGENT()->value,
-                'voucher_amount' => $data['voucher_amount'],
-                'job_no' => $data['job_no'],
-            ]);
+            // Create the job
+            $job = $this->create($data);
 
-            // Perform additional operations if needed
-            // Example: Log the job creation, send notifications, etc.
+            // Get the terminal expenses
+            $terminalExpense = $job->terminal->terminalExpense->first();
+
+            // Get the job expenses
+            $jobExpenses = $terminalExpense->jobExpense;
+
+            // Create the job expenses
+            $this->createRelianceJobExpense($job, $jobExpenses);
+            // Create the expense summary
+            $this->crewateRelianceJobExpenseSummury($job, $terminalExpense, $jobExpenses);
 
             return $job;
         });
+    }
+
+    public function create($data)
+    {
+        return $job = RelianceJob::create([
+            'buyer_name' => $data['buyer_name'],
+            'invoice_no' => $data['invoice_no'],
+            'value_usd' => $data['value_usd'],
+            'usd_rate' => $data['usd_rate'],
+            'item' => $data['item'],
+            'terminal_id' => $data['terminal_id'], // Ensure this is a valid UUID
+            'party_id' => $data['party_id'],       // Ensure this is a valid UUID
+            'lc_no' => $data['lc_no'],
+            'be_no' => $data['be_no'],
+            'sales_contact' => $data['sales_contact'],
+            'ud_no' => $data['ud_no'],
+            'ud_amendment_no' => $data['ud_amendment_no'],
+            'job_type' => $data['job_type'],
+            'master_bl_number' => $data['master_bl_number'],
+            'house_bl_number' => $data['house_bl_number'],
+            'quantity' => $data['quantity'],
+            'ctns_pieces' => $data['ctns_pieces'] ?? null,
+            'weight' => $data['weight'],
+            'agent_id' => auth()->guard('agent')->user()->uid ?? $data['agent_id'],       // Ensure this is a valid UUID
+            'status' => JobStatusEnum::INITIALIZED_BY_AGENT()->value,
+            'voucher_amount' => $data['voucher_amount'],
+            'job_no' => $data['job_no'],
+            'remarks' => $data['remarks'],
+        ]);
+    }
+
+    public function createRelianceJobExpense($job, $jobExpenses)
+    {
+        foreach ($jobExpenses as $index => $jobExpense) {
+            RelianceJobExpense::create(
+                [
+                    'job_id' => $job->uid,
+                    'job_expend_field' => $jobExpense['job_expend_field'],
+                    'amount' => $jobExpense['amount'],
+                ]
+            );
+        }
+    }
+
+    public function crewateRelianceJobExpenseSummury($job, $terminalExpense, $jobExpenses)
+    {
+        $commission_by_rate =
+            $job->value_usd *
+            $job->usd_rate *
+            $terminalExpense->comission_rate ?? 0;
+        $agency_commission = max(
+            $commission_by_rate,
+            $terminalExpense->minimum_comission,
+        );
+        RelianceJobExpenseSummury::create(
+            [
+                'job_id' => $job->uid,
+                'agency_commission' => $agency_commission,
+                'total_expenses' => $jobExpenses->sum('amount') ?? 0.00,
+                'advanced_received' =>  0.00,
+                'due' => 0.00,
+                'grand_total' => $agency_commission  + $jobExpenses->sum('amount') ?? 0.00,
+            ]
+        );
     }
 
 
@@ -79,7 +130,6 @@ class  JobService
             }
 
             $this->updateJobDetails($job, $data);
-
             DB::commit(); // Commit transaction if everything is successful
 
             return $job;
@@ -113,9 +163,8 @@ class  JobService
             'status' => $data['status'],
             'voucher_amount' => $data['voucher_amount'],
             'job_no' => $job->status == JobStatusEnum::INITIALIZED_BY_AGENT()->value ? $this->generateJobNo($data) : $data['job_no'],
-            // 'updated_by_type' => auth()->guard('web')->check() ? 'App\Models\User' : 'App\Models\Agent',
-            // 'updated_by_uid' => auth()->user()->uid ?? auth()->guard('agent')->user()->uid,
             'comment' => $data['comment'],
+            'remarks' => $data['remarks'] ?? null,
             'job_complete_date' => $data['job_date'],
         ]);
     }

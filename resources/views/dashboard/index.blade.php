@@ -5,12 +5,12 @@
 @section('content')
     <div class="row g-4">
         <!-- Card Template -->
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="card bg-gradient bg-success text-white shadow-lg border-0 h-100">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                         <div class="fs-3 fw-bold mb-1">Total Agent</div>
-                        <div class="fs-1 fw-bolder">5</div>
+                        <div class="fs-1 fw-bolder">{{$total['totaAgents']}}</div>
                     </div>
                     <div class="display-4">
                         <i class="fas fa-user-tie"></i>
@@ -19,12 +19,12 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="card bg-gradient bg-info text-white shadow-lg border-0 h-100">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                         <div class="fs-3 fw-bold mb-1">Total Terminal</div>
-                        <div class="fs-1 fw-bolder">10</div>
+                        <div class="fs-1 fw-bolder">{{$total['totalTerminals']}}</div>
                     </div>
                     <div class="display-4">
                         <i class="fas fa-desktop text-2xl"></i>
@@ -33,12 +33,12 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="card bg-gradient bg-primary text-white shadow-lg border-0 h-100">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                         <div class="fs-3 fw-bold mb-1">Total Party</div>
-                        <div class="fs-1 fw-bolder">1</div>
+                        <div class="fs-1 fw-bolder">{{$total['totalParties']}}</div>
                     </div>
                     <div class="display-4">
                         <i class="fas fa-users"></i>
@@ -47,12 +47,12 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="card bg-gradient bg-warning text-dark shadow-lg border-0 h-100">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <div class="fs-3 fw-bold mb-1">Total Jon</div>
-                        <div class="fs-1 fw-bolder">$93.46</div>
+                        <div class="fs-3 fw-bold mb-1">Total Job</div>
+                        <div class="fs-1 fw-bolder">{{$total['totalJobs']}}</div>
                     </div>
                     <div class="display-4 text-dark">
                         <i class="fas fa-coins"></i>

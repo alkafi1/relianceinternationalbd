@@ -107,21 +107,19 @@ class TerminalSeeder extends Seeder
                 'address' => 'CUSTOMS HOUSE, ICD',
                 'status' => TerminalStatusEnum::ACTIVE()->value,
             ],
-            [
-                'terminal_name' => 'DEPZ EXPORT',
-                'terminal_short_form' => 'DEPZ',
-                'description' => '',
-                'terminal_type' => TerminalTypeEnum::IMPORT()->value,
-                'address' => 'Savar, EPZ',
-                'status' => TerminalStatusEnum::DEACTIVE()->value,
-            ],
+            // [
+            //     'terminal_name' => 'DEPZ EXPORT',
+            //     'terminal_short_form' => 'DEPZ',
+            //     'description' => '',
+            //     'terminal_type' => TerminalTypeEnum::IMPORT()->value,
+            //     'address' => 'Savar, EPZ',
+            //     'status' => TerminalStatusEnum::DEACTIVE()->value,
+            // ],
         ];
 
         $expenseFields = [
             [
                 'expense_name' => 'Dhaka Airport Import Fields',
-                'terminal_id' => 1,
-                'job_type' => 2, // Import
                 'job_expenses' => [
                     ['title' => 'ASSOCIATION FEE + data entry = 80/- + 40/-', 'amount' => 120.00],
                     ['title' => 'DUTY/VAT PAID', 'amount' => 0.00],
@@ -139,8 +137,6 @@ class TerminalSeeder extends Seeder
             ],
             [
                 'expense_name' => 'Dhaka Airport Export Fields',
-                'terminal_id' => 1,
-                'job_type' => 1, // Export
                 'job_expenses' => [
                     ['title' => 'ASSOCIATION     80/-', 'amount' => 80.00],
                     ['title' => 'DUTY/VAT PAID WITH SCANNING CHARGES', 'amount' => 110.00],
@@ -356,31 +352,19 @@ class TerminalSeeder extends Seeder
                 'address' => $terminalData['address'],
                 'status' => $terminalData['status'],
             ]);
-
-            // Create the expense fields for the terminal
-            foreach ($expenseFields as $expenseField) {
-                $terminalExpense = TerminalExpense::create([
-                    'terminal_id' => $terminal->uid,
-                    'title' => $expenseField['expense_name'],
-                    'job_type' => $expenseField['job_type'],
-                    'comission_rate' => $expenseField['comission_rate'],
-                    'minimum_comission' => $expenseField['minimum_comission'],
-                    'status' => $terminal['status'],
-                ]);
-                // dd($expenseField['job_expenses']);
-
-                // Create the job expenses for the terminal expense
-                foreach ($expenseField['job_expenses'] as $jobExpense) {
-                    Jobexpense::create([
-                        'terminal_expense_id' => $terminalExpense->uid,
-                        'job_expend_field' => $jobExpense['title'],
-                        'terminal_id' => $terminal->uid,
-                        'amount' => $jobExpense['amount'],
-                        'status' => $terminal['status'],
-                    ]);
-                }
-            }
         }
+
+        // $allTerminals = Terminal::all();
+
+        // foreach ($allTerminals as $terminal) {
+        //     $terminal->terminalExpenses()->create([
+        //         'terminal_id' => $terminal->id,
+        //         'job_type' => $terminal->job_type,
+        //         'job_expenses' => json_encode($terminal->job_expenses),
+        //         'comission_rate' => $terminal->comission_rate,
+        //         'minimum_comission' => $terminal->minimum_comission,
+        //     ]);
+        // }
 
         $this->command->info('Main Terminal created successfully.');
     }

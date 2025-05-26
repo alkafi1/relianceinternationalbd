@@ -18,13 +18,13 @@ return new class extends Migration
             // Foreign key reference to terminals table
             $table->uuid('terminal_id');
             $table->foreign('terminal_id')->references('uid')->on('terminals')->onDelete('cascade');
-            
+
             $table->uuid('agent_id'); //Agent
             $table->foreign('agent_id')->references('uid')->on('agents')->onDelete('cascade');
-            
+
             $table->uuid('party_id'); //party_id
             $table->foreign('party_id')->references('uid')->on('parties')->onDelete('cascade');
-            
+
             $table->string('buyer_name'); // Buyer Name
             $table->string('invoice_no'); // Invoice No
             $table->decimal('value_usd', 10, 2); // Value (USD)
@@ -44,6 +44,7 @@ return new class extends Migration
             $table->enum('status', [JobStatusEnum::getValues()]); // Status
             $table->decimal('voucher_amount', 10, 2); // Voucher Amount
             $table->string('job_no'); // Job No
+            $table->string('remarks')->nullable(); // Remarks
             $table->softDeletes();
             $table->timestamps(); // Created At and Updated At timestamps
         });

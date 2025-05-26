@@ -37,9 +37,9 @@ class SeedAllCommand extends Command
         $this->callSeeder(PermissionSeeder::class);
         $this->callSeeder(AgentRolePermissionSeeder::class);
         $this->callSeeder(SuperAdminSeeder::class);
-        // $this->callSeeder(AgentSeeder::class);
-        // $this->callSeeder(PartySeeder::class);
-        // $this->callSeeder(TerminalSeeder::class);
+        $this->callSeeder(AgentSeeder::class);
+        $this->callSeeder(PartySeeder::class);
+        $this->callSeeder(TerminalSeeder::class);
 
         $this->info('All seeders completed successfully.');
     }

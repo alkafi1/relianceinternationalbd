@@ -121,25 +121,25 @@ class JobController extends Controller
                 })
 
                 ->addColumn('total_job_expense', function ($data) {
-                    return $data->relianceJobExpenseSummury->total_expenses ?? '';
+                    return $data->relianceJobExpenseSummury->total_expenses ?? '0.00';
                 })
                 ->orderColumn('total_job_expense', function ($query, $order) {
                     return $query->orderBy('relianceJobExpenseSummury.total_expenses', $order);
                 })
                 ->addColumn('commissoin', function ($data) {
-                    return $data->relianceJobExpenseSummury->agency_commission ?? '';
+                    return $data->relianceJobExpenseSummury->agency_commission ?? '0.00';
                 })
                 ->orderColumn('commissoin', function ($query, $order) {
                     return $query->orderBy('relianceJobExpenseSummury.commissoin', $order);
                 })
                 ->addColumn('advanced_received', function ($data) {
-                    return $data->relianceJobExpenseSummury->agency_commission ?? '';
+                    return $data->relianceJobExpenseSummury->advanced_received ?? '0.00';
                 })
                 ->orderColumn('advanced_received', function ($query, $order) {
                     return $query->orderBy('relianceJobExpenseSummury.advanced_received', $order);
                 })
                 ->addColumn('total_bill_amount', function ($data) {
-                    return $data->relianceJobExpenseSummury->grand_total ?? '';
+                    return $data->relianceJobExpenseSummury->grand_total ?? '0.00';
                 })
                 ->orderColumn('total_bill_amount', function ($query, $order) {
                     return $query->orderBy('relianceJobExpenseSummury.grand_total', $order);
@@ -177,25 +177,27 @@ class JobController extends Controller
                     return $query->orderBy('invoice_no', $order);
                 })
 
-                ->addColumn('value_usd', function ($data) {
-                    return number_format($data->value_usd, 2);
-                })
-                ->orderColumn('value_usd', function ($query, $order) {
-                    return $query->orderBy('value_usd', $order);
-                })
-
-                ->addColumn('usd_rate', function ($data) {
-                    return number_format($data->usd_rate, 2);
-                })
-                ->orderColumn('usd_rate', function ($query, $order) {
-                    return $query->orderBy('usd_rate', $order);
-                })
-
                 ->addColumn('job_type', function ($data) {
                     return ucfirst($data->job_type);
                 })
                 ->orderColumn('job_type', function ($query, $order) {
                     return $query->orderBy('job_type', $order);
+                })
+                ->addColumn('audited_amount', function ($data) {
+                    return $data->relianceJobExpenseSummury->audited_amount ?? '0.00';
+                })
+                ->orderColumn('audited_amount', function ($query, $order) {
+                    return $query->orderBy('relianceJobExpenseSummury.audited_amount', $order);
+                })
+                ->addColumn('actual_profit', function ($data) {
+                    return ($data->relianceJobExpenseSummury->grand_total  - $data->voucher_amount) ?? '0.00';
+                })
+                ->orderColumn('actual_profit', function ($query, $order) {
+                    return $query->orderBy('relianceJobExpenseSummury.grand_total', $order);
+                })
+                ->addColumn('vat', function ($data) {
+                    $vatExpense = $data->relianceJobExpense->firstWhere('job_expend_field', 'Vat');
+                    return $vatExpense ? $vatExpense->amount : '0.00';
                 })
 
                 ->addColumn('status', function ($data) {
@@ -215,11 +217,12 @@ class JobController extends Controller
                 ->addColumn('action', function ($data) {
                     $guard = auth()->guard('agent')->check() ? 'agent' : 'web';
                     $editUrl = route('job.edit', ['job' => $data->uid]);
+                    $deleteUrl = route('job.destroy', ['job' => $data->uid]);
 
                     $actions = [];
 
                     // View icon button
-                    $actions[] = '<a href="javascript:void(0)" class=" me-2 view" data-id="' . $data->id . '" title="View">
+                    $actions[] = '<a href="javascript:void(0)" class=" me-2 view" data-id="' . $data->uid . '" title="View">
                     <i class="fas fa-eye text-info"></i>
                         </a>';
 
@@ -231,15 +234,12 @@ class JobController extends Controller
                     }
 
                     // Delete icon button
-                    $actions[] = '<a href="javascript:void(0)" class="text-danger delete" data-id="' . $data->id . '" title="Delete">
+                    $actions[] = '<a href="javascript:void(0)" class="text-danger delete" data-id="' . $data->uid . '" title="Delete">
                             <i class="fas fa-trash text-danger"></i>
                         </a>';
 
                     return '<div class="d-flex align-items-center gap-2 justify-content-center">' . implode('', $actions) . '</div>';
                 })
-
-
-
                 ->editColumn('created_at', function ($data) {
                     return $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '';
                 })
@@ -349,6 +349,26 @@ class JobController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred while updating the job.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function delete(RelianceJob $job)
+    {
+        try {
+            $job->relianceJobExpense()->delete();
+            $job->relianceJobExpenseSummury()->delete();
+            $job->billRegister()->delete();
+            $job->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Job deleted successfully!',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while deleting the job.',
                 'error' => $e->getMessage(),
             ], 500);
         }

@@ -9,6 +9,7 @@ use Spatie\Enum\Enum;
 /**
  * @method static self EXPORT()
  * @method static self IMPORT()
+ * @method static self BOTH()
  */
 
 class JobTypeEnum extends Enum
@@ -20,6 +21,7 @@ class JobTypeEnum extends Enum
         return [
             'EXPORT' => 'export',
             'IMPORT' => 'import',
+            'BOTH' => 'both',
         ];
     }
 }

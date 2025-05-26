@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('breadcame', $job->invoice_no . ' Party Edit')
+@section('breadcame', 'Reliance International Job Edit')
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12">
@@ -321,7 +321,7 @@
                                     <div class="col-md-6 mt-2 text-end">
                                         <input type="number" id="total_expenses" name="total_expenses"
                                             value="{{ $terminalExpense->sum('amount') ?? 0.0 }}"
-                                            class="form-control  text-end" />
+                                            class="form-control  text-end" readonly />
                                     </div>
 
                                     <div class="col-md-4 mt-5 text-end">
@@ -519,6 +519,10 @@
                 $('input[name="amount[]"]').each(function() {
                     total += parseFloat($(this).val()) || 0;
                 });
+                let grandTotal = total + parseFloat($('#agency_commission').val()) || 0;
+                let due = total + parseFloat($('#advanced_received').val()) || 0;
+                $('#grand_total').val(grandTotal.toFixed(2));
+                $('#due').val(grandTotal.toFixed(2));
                 $('#total_expenses').val(total.toFixed(2));
             }
 

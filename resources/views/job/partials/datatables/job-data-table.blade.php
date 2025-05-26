@@ -17,22 +17,13 @@
                 <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.agent') }}</th>
                 <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.terminal') }}</th>
                 <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.total_job_expense') }}</th>
+                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.vat') }}</th>
                 <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.commission') }}</th>
+                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.audited_amount') }}</th>
                 <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.advanced_received') }}</th>
                 <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.total_bill_amount') }}</th>
-                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.buyer_name') }}</th>
-                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.value_usd') }}</th>
-                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.usd_rate') }}</th>
-                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.item') }}</th>
-                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.lc_no') }}</th>
-                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.ud_no') }}</th>
-                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.ud_amendment_no') }}</th>
-                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.master_bl_number') }}</th>
-                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.house_bl_number') }}</th>
-                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.quantity') }}</th>
-                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.ctns_pieces') }}</th>
-                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.weight') }}</th>
                 <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.voucher_amount') }}</th>
+                <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.actual_profit') }}</th>
                 <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.updated_at') }}</th>
                 <th class="fw-bold text-dark" style="font-weight: 900">{{ __('english.created_at') }}</th>
             </tr>

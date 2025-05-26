@@ -162,10 +162,10 @@ Route::middleware('auth.agent_or_web')->group(function () {
         Route::get('/', [JobController::class, 'index'])->name('job.index');
         Route::get('/create', [JobController::class, 'create'])->name('job.create');
         Route::post('/store', [JobController::class, 'store'])->name('job.store');
-        Route::post('/delete', [JobController::class, 'destroy'])->name('job.destroy');
 
         Route::get('/edit/{job}', [JobController::class, 'edit'])->name('job.edit');
         Route::post('/update/{job}', [JobController::class, 'update'])->name('job.update');
+        Route::delete('/delete/{job}', [JobController::class, 'delete'])->name('job.destroy');
 
         Route::get('/report', [JobController::class, 'reportIndex'])->name('job.report.index');
 

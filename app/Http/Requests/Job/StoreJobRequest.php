@@ -85,6 +85,7 @@ class StoreJobRequest extends FormRequest
             'status' => [Auth::guard('agent')->check() ? 'nullable' : 'required', 'string', 'max:255', Rule::in(JobStatusEnum::getValues())],
             'voucher_amount' => 'required|numeric',
             'job_no' => 'required|numeric',
+            'remarks' => 'nullable|string|max:255',
         ];
     }
 }

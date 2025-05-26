@@ -258,6 +258,16 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mt-3">
+                                    <label for="remarks" class="">Remarks</label>
+                                    <textarea class="form-control" name="remarks" id="remarks" id="" cols="10" rows="5"></textarea>
+                                </div>
+
+                            </div>
+                        </div>
+
                         <!-- Submit Button -->
                         <div class="row">
                             <div class="col-md-12">

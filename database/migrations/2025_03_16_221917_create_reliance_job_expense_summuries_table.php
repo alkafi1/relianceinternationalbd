@@ -22,6 +22,8 @@ return new class extends Migration
             $table->decimal('total_expenses', 10, 2);
             $table->decimal('advanced_received', 10, 2);
             $table->decimal('due', 10, 2);
+            $table->decimal('audited_amount', 10, 2)->default(0.00);
+
             $table->decimal('grand_total', 10, 2);
             $table->softDeletes();
             

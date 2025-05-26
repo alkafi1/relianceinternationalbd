@@ -73,4 +73,7 @@ return [
     'total_due_balance' => 'Total Due Balance',
     'total_current_balance' => 'Total Current Balance',
     'role' => 'Role',
+    'actual_profit' => 'Actual Profit',
+    'vat' => 'Vat',
+    'total' => 'Total',
 ];
