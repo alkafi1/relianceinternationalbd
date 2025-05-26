@@ -176,6 +176,7 @@
                                         <option value="export" {{ $job->job_type == 'export' ? 'selected' : '' }}>Export
                                         </option>
                                         <option value="import" {{ $job->job_type == 'import' ? 'selected' : '' }}>Import
+                                        <option value="both" {{ $job->job_type == 'both' ? 'selected' : '' }}>Both
                                         </option>
                                     </select>
                                 </div>

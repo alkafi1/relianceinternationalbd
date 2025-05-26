@@ -31,7 +31,13 @@
         <tbody>
 
         </tbody>
-
+        git add .
+        git commit -m "update"
+        git push
+        git checkout new_development
+        git pull origin development
+        git push
+        git checkout development
         <!--end::Table head-->
     </table>
     <!--end::Table-->
