@@ -50,7 +50,7 @@ class Admincontroller extends Controller
      */
     public function create()
     {
-        $roles = Role::where('name', '!=',  'super-admin')->get();
+        $roles = Role::where('guard_name', 'web')->where('name', '!=',  'super-admin')->get();
         // Display the view for creating a new admin.
         return view('admin.create', compact('roles'));
     }

@@ -45,8 +45,10 @@ class UserService
     public function store(array $validatedData): ?array
     {
         // Create or find the 'super_admin' role
-        $role = Role::firstOrCreate(['name' => $validatedData['role']]);
-
+        $role = Role::where('name', $validatedData['role'])
+            ->where('guard_name', 'web') // ✅ important fix
+            ->first();
+            
         // // Grant all permissions to the 'super_admin' role
         // $role->syncPermissions(Permission::where('guard_name', 'web')->get());
 
@@ -60,7 +62,6 @@ class UserService
             'password' => Hash::make($validatedData['password']), // Hash the password
             'remember_token' => Str::random(10),
         ]);
-
 
         // Assign the 'super_admin' role to the user
         $admin->assignRole($role);

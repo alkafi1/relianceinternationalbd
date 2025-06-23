@@ -13,11 +13,11 @@ class RoleController extends Controller
 {
     public function index(Request $request)
     {
-        $roles = Role::where('name', '!=', 'super-admin')->with('permissions')->get();
+        $roles = Role::where('guard_name', 'web')->where('name', '!=', 'super-admin')->with('permissions')->get();
         // dd($roles);
         if ($request->ajax()) {
             // Fetch roles excluding the "super admin" role
-            $roles = Role::where('name', '!=', 'super-admin')->with('permissions')->get();
+            $roles = Role::where('guard_name', 'web')->where('name', '!=', 'super-admin')->with('permissions')->get();
 
             return DataTables::of($roles)
                 ->addColumn('permissions', function ($role) {

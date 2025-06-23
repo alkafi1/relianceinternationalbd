@@ -20,7 +20,7 @@ class AgentLoginService
     {
         // Attempt to log the user in
         if (Auth::guard('agent')->attempt($credentials)) {
-            
+            // dd(Auth::guard('agent')->user());
             // Get the user that was logged in
             $agent = Auth::guard('agent')->user();
             // If the user is not approved, return null
